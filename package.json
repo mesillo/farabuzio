@@ -1,0 +1,19 @@
+{
+  "name": "farabuzio",
+  "version": "0.0.0",
+  "description": "Collection of Utils Scripts and tools",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mesillo/farabuzio.git"
+  },
+  "author": "Alberto Mesin",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/mesillo/farabuzio/issues"
+  },
+  "homepage": "https://github.com/mesillo/farabuzio#readme"
+}
