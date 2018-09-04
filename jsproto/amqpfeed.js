@@ -1,15 +1,19 @@
-#!/usr/bin/env node
+//#!/usr/bin/env node
 
-var amqp = require('amqplib/callback_api');
+"use strict"
 
-amqp.connect('amqp://localhost', function(err, conn) {
-  conn.createChannel(function(err, ch) {
-    var q = 'hello';
-    var msg = 'Hello World!';
+let amqp = require('amqplib/callback_api');
 
-    ch.assertQueue(q, {durable: false});
-    ch.sendToQueue(q, Buffer.from(msg));
-    console.log(" [x] Sent %s", msg);
-  });
-  setTimeout(function() { conn.close(); process.exit(0) }, 500);
+amqp.connect( "amqp://localhost", ( error, connection ) => {
+	connection.createChannel( ( error, channel ) => {
+		let queue = 'hello';
+		let msg = 'Hello World!';
+		channel.assertQueue( queue, { durable: false } );
+		channel.sendToQueue( queue, Buffer.from( msg ) );
+		//console.log( " [x] Sent %s", msg );
+	});
+	/*setTimeout( () => {
+		conn.close();
+		process.exit(0)
+	}, 500 );*/
 });
