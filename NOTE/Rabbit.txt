@@ -8,3 +8,6 @@ docker exec some-rabbit rabbitmq-plugins enable rabbitmq_management
 # using guest/guest
 
     from: https://gist.github.com/yetanotherchris/c954d1e8b688845c2dcdb3b33c94b2d2
+
+- Specificare passwd e username rabbitmq
+    amqp://user:pass@host.com/vhost

@@ -1,16 +1,24 @@
-// #!/usr/bin/env node
+#!/usr/bin/env node
 
 "use strict"
 
 let amqp = require( "amqplib/callback_api" );
 
-amqp.connect( "amqp://localhost", function( error, connection ) {
-	connection.createChannel( function( error, channel ) {
-		var queue = "hello";
+let serverUrl = "amqp://localhost";
+let queueName = "amqpTest";
 
-		channel.assertQueue( queue, { durable: false });
+if( process.argv[ 2 ] !== undefined )
+	queueName = process.argv[ 2 ];
+if( process.argv[ 3 ] !== undefined )
+	serverUrl = process.argv[ 3 ];
+
+amqp.connect( serverUrl, ( error, connection ) => {
+	connection.createChannel( ( error, channel ) => {
+		//let queue = "hello";
+
+		channel.assertQueue( queueName, { durable: false });
 		//console.log( " [*] Waiting for messages in %s. To exit press CTRL+C", queue );
-		channel.consume( queue, function( msg ) {
+		channel.consume( queueName, function( msg ) {
 		//console.log( " [x] Received %s", msg.content.toString() );
 		console.log( msg.content.toString() );
 	}, { noAck: true });
