@@ -25,7 +25,7 @@ amqp.connect( serverUrl, ( error, connection ) => {
       console.log( error );
     }*/
     //let msg = "Hello World!";
-		channel.assertQueue( queueName, { durable: false } );
+//		channel.assertQueue( queueName, { durable: false } );
 
 		rl.on( "line", ( line ) => {
 			channel.sendToQueue( queueName, Buffer.from( line ) );

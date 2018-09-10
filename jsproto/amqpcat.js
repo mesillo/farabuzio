@@ -16,7 +16,7 @@ amqp.connect( serverUrl, ( error, connection ) => {
 	connection.createChannel( ( error, channel ) => {
 		//let queue = "hello";
 
-		channel.assertQueue( queueName, { durable: false });
+//		channel.assertQueue( queueName, { durable: false });
 		//console.log( " [*] Waiting for messages in %s. To exit press CTRL+C", queue );
 		channel.consume( queueName, function( msg ) {
 		//console.log( " [x] Received %s", msg.content.toString() );

@@ -1,0 +1,6 @@
+total 8.0K
+-rwxrwxrwx 1 mesillo mesillo 740 Sep  5 09:45 amqpcat.js
+-rwxrwxrwx 1 mesillo mesillo 897 Sep  5 09:29 amqpush.js
+-rwxrw-rw- 1 mesillo mesillo 232 Sep 10 16:40 echo.js
+-rwxrwxrwx 1 mesillo mesillo 392 Sep  5 09:18 jsonGrep.js
+-rw-rw-rw- 1 mesillo mesillo   0 Sep 10 16:41 test.txt
