@@ -23,14 +23,11 @@ amqp.connect( serverUrl, ( error, connection ) => {
 				channel.consume( queueName, function( msg ) {
 					//console.log( " [x] Received %s", msg.content.toString() );
 					console.log( msg.content.toString() );
-				} );
+				}, { noAck: true } );
 			} else {
 				console.log( "createChannel() - error - ", error.message );
 			}
-		},
-		{ noAck: true }
-		//{}
-		);
+		});
 	} else {
 		console.log( "=== ERROR ===" );
 		console.log( error );
