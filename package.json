@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/mesillo/farabuzio/issues"
   },
-  "homepage": "https://github.com/mesillo/farabuzio#readme"
+  "homepage": "https://github.com/mesillo/farabuzio#readme",
+  "dependencies": {
+    "amqplib": "^0.5.3"
+  }
 }

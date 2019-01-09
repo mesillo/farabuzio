@@ -15,16 +15,25 @@ if( process.argv[ 3 ] !== undefined )
 amqp.connect( serverUrl, ( error, connection ) => {
 	if( ! error ) {
 		connection.createChannel( ( error, channel ) => {
-			//let queue = "hello";
-	
-			//channel.assertQueue( queueName, { durable: false });
-			//console.log( " [*] Waiting for messages in %s. To exit press CTRL+C", queue );
-			channel.consume( queueName, function( msg ) {
-			//console.log( " [x] Received %s", msg.content.toString() );
-			console.log( msg.content.toString() );
-		}, { noAck: true });
-		});
+			if( ! error ) {
+				//let queue = "hello";
+
+				//channel.assertQueue( queueName, { durable: false });
+				//console.log( " [*] Waiting for messages in %s. To exit press CTRL+C", queue );
+				channel.consume( queueName, function( msg ) {
+					//console.log( " [x] Received %s", msg.content.toString() );
+					console.log( msg.content.toString() );
+				} );
+			} else {
+				console.log( "createChannel() - error - ", error.message );
+			}
+		},
+		//{ noAck: true }
+		{}
+		);
 	} else {
+		console.log( "=== ERROR ===" );
 		console.log( error );
+		console.log( "=============" );
 	}
 });
