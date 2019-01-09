@@ -28,8 +28,8 @@ amqp.connect( serverUrl, ( error, connection ) => {
 				console.log( "createChannel() - error - ", error.message );
 			}
 		},
-		//{ noAck: true }
-		{}
+		{ noAck: true }
+		//{}
 		);
 	} else {
 		console.log( "=== ERROR ===" );
