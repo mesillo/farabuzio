@@ -35,7 +35,7 @@ amqp.connect( serverUrl, ( error, connection ) => {
 		//channel.assertQueue( queueName, { durable: false } );
 		rl.on( "line", ( line ) => {
 			channel.sendToQueue( queueName, Buffer.from( line ) );
-			console.log( "Sent message " + (++messageIndex) + " to " + queueName );
+			console.log( Date() + ": Sent message " + (++messageIndex) + " to " + queueName );
 		} );
 		//console.log( " [x] Sent %s", msg );
 	});
