@@ -20,15 +20,22 @@ if( process.argv[ 3 ] !== undefined )
 	serverUrl = process.argv[ 3 ];
 
 amqp.connect( serverUrl, ( error, connection ) => {
+	if( error ) {
+		console.error( error );
+		return;
+	}
 	connection.createChannel( ( error, channel ) => {
-    /*if( error ) {
-      console.log( error );
-    }*/
-    //let msg = "Hello World!";
-//		channel.assertQueue( queueName, { durable: false } );
-
+    	if( error ) {
+			console.error( error );
+			return;
+		}
+		
+		let messageIndex = 0;
+    	//let msg = "Hello World!";
+		//channel.assertQueue( queueName, { durable: false } );
 		rl.on( "line", ( line ) => {
 			channel.sendToQueue( queueName, Buffer.from( line ) );
+			console.log( "Sent message " + (++messageIndex) + " to " + queueName );
 		} );
 		//console.log( " [x] Sent %s", msg );
 	});
