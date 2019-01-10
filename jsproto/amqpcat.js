@@ -21,12 +21,12 @@ amqp.connect( serverUrl, ( error, connection ) => {
 					console.log( msg.content.toString() );
 				}, { noAck: true } );
 			} else {
-				console.log( "createChannel() - error - ", error.message );
+				console.error( "createChannel() - error - ", error.message );
 			}
 		});
 	} else {
-		console.log( "=== ERROR ===" );
-		console.log( error );
-		console.log( "=============" );
+		console.error( "=== ERROR ===" );
+		console.error( error );
+		console.error( "=============" );
 	}
 });
