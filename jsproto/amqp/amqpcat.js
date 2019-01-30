@@ -17,10 +17,15 @@ if( process.argv[ 3 ] !== undefined )
 let closeConnection = () => {
 	if( connectionHandler ) {
 		connectionHandler.close();
+		connectionHandler = null;
 	}
+};
+
+process.on( "SIGINT", () => {
+	closeConnection();
 	console.log( "... exiting!" );
 	process.exit( 0 );
-};
+});
 
 amqp.connect( serverUrl, ( error, connection ) => {
 	if( ! error ) {
