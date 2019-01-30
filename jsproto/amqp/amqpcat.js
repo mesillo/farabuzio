@@ -25,8 +25,8 @@ amqp.connect( serverUrl, ( error, connection ) => {
 			}
 		});
 	} else {
-		console.error( "=== ERROR ===" );
+		console.error( "====== ERROR ======" );
 		console.error( error );
-		console.error( "=============" );
+		console.error( "===================" );
 	}
 });

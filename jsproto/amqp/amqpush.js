@@ -30,17 +30,17 @@ amqp.connect( serverUrl, ( error, connection ) => {
 			return;
 		}
 		
+		let closeconnectionfn = () => {
+			connection.close();
+			console.log( "... done!" );
+			process.exit( 0 );
+		};
+
 		let messageIndex = 0;
-    	//let msg = "Hello World!";
 		//channel.assertQueue( queueName, { durable: false } );
 		rl.on( "line", ( line ) => {
 			channel.sendToQueue( queueName, Buffer.from( line ) );
 			console.log( Date() + ": Sent message " + (++messageIndex) + " to " + queueName );
 		} );
-		//console.log( " [x] Sent %s", msg );
 	});
-	/*setTimeout( () => {
-		conn.close();
-		process.exit(0)
-	}, 500 );*/
 });
