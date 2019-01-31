@@ -12,5 +12,6 @@ rl.on( "line", function( line ) {
     let object = JSON.parse( line );
     //console.log( object );
     //console.log( util.inspect( object, {showHidden: false, depth: null} ) );
-    console.log( util.inspect( object, false, null, true /* enable colors */) );
+    //console.log( util.inspect( object, false, null, true /* enable colors */) );
+    console.log( util.inspect( object, false, null, false /* enable colors */) );
 } );
