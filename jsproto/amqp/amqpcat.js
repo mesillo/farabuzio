@@ -23,7 +23,7 @@ let closeConnection = () => {
 
 process.on( "SIGINT", () => {
 	closeConnection();
-	console.log( "... exiting!" );
+	console.error( "... exiting!" );
 	process.exit( 0 );
 });
 
