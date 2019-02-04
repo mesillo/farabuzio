@@ -43,6 +43,7 @@ amqp.connect( serverUrl, ( error, connection ) => {
 		let messageIndex = 0;
     	//let msg = "Hello World!";
 		//channel.assertQueue( queueName, { durable: false } );
+		channel.assertQueue( queueName );
 		//console.log( "Setting handler..." );
 		//rl.on( "line", ( line ) => {
 		//	console.log( "Sending line: " + line );
@@ -59,8 +60,8 @@ amqp.connect( serverUrl, ( error, connection ) => {
 		}		
 		//console.log( " [x] Sent %s", msg );
 	});
-	/*setTimeout( () => {
-		conn.close();
+	setTimeout( () => {
+		connection.close();
 		process.exit(0)
-	}, 500 );*/
+	}, 500 );
 });
