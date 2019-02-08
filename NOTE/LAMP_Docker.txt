@@ -1,0 +1,8 @@
+# net
+
+docker network create --driver bridge mysql-net
+
+#db
+
+docker run --name mysql --network mysqlnet -d application-that-uses-mysql
+
