@@ -2,9 +2,10 @@
   "name": "farabuzio",
   "version": "0.0.0",
   "description": "Collection of Utils Scripts and tools",
-  "main": "index.js",
+  "main": "main.js",
+  "environment": "worst",
   "scripts": {
-    "start": "node main.js"
+    "start": "node main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,6 +20,5 @@
   "homepage": "https://github.com/mesillo/farabuzio#readme",
   "dependencies": {
     "amqplib": "^0.5.3"
-  },
-  "environment": "release"
+  }
 }
