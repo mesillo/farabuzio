@@ -5,35 +5,48 @@ let objectToSanitize = {"results":[{"address_components":[{"long_name":"277","sh
 //console.dir( objectToSanitize, { showHidden: false, depth: null, colors: true } );
 
 class ObjectUtils {
-    static doForAll( object, targetType, callback ) {
-        let type = typeof object;
+	static doForAll( object, targetType, callback ) {
+		let type = typeof object;
 
-        if( type === targetType ) {
-            object = callback( object );
-        } else if( type === "object" ) {
-            let keys = Object.keys( object );
-            for( let key of keys ) {
-                object[ key ] = ObjectUtils.doForAll( object[ key ], targetType, callback );
-            }
-        } else {
-            console.warn( " === >  Excluded type: " + type );
-        }
+		if( type === targetType ) {
+			object = callback( object );
+		} else if( type === "object" ) {
+			let keys = Object.keys( object );
+			for( let key of keys ) {
+				object[ key ] = ObjectUtils.doForAll( object[ key ], targetType, callback );
+			}
+		} else {
+			console.warn( " === >  Excluded type: " + type );
+		}
 
-        return object;
-    }
+		return object;
+	}
+
+	static doForAllStrings(  object, callback ) {
+		return ObjectUtils.doForAll(  object, "string", callback );
+	}
 }
 
-let testCallBack = ( string ) => {
-    //console.log( string );
-    string = "HIT: " + string;
-    return string;
-};
+//let testCallBack = ( string ) => {
+//	//console.log( string );
+//	string = "HIT: " + string;
+//	return string;
+//};
+//
+//let testNumberCallBack = ( num ) => {
+//	return Math.round( num );
+//};
 
-let testNumberCallBack = ( num ) => {
-    return Math.round( num );
-};
+//objectToSanitize = ObjectUtils.doForAll( objectToSanitize, "string", testCallBack );
+//objectToSanitize = ObjectUtils.doForAll( objectToSanitize, "number", testNumberCallBack );
+//let resultObj = ObjectUtils.doForAllStrings( objectToSanitize, testCallBack );
 
-objectToSanitize = ObjectUtils.doForAll( objectToSanitize, "string", testCallBack );
-objectToSanitize = ObjectUtils.doForAll( objectToSanitize, "number", testNumberCallBack );
+//console.dir( objectToSanitize, { showHidden: false, depth: null, colors: true } );
+//console.dir( resultObj, { showHidden: false, depth: null, colors: true } );
 
-console.dir( objectToSanitize, { showHidden: false, depth: null, colors: true } );
+//let testvar = "Pippo";
+//console.dir(
+//	ObjectUtils.doForAllStrings( testvar, testCallBack ),
+//	{ showHidden: false, depth: null, colors: true }
+//);
+//console.dir( testvar, { showHidden: false, depth: null, colors: true } );
