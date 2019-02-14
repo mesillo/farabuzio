@@ -13,20 +13,27 @@ class ObjectUtils {
         } else if( type === "object" ) {
             let keys = Object.keys( object );
             for( let key of keys ) {
-                ObjectUtils.doForAll( object[ key ], targetType, callback );
+                object[ key ] = ObjectUtils.doForAll( object[ key ], targetType, callback );
             }
         } else {
             console.warn( " === >  Excluded type: " + type );
         }
+
+        return object;
     }
 }
 
 let testCallBack = ( string ) => {
-    console.log( string );
+    //console.log( string );
     string = "HIT: " + string;
+    return string;
 };
 
+let testNumberCallBack = ( num ) => {
+    return Math.round( num );
+};
 
-ObjectUtils.doForAll( objectToSanitize, "string", testCallBack );
+objectToSanitize = ObjectUtils.doForAll( objectToSanitize, "string", testCallBack );
+objectToSanitize = ObjectUtils.doForAll( objectToSanitize, "number", testNumberCallBack );
 
 console.dir( objectToSanitize, { showHidden: false, depth: null, colors: true } );
