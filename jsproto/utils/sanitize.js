@@ -5,7 +5,19 @@ let objectToSanitize = {"results":[{"address_components":[{"long_name":"277","sh
 //console.dir( objectToSanitize, { showHidden: false, depth: null, colors: true } );
 const sanitizeDefines = Object.freeze( {
 	toReplace: {
-		" ": "_",
+		// HTML encoding
+		"&": "&amp",
+		"<": "&lt",
+		">": "&gt",
+		"\"": "&quot",
+		"'": "&#39",
+		// Destructive substitutions
+		"(": "",
+		")": "",
+		"[": "",
+		"]": "",
+		"{": "",
+		"}": ""
 	}
 });
 
@@ -27,7 +39,7 @@ class ObjectUtils {
 		return object;
 	}
 
-	static doForAllStrings(  object, callback ) {
+	static doForAllStrings( object, callback ) {
 		return ObjectUtils.doForAll(  object, "string", callback );
 	}
 
