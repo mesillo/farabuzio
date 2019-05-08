@@ -1,6 +1,7 @@
 "use strict"
 // Imports
 let fs = require( "fs" );
+let path = require( "path" );
 // definitios
 let handlerFilename = "./lambdahandler.js";
 let handlerFnName = "handler";
@@ -26,6 +27,9 @@ let baseContextStruct = {}; // TODO: dump one and make a sensed example.
 
 if( process.argv[ 2 ] !== undefined )
 	handlerFilename = process.argv[ 2 ];
+let targetDir = path.dirname( handlerFilename );
+if( process.argv[ 3 ] !== undefined )
+	targetDir = process.argv[ 3 ];
 
 let handler = require( handlerFilename )[ handlerFnName ];
 // local utilities... TODO: do it better...
@@ -42,6 +46,10 @@ let processResults = ( lambdaResult ) => {
 // do things
 let dataRaw = fs.readFileSync( inputFilename, "utf8" );
 let dataLines = dataRaw.split( "\n" );
+// cange Working Directory
+//let targetDir = path.dirname( handlerFilename );
+process.chdir( targetDir );
+//console.log( process.cwd() );
 for( const dataLine of dataLines ) {
 	try {
 		//let data = JSON.parse( dataLine );

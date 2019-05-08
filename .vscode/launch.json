@@ -14,8 +14,16 @@
             "type": "node",
             "request": "launch",
             "name": "Try lambdaTest.js",
-            "program": "${workspaceFolder}\\jsproto\\kinesis\\lambdaTest.js",
-            "cwd": "${workspaceFolder}\\jsproto\\kinesis"
+            "program": "${workspaceFolder}\\jsproto\\lambda\\lambdaTest.js",
+            "cwd": "${workspaceFolder}\\lambda\\kinesis"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Try external TS project",
+            "program": "${workspaceFolder}\\jsproto\\lambda\\lambdaTest.js",
+            "cwd": "${workspaceFolder}\\jsproto\\lambda",
+            "args": [ "../../../../src/iot-connector-forwarder-lambda/dist/main.js", "../../../../src/iot-connector-forwarder-lambda/" ]
         }
     ]
 }
