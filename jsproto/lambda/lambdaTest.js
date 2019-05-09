@@ -54,11 +54,18 @@ for( const dataLine of dataLines ) {
 	try {
 		//let data = JSON.parse( dataLine );
 		if( dataLine.length > 0 ) {
+			console.info( `Try with dataline:\n\t\t ${dataLine}` );
 			let eventStruct = cloneObj( baseEventStruct );
 			let b64data = Buffer.from( dataLine ).toString( "base64" );
 			eventStruct.Records[0].kinesis.data = b64data;
 			let result = handler( eventStruct, baseContextStruct );
-			processResults( result );
+			if( result instanceof Promise ) {
+				result.then( ( pResult ) => {
+					processResults( pResult );
+				} );
+			} else {
+				processResults( result );
+			}
 		}
 	} catch( error ) {
 		console.error( error ); //TODO: check the type...
