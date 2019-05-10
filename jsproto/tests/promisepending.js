@@ -2,6 +2,9 @@
 
 let promises = [];
 
+
+
+/*************************************************
 for( let i = 0 ; i < 10 ; i++ ) {
     promises.push( new Promise( ( resolve, reject ) => {
         setTimeout( () => {
@@ -13,6 +16,7 @@ for( let i = 0 ; i < 10 ; i++ ) {
 Promise.all( promises ).then( ( results ) => {
     console.dir( results, { depth: null } );
 } );
+*/
 
 /*************************************************
 let p = new Promise( ( resolve, reject ) => {
