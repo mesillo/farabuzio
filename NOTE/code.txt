@@ -1,0 +1,26 @@
+const zlib = require("zlib");
+
+const std = {"ThingId":"359206062998174","ThingType":"RaliacomVC","UpdateTime":"2019-05-10T15:34:26.000Z","ReceivedTime":"2019-05-10T15:38:03.455Z","SequenceNumber":15,"IMSI":"204047112105359","RDLTachoErrorCode":"","RemoteAddress":"100.64.0.93","RemotePort":55501,"DebugMessage":"[RDL]: RDL got driver scheduling true","PayloadIdentifier":"8a720b8d-2f67-4657-a2f7-09f1aeaa9406","MessageIndex":2,"NativeEventCode":2560,"CorrelationId":"","ProcessTime":"2019-05-10T15:38:14.763Z","FeedProvider":"Direct Reveal EU","EventCode":2560,"Region":"EU","Protocol":"udp","DebugGeneralType":10,"DebugSpecificType":0};
+
+const buffer = Buffer.from(JSON.stringify(std));
+zlib.gzip(buffer, (err, result) =>
+{
+  if(err)
+  {
+    console.error(err);
+  }
+  else
+  {
+    console.log(result.toString("base64"));
+  }
+});
+
+------------------------------------------------------------------------------------------------------------
+
+import { unzip } from "zlib";
+import { promisify } from "util";
+
+const unzipPromisified = promisify(unzip);
+
+const stdMsgContent = await unzipPromisified(msgBuffer).then( (content) => content.toString());
+const standardMsg: IStandardDecodedMessage | IStandardDebugMessage  = JSON.parse(stdMsgContent);
