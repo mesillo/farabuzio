@@ -1,0 +1,146 @@
+{
+	"extends": "tslint:recommended",
+	"rules":
+	{
+		"align":
+		{
+			"severity": "warning"
+		},
+		"arrow-return-shorthand":
+		{
+			"severity": "warning"
+		},
+		"comment-format":
+		{
+			"severity": "warning"
+		},
+		"eofline": false,
+		"import-spacing":
+		{
+			"severity": "warning"
+		},
+		"indent":
+		{
+			"options":
+			[
+				true,
+				"tabs",
+				4
+			],
+			"severity": "warning"
+		},
+		"jsdoc-format":
+		{
+			"severity": "warning"
+		},
+		"max-line-length": false,
+		"member-ordering":
+		{
+			"options":
+			[
+				"fields-first"
+			],
+			"severity": "warning"
+		},
+		"no-angle-bracket-type-assertion":
+		{
+			"severity": "warning"
+		},
+		"no-bitwise": false,
+		"no-conditional-assignment":
+		{
+			"severity": "warning"
+		},
+		"no-consecutive-blank-lines":
+		{
+			"severity": "warning"
+		},
+		"no-console":
+		{
+			"severity": "warning"
+		},
+		"no-duplicate-imports": true,
+		"no-duplicate-switchcase": true,
+		"no-floating-promises": true,
+		"no-for-in-array": true,
+		"no-implicit-dependencies":
+		[
+			"dev",
+			true
+		],
+		"no-magic-numbers":
+		{
+			"options":
+			[
+				true,
+				-1,
+				0,
+				1,
+				10,
+				1000
+			],
+			"severity": "warning"
+		},
+		"no-trailing-whitespace":
+		{
+			"options":
+			[
+				"ignore-jsdoc"
+			],
+			"severity": "warning"
+		},
+		"no-unused-variable": true,
+		"no-use-before-declare": true,
+		"object-literal-sort-keys": false,
+		"one-line": false,
+		"ordered-imports": false,
+		"prefer-const": false,
+		"prefer-readonly": false,
+		"quotemark":
+		{
+			"severity": "warning"
+		},
+		"radix": false,
+		"restrict-plus-operands":
+		{
+			"options":
+			[
+				true
+			],
+			"severity": "warning"
+		},
+		"space-before-function-paren": false,
+		"trailing-comma":
+		{
+			"options":
+			[
+				{
+					"multiline":
+					{
+						"arrays": "never",
+						"functions": "never",
+						"objects": "never",
+						"typeLiterals": "never"
+					}
+				}
+			],
+			"severity": "warning"
+		},
+		"typedef":
+		[
+			true,
+			"call-signature",
+			"member-variable-declaration",
+			"parameter",
+			"property-declaration"
+		],
+		"typedef-whitespace":
+		{
+			"severity": "warning"
+		},
+		"whitespace":
+		{
+			"severity": "warning"
+		}
+	}
+}
