@@ -2,11 +2,14 @@
 // Imports
 let fs = require( "fs" );
 let path = require( "path" );
+let zlib = require( "zlib" );
 // definitios
 let handlerFilename = "./lambdahandler.js";
 let handlerFnName = "handler";
 
 let inputFilename = "./inputs.json";
+
+let zipPayload = true;
 
 let baseEventStruct = {
 	Records: []
@@ -36,6 +39,12 @@ let handler = require( handlerFilename )[ handlerFnName ];
 let cloneObj = ( sourceObj ) => {
 	return JSON.parse( JSON.stringify( sourceObj ) );
 };
+let compressPayload = ( payload ) => {
+	return zlib.gzipSync( payload );
+}
+let donNoting = ( unmanagedInput ) => {
+	return unmanagedInput;
+}
 // functions
 let processResults = ( lambdaResult ) => {
 	console.log( " ===== Process Result ===== " );
@@ -55,7 +64,11 @@ for( const dataLine of dataLines ) {
 		if( dataLine.length > 0 ) {
 			//console.info( `Using dataline:\n\t\t ${dataLine}` );
 			let record = cloneObj( baseRecordStruct );
-			let b64data = Buffer.from( dataLine ).toString( "base64" );
+			let recordBuffer = Buffer.from( dataLine );
+			if( zipPayload ) {
+				recordBuffer = compressPayload( recordBuffer );
+			}
+			let b64data = recordBuffer.toString( "base64" );
 			record.kinesis.data = b64data;
 			eventStruct.Records.push( record );
 		}
