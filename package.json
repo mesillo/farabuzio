@@ -20,7 +20,8 @@
   },
   "homepage": "https://github.com/mesillo/farabuzio#readme",
   "dependencies": {
-    "amqplib": "^0.5.3"
+    "amqplib": "^0.5.3",
+    "typescript": "^3.4.5"
   },
   "devDependencies": {
     "forever": "^0.15.3"

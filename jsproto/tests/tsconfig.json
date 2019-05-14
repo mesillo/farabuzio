@@ -14,7 +14,7 @@
 		"baseUrl": "./",
 		"paths":
 		{
-			"connector-rmq-feeder":
+			"farabuzio":
 			[
 				"src"
 			],
