@@ -4,7 +4,7 @@ let unzipSync = require( "zlib" ).unzipSync;
 
 console.log('Loading function');
 
-exports.handler = async function(event, context) {
+let parseAndDisplay = async ( event, context ) => {
     //console.log(JSON.stringify(event, null, 2));
     event.Records.forEach(function(record) {
         // Kinesis data is base64 encoded so decode here
@@ -20,3 +20,19 @@ exports.handler = async function(event, context) {
     });
     return event.Records.length;
 };
+
+let dirEvent = async ( event, context ) => {
+    console.dir(
+        event,
+        {
+            depth: null
+        }
+    );
+    return 0;
+};
+
+let JSONEvent = async ( event, context ) => {
+    console.log( JSON.stringify( event ) );
+    return 0;
+};
+exports.handler = JSONEvent;
