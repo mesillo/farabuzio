@@ -48,7 +48,8 @@ let donNoting = ( unmanagedInput ) => {
 // functions
 let processResults = ( lambdaResult ) => {
 	console.log( " ===== Process Result ===== " );
-	console.dir( lambdaResult, { depth: null } );
+	//console.dir( lambdaResult, { depth: null } );
+	console.log( lambdaResult.length + " elements." );
 	console.log( " ========================== " );
 };
 
@@ -57,6 +58,7 @@ let dataRaw = fs.readFileSync( inputFilename, "utf8" );
 let dataLines = dataRaw.split( "\n" );
 // cange Working Directory
 process.chdir( targetDir );
+console.log( process.cwd() );
 // manage lines...
 let eventStruct = cloneObj( baseEventStruct );
 for( const dataLine of dataLines ) {
