@@ -38,7 +38,6 @@ let targetDir = path.dirname( handlerFilename );
 if( process.argv[ 3 ] !== undefined )
 	targetDir = process.argv[ 3 ];
 
-let handler = require( handlerFilename )[ handlerFnName ];
 // local utilities... TODO: do it better...
 let cloneObj = ( sourceObj ) => {
 	return JSON.parse( JSON.stringify( sourceObj ) );
@@ -60,9 +59,7 @@ let processResults = ( lambdaResult ) => {
 // do things
 let dataRaw = fs.readFileSync( inputFilename, "utf8" );
 let dataLines = dataRaw.split( "\n" );
-// cange Working Directory
-process.chdir( targetDir );
-console.log( process.cwd() );
+
 // manage lines...
 let eventStruct = cloneObj( baseEventStruct );
 for( const dataLine of dataLines ) {
@@ -82,6 +79,10 @@ for( const dataLine of dataLines ) {
 		console.error( error ); //TODO: check the type...
 	}
 }
+// cange Working Directory
+process.chdir( targetDir );
+console.log( process.cwd() );
+let handler = require( handlerFilename )[ handlerFnName ];
 console.info( "Try to run lambda..." );
 try {
 	let result = handler( eventStruct, baseContextStruct );
