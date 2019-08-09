@@ -1,16 +1,20 @@
 "use strict"
-// Imports
-let fs = require( "fs" );
-let path = require( "path" );
-let zlib = require( "zlib" );
-// definitios
+/////////////
+// Imports //
+/////////////
+const fs = require( "fs" );
+const path = require( "path" );
+const zlib = require( "zlib" );
+////////////////////
+// configurations //
+////////////////////
 let handlerFilename = "./lambdahandler.js";
 let handlerFnName = "handler";
-
 let inputFilename = "./inputs.json";
-
 let zipPayload = true;
-
+/////////////////
+// Global Vars //
+/////////////////
 let baseEventStruct = {
 	Records: []
 };
