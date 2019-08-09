@@ -124,9 +124,16 @@ let server = http.createServer( ( request, response ) => {
 	response.end();
 } );
 
+let connectionId = 0;
+
 server.on( "connection", ( connection ) => {
-	console.log( "===== Connection! =====" );
-	console.log( "=======================" );
+	console.log( `===== Connection ${connectionId} opened!=====` );
+	( ( connID ) => {
+		connection.on( "close", ( hadError ) => {
+			console.log( `===== Connection ${connID} closed! ===== E: ${hadError}` );
+		} )
+	} )( connectionId );
+	connectionId++;
 } );
 
 server.listen( httpPort );
