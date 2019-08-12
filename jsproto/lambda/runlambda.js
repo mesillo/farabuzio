@@ -89,10 +89,16 @@ try {
 	if( result instanceof Promise ) {
 		result.then( ( pResult ) => {
 			processResults( pResult );
+		} ).catch( ( error ) => {
+			console.log( "========== Promise ERROR ==========" );
+			console.error( error ); //TODO: check the type...		
 		} );
 	} else {
 		processResults( result );
 	}
 } catch( error ) {
+	console.log( "========== ERROR ==========" );
 	console.error( error ); //TODO: check the type...
 }
+
+//process.exit();
