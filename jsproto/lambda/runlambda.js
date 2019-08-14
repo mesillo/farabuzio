@@ -72,6 +72,7 @@ for( const dataLine of dataLines ) {
 				recordBuffer = compressPayload( recordBuffer );
 			}
 			let b64data = recordBuffer.toString( "base64" );
+			//console.log( b64data );
 			record.kinesis.data = b64data;
 			eventStruct.Records.push( record );
 		}
