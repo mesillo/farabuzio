@@ -1,0 +1,20 @@
+{
+  "name": "katarro",
+  "version": "0.0.0",
+  "description": "Node application manager.",
+  "main": "main.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "keywords": [
+    "node",
+    "forever",
+    "process",
+    "gui"
+  ],
+  "author": "",
+  "license": "GPL-2.0-only",
+  "dependencies": {
+    "forever": "^1.0.0"
+  }
+}
