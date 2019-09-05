@@ -1,0 +1,56 @@
+ docker run -e ALLOW_EMPTY_PASSWORD=yes -v mysqldata:/bitnami/mysql/data --network mysqlnet bitnami/mysql:latest
+ 
+ 
+ 
+ 
+ docker run -d -p15672:15672 -p5672:5672 --name rabbitmq -v rabbit_volume:/bitnami bitnami/rabbitmq:latest
+ docker run -d -p15672:15672 -p5672:5672 --name rabbitmq bitnami/rabbitmq:latest
+ docker run -p15672:15672 -p5672:5672 --name rabbitmq bitnami/rabbitmq:latest
+ 
+ docker exec -it <container name> /bin/bash
+ 
+	git clone https://github.com/localstack/localstack.git
+	cd localstack
+	$env:SERVICES="kinesis,lambda"; docker-compose up -d
+	$env:SERVICES="kinesis,lambda,cloudwatch"; docker-compose up
+	
+	$env:SERVICES="kinesis,lambda,cloudwatch";$env:LAMBDA_EXECUTOR="docker"; docker-compose up
+	zip -r application.zip *
+	aws --region=us-east-1 --endpoint-url=http://localhost:4574 lambda create-function --function-name=testFn --runtime=nodejs8.10 --role=r1 --handler=main.handler --zip-file fileb://lambda.zip
+	aws --region=local --endpoint-url=http://localhost:4574 lambda create-function --function-name=testFn --runtime=nodejs8.10 --role=fakeRole --handler=dist/main.handler --zip-file fileb://application.zip
+	aws lambda --endpoint-url=http://localhost:4574 invoke --region=local --function-name testFn --payload='{"key1":"value1", "key2":"value2"}' result.log
+	aws --region=local --endpoint-url=http://localhost:4574 lambda update-function-code --function-name=testFn --zip-file fileb://application.zip
+	
+	aws configure  # con dati a caso... ma non vuoti
+	aws --endpoint-url=http://localhost:4568 kinesis create-stream --stream-name testStream --shard-count 2
+	aws --endpoint-url=http://localhost:4568 kinesis delete-stream --stream-name testStream
+	aws --endpoint-url=http://localhost:4568 kinesis list-streams
+	
+	aws lambda invoke --endpoint-url=http://localhost:4574 --function-name testFn --payload file://input.txt out.txt
+
+    TO READ: https://docs.aws.amazon.com/en_us/lambda/latest/dg/with-kinesis-example.html
+	
+	https://github.com/mhart/kinesalite#cbor-protocol-issues-with-the-java-sdk
+	//var kinesis = new AWS.Kinesis({region : config.kinesis.region});
+	var kinesis = new AWS.Kinesis({endpoint: 'http://localhost:4567'});
+ 
+ 
+	aws lambda create-event-source-mapping --function-name testFn --event-source arn:aws:kinesis:us-east-1:000000000000:stream/test-stream --batch-size 10 --starting-position TRIM_HORIZON --region=local --endpoint-url=http://localhost:4568
+ config
+	vhost		/
+	username	user
+	passwd		bitnami
+	host		127.0.0.1 (winzozz ha problemi con localhost, lo risolve ipv6)
+	
+	
+attualmente il mio ip è 10.50.32.18. Se vuoi provare.
+
+
+./amqp/amqpcat.js iot-normalized-messages-queue-replica amqp://iot-geocoder:zED7sXLPMeAcqyU3W9VG@internal-elb-deve-loadbala-18c6451327ho3-1865266528.eu-west-1.elb.amazonaws.com/iot-messages
+
+
+ npm run package -- "--destinationPath=diomerda.zip"
+
+
+
+find . -path *node_modules* -prune -o -name package.json -exec grep -Hn "@iot" {} \;
