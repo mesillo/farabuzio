@@ -1,0 +1,21 @@
+{
+	"compilerOptions":
+	{
+		"strict": true,
+		"module": "commonjs",
+		"noEmitOnError": true,
+		"noUnusedLocals": true,
+		"removeComments": false,
+		"sourceMap": true,
+		"target": "es6",
+		"outDir": "dist",
+		"declaration": true,
+		"declarationDir": "types",
+		"baseUrl": "./"
+	},
+	"exclude":
+	[
+		"**/*.d.ts",
+		"node_modules"
+	]
+}
