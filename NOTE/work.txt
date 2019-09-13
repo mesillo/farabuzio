@@ -13,6 +13,7 @@
 	cd localstack
 	$env:SERVICES="kinesis,lambda"; docker-compose up -d
 	$env:SERVICES="kinesis,lambda,cloudwatch"; docker-compose up
+	$env:TMPDIR="./tmp/";$env:SERVICES="kinesis"; docker-compose up
 	
 	$env:SERVICES="kinesis,lambda,cloudwatch";$env:LAMBDA_EXECUTOR="docker"; docker-compose up
 	zip -r application.zip *
