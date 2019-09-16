@@ -16,6 +16,7 @@
 	$env:TMPDIR="./tmp/";$env:SERVICES="kinesis"; docker-compose up
 	
 	$env:SERVICES="kinesis,lambda,cloudwatch";$env:LAMBDA_EXECUTOR="docker"; docker-compose up
+	$env:SERVICES="kinesis,lambda";$env:LAMBDA_EXECUTOR="local"; docker-compose up
 	zip -r application.zip *
 	aws --region=us-east-1 --endpoint-url=http://localhost:4574 lambda create-function --function-name=testFn --runtime=nodejs8.10 --role=r1 --handler=main.handler --zip-file fileb://lambda.zip
 	aws --region=local --endpoint-url=http://localhost:4574 lambda create-function --function-name=testFn --runtime=nodejs8.10 --role=fakeRole --handler=dist/main.handler --zip-file fileb://application.zip
