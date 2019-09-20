@@ -36,6 +36,22 @@
 	//var kinesis = new AWS.Kinesis({region : config.kinesis.region});
 	var kinesis = new AWS.Kinesis({endpoint: 'http://localhost:4567'});
  
+
+	$env:SERVICES="kinesis,lambda";$env:LAMBDA_EXECUTOR="docker-reuse"; docker-compose up -d 
+	$env:SERVICES="kinesis,lambda,cloudwatch";$env:LAMBDA_EXECUTOR="docker-reuse"; docker-compose up -d 
+	export SERVICES="kinesis,lambda"; export LAMBDA_EXECUTOR="docker-reuse"; docker-compose up -d
+	export SERVICES="kinesis,lambda,cloudwatch"; export LAMBDA_EXECUTOR="docker-reuse"; docker-compose up -d
+	aws configure  # con dati a caso...
+	aws --endpoint-url=http://localhost:4568 kinesis create-stream --stream-name testStream --shard-count 2
+	aws --region=local --endpoint-url=http://localhost:4574 lambda create-function --function-name=testFn --runtime=nodejs8.10 --role=fakeRole --handler=main.handler --zip-file fileb://application.zip
+	aws lambda --endpoint-url=http://localhost:4574 create-event-source-mapping --function-name testFn --event-source arn:aws:kinesis:us-east-1:000000000000:stream/testStream --batch-size 10 --starting-position TRIM_HORIZON --region=local
+
+	awslocal logs describe-log-groups
+	awslocal logs describe-log-streams --log-group-name "/aws/lambda/testFn"
+	awslocal logs get-log-events --log-group-name '/aws/lambda/testFn' --log-stream-name '+51689/09/13/[$LATEST]3e56389c'
+
+
+
  
 	aws lambda create-event-source-mapping --function-name testFn --event-source arn:aws:kinesis:us-east-1:000000000000:stream/test-stream --batch-size 10 --starting-position TRIM_HORIZON --region=local --endpoint-url=http://localhost:4568
  config

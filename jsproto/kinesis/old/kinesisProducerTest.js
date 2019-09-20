@@ -11,7 +11,7 @@ let index = 0;
 
 kns.onReady().then( () => {
     setInterval( () => {
-        kns.writeToStream( "test-stream",
+        kns.writeToStream( "testStream", //TODO: perchè non dalla config???
                             Math.floor( Math.random() * 100000 ),
                             //{ scc: Math.floor( Math.random() * 10 ) }
                             { value: `${index++} => Rand: ${Math.floor( Math.random() * 10 )}` }

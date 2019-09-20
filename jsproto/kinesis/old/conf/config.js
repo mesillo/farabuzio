@@ -16,8 +16,8 @@ let config = {
 	},
 
 	streams: [ {
-		StreamName: "test-stream",
-		ShardCount: 1
+		StreamName: "testStream",
+		ShardCount: 2
 	} ],
 
 	application: {
