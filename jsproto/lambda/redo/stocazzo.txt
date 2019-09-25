@@ -1,0 +1,9 @@
+$env:SERVICES="kinesis,lambda,cloudwatch";$env:LAMBDA_EXECUTOR="docker-reuse"; docker-compose up
+
+$env:SERVICES="kinesis,lambda,cloudwatch";$env:LAMBDA_EXECUTOR="docker-reuse";$env:TMPDIR="C:\Users\alberto.mesin\Documents\sources\farabuzio"; docker-compose up
+
+awslocal kinesis create-stream --stream-name testStream --shard-count 1
+
+awslocal lambda create-function --function-name=testFn --runtime=nodejs8.10  --region=local --role=fakeRole --handler=main.handler --zip-file fileb://application.zip
+
+awslocal lambda create-event-source-mapping --function-name testFn --event-source arn:aws:kinesis:us-east-1:000000000000:stream/testStream --batch-size 10 --starting-position TRIM_HORIZON --region=local
