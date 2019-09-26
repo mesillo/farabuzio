@@ -10,11 +10,11 @@ class Render {
 	 */
 	static drawCommandForm( response ) {
 		let cmdlist = Commands.getCommandsìList();
-		let outputBuffer = "<select>";
+		let outputBuffer = "<form action=\"/command\"><select name=\"name\">";
 		for( let cmdname of cmdlist ) {
 			outputBuffer += `<option value="${cmdname}">${cmdname}</option>`;
 		}
-		outputBuffer += "</select>";
+		outputBuffer += "</select><input type=\"submit\"></form>";
 		response.write( outputBuffer );
 	}
 
