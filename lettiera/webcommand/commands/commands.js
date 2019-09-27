@@ -6,8 +6,15 @@ const COMMANDS_DEFINITIONS = {
 		parameters: []
 	},
 	"uname": {
-		cmd: "uname -a",
-		parameters: []
+		cmd: "uname -a"
+	},
+	"list": {
+		cmd: "ls -lah %dirname%",
+		parameters: [ "dirname" ]
+	},
+	"create_kinesis_stream": {
+		cmd: "awslocal kinesis create-stream --stream-name %streamName% --shard-count %shardCount%",
+		parameters: [ "streamName", "shardCount" ]
 	}
 };
 
