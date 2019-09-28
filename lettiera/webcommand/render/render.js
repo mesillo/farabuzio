@@ -61,6 +61,10 @@ class Render {
 		}
 	}
 
+	static drawText( text, response ) {
+		response.write( `\n<pre>\n${text}\n</pre>\n` );
+	}
+
 	static _getInputList( cmdDescription ) {
 		if( cmdDescription.parameters ) {
 			return cmdDescription.parameters;
