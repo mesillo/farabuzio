@@ -1,27 +1,37 @@
 "use strict";
 
 const http = require( "http" );
-//const url = require( "url" );
-//const Commands = require( "./commands/commands" );
 const Render = require( "./render/render" );
 const Executor = require( "./executor/executor" );
 const RequestManager = require( "./requestmanager/requestmanager" );
+const defines = require( "./defines" );
 
 const PORT = 8181;
 
-let manageRequest = ( request, response ) => {
+let manageRequest = async ( request, response ) => {
 	Render.setHeaders( response );
 	Render.drawCommandForm( response );
 	Render.drawSeparator( response );
+	await listStorageFiles( response );
+	Render.drawSeparator( response );
 	RequestManager.commandManage( request, response );
-	//response.end(); //end the response
 };
+
+let listStorageFiles = async ( response ) => { //TODO: return (something)???
+	try {
+		let streams = await Executor.execute( `ls -lh ${defines.STORAGEPATH}` )
+		Render.drawText( streams.stdout, response );
+	} catch( error ) {
+		console.error( error );
+		process.exit( 255 );
+	}
+}
 
 let server = http.createServer( manageRequest );
 
 Executor.execute( "whoami" )
 	.then( ( streams ) => {
-		if( streams.stdour === "root\n" ) {
+		if( streams.stdout === "root\n" ) {
 			console.error( "Not as Root!!!" );
 			process.exit( 255 );
 		}
