@@ -11,6 +11,7 @@ RUN cd webcommand && npm install && cd ..
 
 # create a storage diectory for webcommand application
 RUN mkdir -p storage/
+RUN chown -R localstack.localstack storage
 RUN chmod 777 storage
 
 # expose webcommand port
