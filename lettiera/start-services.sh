@@ -2,8 +2,10 @@
 
 echo "=== starting sandbox ==="
 # starting webcommand application
-node webcommand/index.js &
+su - localstack -c 'cd /opt/code/localstack/ && node webcommand/index.js' &
+# runuser -l  localstack -c 'node webcommand/index.js' &
+# node webcommand/index.js &
 
 echo "=== starting localstack services ==="
-#starting localstack
+# starting localstack
 docker-entrypoint.sh
