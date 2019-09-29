@@ -65,6 +65,10 @@ class Render {
 		response.write( `\n<pre>\n${text}\n</pre>\n` );
 	}
 
+	static drawFileUploadForm( response ) {
+		response.write( `\n<form action="${defines.UPLOADFILEURL}" method="post" enctype="multipart/form-data">\n<input type="file" name="filetoupload"><br>\n<input type="submit">\n</form>\n` );
+	}
+
 	static _getInputList( cmdDescription ) {
 		if( cmdDescription.parameters ) {
 			return cmdDescription.parameters;

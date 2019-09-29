@@ -5,6 +5,7 @@ module.exports = Object.freeze(
         FORMREQUSTEPARAM : "getForm",
         EXECUTIONURL: "/execute",
         EXECUTEREQUESTPARAM : "commandName",
-        STORAGEPATH: "storage/"
+        STORAGEPATH: "storage/",
+        UPLOADFILEURL: "/uploadfile"
     }
 );

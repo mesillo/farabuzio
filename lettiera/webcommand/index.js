@@ -4,6 +4,7 @@ const http = require( "http" );
 const Render = require( "./render/render" );
 const Executor = require( "./executor/executor" );
 const RequestManager = require( "./requestmanager/requestmanager" );
+const Uploader = require( "./uploader/uploader" );
 const defines = require( "./defines" );
 
 const PORT = 8181;
@@ -12,7 +13,9 @@ let manageRequest = async ( request, response ) => {
 	Render.setHeaders( response );
 	Render.drawCommandForm( response );
 	Render.drawSeparator( response );
+	await Uploader.manageUpload( request );
 	await listStorageFiles( response );
+	Render.drawFileUploadForm( response );
 	Render.drawSeparator( response );
 	RequestManager.commandManage( request, response );
 };
