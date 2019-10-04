@@ -15,7 +15,7 @@ class Render {
 		for( let cmdname of cmdlist ) {
 			outputBuffer += `<option value="${cmdname}">${cmdname}</option>`;
 		}
-		outputBuffer += "</select><input type=\"submit\"></form>";
+		outputBuffer += "</select><input type=\"submit\" value=\"Get Command Form\"></form>";
 		response.write( outputBuffer );
 	}
 
@@ -43,7 +43,7 @@ class Render {
 			response.write( `<form action="${defines.EXECUTIONURL}">` );
 			response.write( `<input type="hidden" name="${defines.EXECUTEREQUESTPARAM}" value="${commandName}">` );
 			Render._drawInputs( cmdDescription, response );
-			response.write( "</br><input type=\"submit\"></form>" );
+			response.write( "</br><input type=\"submit\" value=\"Execute Command\"></form>" );
 		} else {
 			console.info( `Description for command ${cmdDescription} not found!` );
 		}
@@ -65,8 +65,12 @@ class Render {
 		response.write( `\n<pre>\n${text}\n</pre>\n` );
 	}
 
+	static drawError( error, response ) {
+		Render.drawText( error.message, response ); //TODO: imporve!
+	}
+
 	static drawFileUploadForm( response ) {
-		response.write( `\n<form action="${defines.UPLOADFILEURL}" method="post" enctype="multipart/form-data">\n<input type="file" name="filetoupload"><br>\n<input type="submit">\n</form>\n` );
+		response.write( `\n<form action="${defines.UPLOADFILEURL}" method="post" enctype="multipart/form-data">\n<input type="file" name="filetoupload"><br>\n<input type="submit" value=\"Upload\">\n</form>\n` );
 	}
 
 	static _getInputList( cmdDescription ) {

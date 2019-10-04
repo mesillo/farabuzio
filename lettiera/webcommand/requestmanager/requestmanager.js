@@ -33,7 +33,10 @@ class RequestManager {
 				.then( ( streams ) => {
 					Render.drawCommandResponse( response, streams, commandStr );
 				} )
-				.catch( console.error )
+				.catch( ( error ) => {
+					console.error( error );
+					Render.drawError( error, response );
+				} )
 				.finally( () => {
 					response.end()
 				} );
