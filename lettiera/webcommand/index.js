@@ -10,14 +10,16 @@ const defines = require( "./defines" );
 const PORT = 8181;
 
 let manageRequest = async ( request, response ) => {
-	Render.setHeaders( response );
-	Render.drawCommandForm( response );
-	Render.drawSeparator( response );
+	let render = new Render( response );
+	render.setHeaders();
+	render.drawCommandForm();
+	render.drawSeparator();
 	await Uploader.manageUpload( request );
 	await listStorageFiles( response );
-	Render.drawFileUploadForm( response );
-	Render.drawSeparator( response );
+	render.drawFileUploadForm();
+	render.drawSeparator();
 	RequestManager.commandManage( request, response );
+	//render.close();
 };
 
 let listStorageFiles = async ( response ) => { //TODO: return (something)???
