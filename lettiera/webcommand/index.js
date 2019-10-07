@@ -11,10 +11,11 @@ const PORT = 8181;
 
 let manageRequest = async ( request, response ) => {
 	let rsp = new Render( response );
+	let upld = new Uploader( rsp );
 	rsp.setHeaders();
 	rsp.drawCommandForm();
 	rsp.drawSeparator();
-	await Uploader.manageUpload( request ); //TODO: evaluate to use a contructor.
+	await upld.manageUpload( request );
 	await listStorageFiles( response );	// TODO: evaluate to put in uploader... ???
 	rsp.drawFileUploadForm();
 	rsp.drawSeparator();
