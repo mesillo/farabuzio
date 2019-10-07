@@ -8,16 +8,20 @@ const Executor = require( "../executor/executor" );
 
 class RequestManager {
 	static commandManage( request, response ) {
-		let parsedRequest = url.parse( request.url, true );
-		let requestParameters = parsedRequest.query;
-		if( parsedRequest.pathname === defines.COMMANDURL ) { // found a form rend request...
-			RequestManager._manageFormRequest( requestParameters, response );
-			response.end();
-		} else if( parsedRequest.pathname === defines.EXECUTIONURL ) { // found a command execution request...
-			RequestManager._manageExecutionRequest( requestParameters, response );
-		} else {
-			response.end(); // end of the request...
-		}
+		return new Promise( ( resolve, reject ) => {
+			let parsedRequest = url.parse( request.url, true );
+			let requestParameters = parsedRequest.query;
+			if( parsedRequest.pathname === defines.COMMANDURL ) { // found a form rend request...
+				RequestManager._manageFormRequest( requestParameters, response );
+				resolve(); //response.end();
+			} else if( parsedRequest.pathname === defines.EXECUTIONURL ) { // found a command execution request...
+				RequestManager._manageExecutionRequest( requestParameters, response )
+					.then( resolve )
+					.catch( reject );
+			} else {
+				resolve(); //response.end(); // end of the request...
+			}
+		} );
 	}
 
 	static _manageFormRequest( requestParameters, response ) {
@@ -27,20 +31,22 @@ class RequestManager {
 	}
 
 	static _manageExecutionRequest( requestParameters, response ) {
-		if( requestParameters[ defines.EXECUTEREQUESTPARAM ] ) { // verified execution request...
-			let commandStr = RequestManager._getCommandString( requestParameters );
-			Executor.execute( commandStr )
-				.then( ( streams ) => {
-					Render.drawCommandResponse( response, streams, commandStr );
-				} )
-				.catch( ( error ) => {
-					console.error( error );
-					Render.drawError( error, response );
-				} )
-				.finally( () => {
-					response.end()
-				} );
-		}
+		return new Promise( ( resolve, reject ) => {
+			if( requestParameters[ defines.EXECUTEREQUESTPARAM ] ) { // verified execution request...
+				let commandStr = RequestManager._getCommandString( requestParameters );
+				Executor.execute( commandStr )
+					.then( ( streams ) => {
+						Render.drawCommandResponse( response, streams, commandStr );
+					} )
+					.catch( ( error ) => {
+						console.error( error );
+						Render.drawError( error, response );
+					} )
+					.finally( () => {
+						resolve(); //response.end()
+					} );
+			}
+		} );
 	}
 
 	static _getCommandString( requestParameters ) {

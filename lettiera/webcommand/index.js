@@ -17,7 +17,8 @@ let manageRequest = async ( request, response ) => {
 	await listStorageFiles( response );	// TODO: evaluate to put in uploader... ???
 	Render.drawFileUploadForm( response );
 	Render.drawSeparator( response );
-	RequestManager.commandManage( request, response );
+	await RequestManager.commandManage( request, response );
+	response.end();
 };
 
 let listStorageFiles = async ( response ) => { //TODO: return (something)???
