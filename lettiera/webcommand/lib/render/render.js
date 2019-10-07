@@ -1,9 +1,101 @@
 "use strict";
 
 const Commands = require( "../commands/commands" );
-const defines = require( "../defines" );
+const defines = require( "../../defines" );
 
 class Render {
+
+	/**
+	 * The constructor
+	 * @param {ServerResponse} response 
+	 */
+	constructor( response ) {
+		if( ! response ) {
+			throw new Error( "No HTTP response provided!" );
+		}
+		this.response = response;
+	}
+
+	close() {
+		if( this.isOpen() ) {
+			this.response.end();
+		}
+		this.response = null;
+	}
+
+	/**
+	 * Check if is possible for render to write.
+	 * @returns {boolean}
+	 */
+	isOpen() {
+		if( this.response !== null ) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * check if response is utilizable
+	 * @throws {Error}
+	 */
+	_checkResponse() {
+		if( ! this.isOpen() ) {
+			throw new Error( "Render not utilizable!" );
+		}
+	}
+
+	/**
+	 * draw the command selection form.
+	 */
+	drawCommandForm() {
+		this._checkResponse();
+		Render.drawCommandForm( this.response );
+	}
+
+	/**
+	 * draw a separation.
+	 */
+	drawSeparator() {
+		this._checkResponse();
+		Render.drawSeparator( this.response );
+	}
+
+	/**
+	 * Send headers to client.
+	 * @param {number} status 
+	 */
+	setHeaders( status = 200 ) {
+		this._checkResponse();
+		Render.setHeaders( this.response, status );
+	}
+
+	drawForm( commandName ) {
+		this._checkResponse();
+		Render.drawForm( commandName, this.response );
+	}
+
+	drawCommandResponse( streams = null, cmdLine = null ) {
+		this._checkResponse();
+		Render.drawCommandResponse( this.response, streams, cmdLine );
+	}
+
+	drawText( text ) {
+		this._checkResponse();
+		Render.drawText( text, this.response );
+	}
+
+	drawError( error ) {
+		this._checkResponse();
+		Render.drawError( error, this.response );
+	}
+
+	drawFileUploadForm() {
+		this._checkResponse();
+		Render.drawFileUploadForm( this.response );
+	}
+
+	///// Static Methods /////
+
 	/**
 	 * draw the command selection form.
 	 * @static

@@ -1,6 +1,6 @@
 "use strict";
 
-const defines = require( "../defines" );
+const defines = require( "../../defines" );
 
 const COMMANDS_DEFINITIONS = {
 	"create_kinesis_stream": {
