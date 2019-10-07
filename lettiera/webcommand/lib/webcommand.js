@@ -38,6 +38,7 @@ class WebCommand {
         let upld = new Uploader( rsp );
         //let reqMan = new RequestManager( rsp ); // TODO: use object...
         rsp.setHeaders();
+        rsp.drawHtmlHeader();
         rsp.drawCommandForm();
         rsp.drawSeparator();
         await upld.manageUpload( request );
@@ -45,6 +46,7 @@ class WebCommand {
         rsp.drawFileUploadForm();
         rsp.drawSeparator();
         await RequestManager.commandManage( request, response ); // TODO: move from response to render...
+        rsp.drawHtmlFooter();
         rsp.close();
     };
 }

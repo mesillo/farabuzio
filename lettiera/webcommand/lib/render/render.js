@@ -2,6 +2,7 @@
 
 const Commands = require( "../commands/commands" );
 const defines = require( "../../defines" );
+const statics = require( "../staticcontents/staticcontents" );
 
 class Render {
 
@@ -94,6 +95,16 @@ class Render {
 		Render.drawFileUploadForm( this.response );
 	}
 
+	drawHtmlHeader() {
+		this._checkResponse();
+		Render.drawHtmlHeader( this.response );
+	}
+
+	drawHtmlFooter() {
+		this._checkResponse();
+		Render.drawHtmlFooter( this.response );
+	}
+
 	///// Static Methods /////
 
 	/**
@@ -163,6 +174,18 @@ class Render {
 
 	static drawFileUploadForm( response ) {
 		response.write( `\n<form action="${defines.UPLOADFILEURL}" method="post" enctype="multipart/form-data">\n<input type="file" name="filetoupload"><br>\n<input type="submit" value=\"Upload\">\n</form>\n` );
+	}
+
+	static drawHtmlHeader( response ) {
+		response.write(
+			statics.getBuffer( "header" )
+		);
+	}
+
+	static drawHtmlFooter( response ) {
+		response.write(
+			statics.getBuffer( "footer" )
+		);
 	}
 
 	static _getInputList( cmdDescription ) {
