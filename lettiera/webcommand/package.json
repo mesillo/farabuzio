@@ -1,16 +1,20 @@
 {
-  "name": "webcommand",
-  "version": "0.0.1",
-  "description": "ho tanta aria",
-  "main": "index.js",
-  "scripts": {
-    "start": "node ./index.js",
-    "debug": "nodemon ./index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "formidable": "^1.2.1"
-  }
+	"name": "webcommand",
+	"version": "0.0.2",
+	"description": "An interface for execute commands... :-|",
+	"main": "index.js",
+	"scripts": {
+		"start": "node ./index.js",
+		"debug": "nodemon ./index.js 1234",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "Alberto Mesillo Mesin",
+	"license": "ISC",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/mesillo/farabuzio"
+	},
+	"dependencies": {
+		"formidable": "^1.2.1"
+	}
 }

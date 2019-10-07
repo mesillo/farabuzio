@@ -1,6 +1,6 @@
 "use strict";
 
-const defines = require( "../defines" );
+const defines = require( "../../defines" );
 const formidable = require( "formidable" );
 const Render = require( "../render/render" );
 const Executor = require( "../executor/executor" );

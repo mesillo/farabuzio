@@ -1,7 +1,7 @@
 "use strict";
 
 const url = require( "url" );
-const defines = require( "../defines" );
+const defines = require( "../../defines" );
 const Render = require( "../render/render" );
 const Commands = require( "../commands/commands" );
 const Executor = require( "../executor/executor" );

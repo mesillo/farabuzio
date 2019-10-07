@@ -1,7 +1,7 @@
 "use strict";
 
 const Commands = require( "../commands/commands" );
-const defines = require( "../defines" );
+const defines = require( "../../defines" );
 
 class Render {
 
