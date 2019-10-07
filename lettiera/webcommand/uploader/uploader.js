@@ -20,7 +20,7 @@ class Uploader {
 	}
 
 	async manageUpload( request ) {
-		Uploader.manageUpload( request );
+		await Uploader.manageUpload( request );
 	}
 
 	async listStorageFiles() {

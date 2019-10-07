@@ -5,22 +5,22 @@ const Render = require( "./render/render" );
 const Executor = require( "./executor/executor" );
 const RequestManager = require( "./requestmanager/requestmanager" );
 const Uploader = require( "./uploader/uploader" );
-const defines = require( "./defines" );
 
 const PORT = 8181;
 
 let manageRequest = async ( request, response ) => {
 	let rsp = new Render( response );
 	let upld = new Uploader( rsp );
+	//let reqMan = new RequestManager( rsp ); // TODO: use object...
 	rsp.setHeaders();
 	rsp.drawCommandForm();
 	rsp.drawSeparator();
 	await upld.manageUpload( request );
-	await upld.listStorageFiles();	// TODO: evaluate to put in uploader... ???
+	await upld.listStorageFiles();
 	rsp.drawFileUploadForm();
 	rsp.drawSeparator();
-	await RequestManager.commandManage( request, response );
-	rsp.close(); //response.end();
+	await RequestManager.commandManage( request, response ); // TODO: move from response to render...
+	rsp.close();
 };
 
 let server = http.createServer( manageRequest );
@@ -31,7 +31,7 @@ Executor.execute( "whoami" )
 			console.error( "Not as Root!!!" );
 			process.exit( 255 );
 		}
-		server.listen( PORT ); //the server object listens on port PORT
+		server.listen( PORT );
 		console.log( "WebCommand listening on port " + PORT );
 	} )
 	.catch( ( error ) => {

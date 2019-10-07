@@ -7,19 +7,37 @@ const Commands = require( "../commands/commands" );
 const Executor = require( "../executor/executor" );
 
 class RequestManager {
+	/**
+	 * The constructor
+	 * @param {Render} render
+	 */
+	constructor( render ) {
+		if( ! render || ! render.isOpen() ) {
+			throw new Error( "Invalid Render provided!" );
+		}
+		this.render = render;
+	}
+
+	async commandManage( request ) {
+		if( request !== null && this.render.isOpen() ) {
+			return await RequestManager.commandManage( request, this.render );
+		}
+	}
+
+	///// Static Methods /////
 	static commandManage( request, response ) {
 		return new Promise( ( resolve, reject ) => {
 			let parsedRequest = url.parse( request.url, true );
 			let requestParameters = parsedRequest.query;
 			if( parsedRequest.pathname === defines.COMMANDURL ) { // found a form rend request...
 				RequestManager._manageFormRequest( requestParameters, response );
-				resolve(); //response.end();
+				resolve();
 			} else if( parsedRequest.pathname === defines.EXECUTIONURL ) { // found a command execution request...
 				RequestManager._manageExecutionRequest( requestParameters, response )
 					.then( resolve )
 					.catch( reject );
 			} else {
-				resolve(); //response.end(); // end of the request...
+				resolve();
 			}
 		} );
 	}
@@ -43,7 +61,7 @@ class RequestManager {
 						Render.drawError( error, response );
 					} )
 					.finally( () => {
-						resolve(); //response.end()
+						resolve();
 					} );
 			}
 		} );
