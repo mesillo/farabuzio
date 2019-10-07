@@ -3,6 +3,7 @@
 const defines = require( "../defines" );
 const formidable = require( "formidable" );
 const Render = require( "../render/render" );
+const Executor = require( "../executor/executor" );
 const fs = require( "fs" );
 const url = require( "url" );
 
@@ -22,9 +23,9 @@ class Uploader {
 		Uploader.manageUpload( request );
 	}
 
-	async stocazzo() {
+	async listStorageFiles() {
 		if( this.render.isOpen() ) {
-			Uploader.manageUpload( this.render );
+			await Uploader.listStorageFiles( this.render );
 		} else {
 			console.warn( "Uploader: render is closed!" );
 		}
@@ -54,6 +55,16 @@ class Uploader {
 				resolve();
 			} );
 		} );
+	}
+
+	static async listStorageFiles( render ) {
+		try {
+			let streams = await Executor.execute( `ls -lh ${defines.STORAGEPATH}` );
+			render.drawText( streams.stdout );
+		} catch( error ) {
+			console.error( error );
+			process.exit( 255 );
+		}
 	}
 }
 

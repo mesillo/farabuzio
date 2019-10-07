@@ -16,22 +16,12 @@ let manageRequest = async ( request, response ) => {
 	rsp.drawCommandForm();
 	rsp.drawSeparator();
 	await upld.manageUpload( request );
-	await listStorageFiles( response );	// TODO: evaluate to put in uploader... ???
+	await upld.listStorageFiles();	// TODO: evaluate to put in uploader... ???
 	rsp.drawFileUploadForm();
 	rsp.drawSeparator();
 	await RequestManager.commandManage( request, response );
 	rsp.close(); //response.end();
 };
-
-let listStorageFiles = async ( response ) => { //TODO: return (something)???
-	try {
-		let streams = await Executor.execute( `ls -lh ${defines.STORAGEPATH}` )
-		Render.drawText( streams.stdout, response );
-	} catch( error ) {
-		console.error( error );
-		process.exit( 255 );
-	}
-}
 
 let server = http.createServer( manageRequest );
 
