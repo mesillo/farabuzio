@@ -7,6 +7,7 @@ module.exports = Object.freeze(
         EXECUTEREQUESTPARAM : "commandName",
         STORAGEPATH: "storage/",
         UPLOADFILEURL: "/uploadfile",
+        STATICCONTENTS: "statics/",
         SERVERPORT: 8181
     }
 );
