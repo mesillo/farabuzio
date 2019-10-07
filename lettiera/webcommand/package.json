@@ -9,12 +9,28 @@
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"author": "Alberto Mesillo Mesin",
-	"license": "ISC",
+	"license": "GPL-2.0-only",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/mesillo/farabuzio"
+		"url": "git+https://github.com/mesillo/farabuzio.git"
 	},
 	"dependencies": {
 		"formidable": "^1.2.1"
-	}
+	},
+	"bugs": {
+		"url": "https://github.com/mesillo/farabuzio/issues"
+	},
+	"homepage": "https://github.com/mesillo/farabuzio#readme",
+	"directories": {
+		"lib": "lib"
+	},
+	"devDependencies": {},
+	"keywords": [
+		"localstack",
+		"awslocal",
+		"commands",
+		"bash",
+		"sh",
+		"awscli-local"
+	]
 }
