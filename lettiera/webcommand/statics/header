@@ -31,9 +31,22 @@ div {
   background-color: #f2f2f2;
   padding: 20px;
 }
+
+#container {
+  position: fixed;
+  /* center the element */
+  right: 0;
+  left: 0;
+  margin-right: auto;
+  margin-left: auto;
+  /* give it dimensions */
+  min-height: 10em;
+  width: 640px;
+}
 </style>
 
 <html>
-	<head></head>
-	<body>
+  <head></head>
+  <body>
+    <div id="container">
 <!-- HEADER //-->
