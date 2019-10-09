@@ -2,9 +2,7 @@
 
 echo "=== starting sandbox ==="
 # starting webcommand application
-su - localstack -c 'cd /opt/code/localstack/ && node webcommand/index.js' &
-# runuser -l  localstack -c 'node webcommand/index.js' &
-# node webcommand/index.js &
+su - localstack -c 'cd /opt/code/localstack/webcommand/ && npm start' &
 
 echo "=== starting localstack services ==="
 # starting localstack
