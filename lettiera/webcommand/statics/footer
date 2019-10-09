@@ -1,6 +1,8 @@
 
 <!-- FOOTER //-->
+            <center>
+                <p><a href="/">HOME</a></p>
+            </center>
         </div>
-        <center><a href="/">Reload the HomePage</a></center>
     </body>
 </html>
