@@ -143,6 +143,7 @@ class Render {
 	static drawForm( commandName, response ) {
 		let cmdDescription = Commands.getCommands()[ commandName ];
 		if( cmdDescription ) {
+			response.write( `<h3><center>${commandName}</center></h3>` );
 			response.write( `<form action="${defines.EXECUTIONURL}">` );
 			response.write( `<input type="hidden" name="${defines.EXECUTEREQUESTPARAM}" value="${commandName}">` );
 			Render._drawInputs( cmdDescription, response );
