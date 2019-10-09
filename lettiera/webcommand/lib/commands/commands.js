@@ -11,10 +11,18 @@ const COMMANDS_DEFINITIONS = {
 		cmd: `awslocal lambda create-function --function-name=%functionName% --runtime=nodejs8.10  --region=fakeRegion --role=fakeRole --handler=%handlerFile%.%handlerFunction% --zip-file fileb://${defines.STORAGEPATH}%zipFileName%`, //TODO: review Storage and runtime...
 		parameters: [ "functionName", "handlerFile", "handlerFunction", "zipFileName" ]
 	},
+	"delete_lambda_function": {
+		cmd: "awslocal lambda delete-function --function-name %functionName%",
+		parameters: [ "functionName" ]
+	},
 	"create_event_mapping": {
 		cmd: "awslocal lambda create-event-source-mapping --function-name %functionName% --event-source arn:aws:kinesis:us-east-1:000000000000:stream/%streamName% --batch-size %batchSize% --starting-position TRIM_HORIZON --region=fakeRegion", //TODO: implement --starting-position
 		parameters: [ "functionName", "streamName", "batchSize" ]
-	}
+	},
+	"delete_storage_file": {
+		cmd: `rm -fv ${defines.STORAGEPATH}%fileName%`, //TODO: review Storage...
+		parameters: [ "fileName" ]
+	},
 	/*,	"checkUser": {
 		cmd: "whoami",
 		parameters: []
