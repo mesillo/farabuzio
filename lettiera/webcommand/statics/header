@@ -33,7 +33,7 @@ div {
 }
 
 #container {
-  position: fixed;
+  /* position: fixed; */
   /* center the element */
   right: 0;
   left: 0;
