@@ -23,6 +23,10 @@ const COMMANDS_DEFINITIONS = {
 		cmd: `rm -fv ${defines.STORAGEPATH}%fileName%`, //TODO: review Storage...
 		parameters: [ "fileName" ]
 	},
+	"=Free_CMD=": {
+		cmd: `%cmd%`,
+		parameters: [ "cmd" ]
+	},
 	/*,	"checkUser": {
 		cmd: "whoami",
 		parameters: []
