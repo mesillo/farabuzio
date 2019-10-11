@@ -2,60 +2,77 @@
 "use strict";
 
 const Executor = require( "../lib/executor/executor" );
+const zlib = require( "zlib" );
 
 ///// Functions /////
 let readStream = ( streamName ) => {
-    Executor.execute( `awslocal kinesis describe-stream --stream-name ${streamName}` )
-        .then( ( streams ) => {
-            let describeStream = JSON.parse( streams.stdout );
-            let shards = describeStream.StreamDescription.Shards;
-            let shradIds = [];
-            for( let shard of shards ) {
-                //shradIds.push( shard.ShardId );
-                readShard( streamName, shard.ShardId ); // TODO: "await" ???
-            }
-        } )
-        .catch( ( error ) => {
-            console.error( error );
-            process.exit( 255 );
-        } );
+	Executor.execute( `awslocal kinesis describe-stream --stream-name ${streamName}` )
+		.then( async ( streams ) => {
+			let describeStream = JSON.parse( streams.stdout );
+			let shards = describeStream.StreamDescription.Shards;
+			let shradIds = [];
+			for( let shard of shards ) {
+				console.log( ` ===== ${shard.ShardId} ===== ` );
+				await readShard( streamName, shard.ShardId );
+			}
+		} )
+		.catch( ( error ) => {
+			console.error( error );
+			process.exit( 255 );
+		} );
 };
 
 let readShard = ( streamName, shardId ) => {
-    Executor.execute( `awslocal kinesis get-shard-iterator --stream-name ${streamName} --shard-id ${shardId} --shard-iterator-type TRIM_HORIZON` )
-        .then( ( streams ) => {
-            let describeShardIterator = JSON.parse( streams.stdout );
-            let shardIterator = describeShardIterator.ShardIterator;
-            readRecords( streamName, shardId, shardIterator ); // TODO: "await" ???
-        } )
-        .catch( ( error ) => {
-            console.error( error );
-            process.exit( 255 );
-        } );
+	return new Promise( ( resolve, reject ) => {
+		Executor.execute( `awslocal kinesis get-shard-iterator --stream-name ${streamName} --shard-id ${shardId} --shard-iterator-type TRIM_HORIZON` )
+			.then( async ( streams ) => {
+				let describeShardIterator = JSON.parse( streams.stdout );
+				let shardIterator = describeShardIterator.ShardIterator;
+				await readRecords( streamName, shardId, shardIterator );
+				resolve();
+			} )
+			.catch( ( error ) => {
+				console.error( error );
+				reject( error );
+			} );
+	} );
 };
 
 let readRecords = ( streamName, shardId, shardIterator ) => {
-    Executor.execute( `awslocal kinesis get-records --shard-iterator ${shardIterator}` )
-        .then( ( streams ) => {
-            let records = JSON.parse( streams.stdout );
-            /*{
-                "Records": [],
-                "NextShardIterator": "AAAAAAAAAAF6i9k+9uSn9/HnvIdxnZRCxo256Q+CydkvEpqbtxBfgTq7Hwxbth+ES5tCzqTPztR2OCUfkRFjcL2hi9NWeTtUklMoaPtki2SYERmW/C8a37pApmAa2+ADl9TXAqP3GPPKNl30va3VKZCA/zOOGeY3AyTvpS1TEvJMWa0DnJ0IOO7F2rQvfSVZJKOi5l0DHHQ=",
-                "MillisBehindLatest": 0
-            }*/
-            // TODO: while MillisBehindLatest????
-            readRecords( streamName, shardId, records.NextShardIterator ); // TODO: "await" ???
-        } )
-        .catch( ( error ) => {
-            console.error( error );
-            process.exit( 255 );
-        } );
+	return new Promise( ( resolve, reject ) => {
+		Executor.execute( `awslocal kinesis get-records --shard-iterator ${shardIterator}` )
+			.then( async ( streams ) => {
+				let records = JSON.parse( streams.stdout );
+				for( let record of records.Records ) {
+					await payloadHandler( streamName, shardId, record );
+				}
+				if( records.MillisBehindLatest !== 0 ) {
+					await readRecords( streamName, shardId, records.NextShardIterator );
+				}
+				resolve();
+			} )
+			.catch( ( error ) => {
+				console.error( error );
+				reject( error );
+			} );
+	} );
 };
+
+///// Output Handler /////
+let payloadHandler = ( streamName, shardId, record ) => { // TODO: implemet replacing method.
+	//console.dir( record.Data, { depth : null } );
+	let dataBuffer = Buffer.from( record.Data, "base64" );
+	let unzippedBuffer = zlib.unzipSync( dataBuffer );
+	let textBuffer = unzippedBuffer.toString( "ascii" );
+	console.log( textBuffer );
+	//let jsonBuffer = JSON.parse( textBuffer );
+	//console.dir( jsonBuffer, { depth : null } );	
+}
 
 let streamName = "test";
 // Parameter reading
-if( process.argv[1] ) {
-    streamName = parseInt( process.argv[1] );
+if( process.argv[2] ) { // TODO: improve parameter parsing ( after --stream-name string )
+	streamName = process.argv[2];
 }
 
 /// Main Task ///

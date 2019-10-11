@@ -19,6 +19,10 @@ const COMMANDS_DEFINITIONS = {
 		cmd: "awslocal lambda create-event-source-mapping --function-name %functionName% --event-source arn:aws:kinesis:us-east-1:000000000000:stream/%streamName% --batch-size %batchSize% --starting-position TRIM_HORIZON --region=fakeRegion", //TODO: implement --starting-position
 		parameters: [ "functionName", "streamName", "batchSize" ]
 	},
+	"get_stream_records": {
+		cmd: "./bin/kscat.js %streamName%",
+		parameters: [ "streamName" ]
+	},
 	"delete_storage_file": {
 		cmd: `rm -fv ${defines.STORAGEPATH}%fileName%`, //TODO: review Storage...
 		parameters: [ "fileName" ]
