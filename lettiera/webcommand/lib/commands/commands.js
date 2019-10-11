@@ -20,11 +20,19 @@ const COMMANDS_DEFINITIONS = {
 		parameters: [ "functionName", "streamName", "batchSize" ]
 	},
 	"get_stream_records": {
-		cmd: "./bin/kscat.js %streamName%",
+		cmd: "./bin/kscat.js --stream-name %streamName%",
 		parameters: [ "streamName" ]
+	},
+	"save_stream": {
+		cmd: `./bin/kscat.js --stream-name %streamName% --save-stream > ${defines.STORAGEPATH}%fileName%`,  //TODO: review Storage...
+		parameters: [ "streamName", "fileName" ]
 	},
 	"delete_storage_file": {
 		cmd: `rm -fv ${defines.STORAGEPATH}%fileName%`, //TODO: review Storage...
+		parameters: [ "fileName" ]
+	},
+	"read_file_content": {
+		cmd: `cat ${defines.STORAGEPATH}%fileName%`, //TODO: review Storage...
 		parameters: [ "fileName" ]
 	},
 	"=Free_CMD=": {

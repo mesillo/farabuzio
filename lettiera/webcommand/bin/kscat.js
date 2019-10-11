@@ -58,22 +58,43 @@ let readRecords = ( streamName, shardId, shardIterator ) => {
 	} );
 };
 
-///// Output Handler /////
-let payloadHandler = ( streamName, shardId, record ) => { // TODO: implemet replacing method.
-	//console.dir( record.Data, { depth : null } );
+///// Output Modes /////
+let printPayload = ( record ) => {
 	let dataBuffer = Buffer.from( record.Data, "base64" );
 	let unzippedBuffer = zlib.unzipSync( dataBuffer );
 	let textBuffer = unzippedBuffer.toString( "ascii" );
 	console.log( textBuffer );
 	//let jsonBuffer = JSON.parse( textBuffer );
-	//console.dir( jsonBuffer, { depth : null } );	
-}
+	//console.dir( jsonBuffer, { depth : null } );
+};
 
-let streamName = "test";
+///// Output Handler /////
+let payloadHandler = ( streamName, shardId, record ) => { // TODO: implemet replacing method.
+	if( options.saveStream ) {
+		console.log( JSON.stringify( record ) );
+	} else {
+		printPayload( record );
+	}
+};
+
+let options = {
+	saveStream : false,
+	streamName : "test"
+};
 // Parameter reading
-if( process.argv[2] ) { // TODO: improve parameter parsing ( after --stream-name string )
-	streamName = process.argv[2];
+//if( process.argv[2] ) { // TODO: improve parameter parsing ( after --stream-name string )
+//	options.streamName = process.argv[2];
+//}
+for( let i = 0  ; i < process.argv.length ; i++ ) {
+	switch( process.argv[ i ] ) {
+		case "--save-stream":
+			options.saveStream = true;
+			break;
+		case "--stream-name":
+			options.streamName = process.argv[++i];
+			break;
+	}
 }
 
 /// Main Task ///
-readStream( streamName );
+readStream( options.streamName );

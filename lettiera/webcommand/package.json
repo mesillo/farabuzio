@@ -5,7 +5,7 @@
 	"main": "index.js",
 	"scripts": {
 		"start": "node ./index.js",
-		"debug": "nodemon ./index.js 1234",
+		"debug": "nodemon ./index.js 8888",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"author": "Alberto Mesillo Mesin",
