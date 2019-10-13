@@ -8,8 +8,8 @@ const PORT = 33333;
 const HOST = "10.0.75.1";
 
 let JSONEvent = async ( event, context ) => {
-	//console.log( "===" + ( new Date() ).toString() + "===" );
-	//console.log( JSON.stringify( event ) );
+	console.log( "===" + ( new Date() ).toString() + "===" );
+	console.log( JSON.stringify( event ) );
 	//fs.appendFileSync( output, "===" + ( new Date() ).toString() + "===" );
 	//fs.appendFileSync( output, JSON.stringify( event ) );
 

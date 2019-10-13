@@ -27,6 +27,10 @@ const COMMANDS_DEFINITIONS = {
 		cmd: `./bin/kscat.js --stream-name %streamName% --save-stream > ${defines.STORAGEPATH}%fileName%`,  //TODO: review Storage...
 		parameters: [ "streamName", "fileName" ]
 	},
+	"load_stream": {
+		cmd: `./bin/kspush.js --stream-name %streamName% --fileName ${defines.STORAGEPATH}%fileName% --binary-payload`,  //TODO: review Storage, non binary mode option...
+		parameters: [ "streamName", "fileName" ]
+	},
 	"delete_storage_file": {
 		cmd: `rm -fv ${defines.STORAGEPATH}%fileName%`, //TODO: review Storage...
 		parameters: [ "fileName" ]
