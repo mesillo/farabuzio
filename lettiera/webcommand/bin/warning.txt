@@ -1,0 +1,2 @@
+1) kspush.js has a hidden dependence; aws-sdk that is already installed in localstack docker image.
+2) all files has 777 perms and root.root owner on docker image.
