@@ -31,6 +31,10 @@ const COMMANDS_DEFINITIONS = {
 		cmd: `./bin/kspush.js --stream-name %streamName% --fileName ${defines.STORAGEPATH}%fileName% --binary-payload`,  //TODO: review Storage, non binary mode option...
 		parameters: [ "streamName", "fileName" ]
 	},
+	"read_function_log": {
+		cmd: `./bin/klLogs.js --function-name %functionName%`,
+		parameters: [ "functionName" ]
+	},
 	"delete_storage_file": {
 		cmd: `rm -fv ${defines.STORAGEPATH}%fileName%`, //TODO: review Storage...
 		parameters: [ "fileName" ]
