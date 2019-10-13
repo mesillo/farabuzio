@@ -10,13 +10,13 @@ const kinesisConfig = {
 };
 
 ///// Functions /////
-let pushStream = async ( streamName, fileName ) => {
+let pushStream = async ( streamName, fileName, binaryPayload ) => {
 	let data = fs.readFileSync( fileName, "utf8" );
 	let lines = data.split( "\n" );
 	for( let line of lines ) {
 		try {
 			let record = JSON.parse( line );
-			if( options.binaryPayload ) {
+			if( binaryPayload ) {
 				if( ! kinesis ) {
 					//console.info( "Load AWS-SDK..." );
 					kinesis = new (require( "aws-sdk" ).Kinesis)( kinesisConfig );
@@ -87,4 +87,4 @@ for( let i = 0  ; i < process.argv.length ; i++ ) {
 }
 
 /// Main Task ///
-pushStream( options.streamName, options.fileName );
+pushStream( options.streamName, options.fileName, options.binaryPayload );
