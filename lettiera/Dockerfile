@@ -7,6 +7,7 @@ RUN chmod a+x /usr/local/bin/start-services.sh
 # adding node command server application
 RUN mkdir -p webcommand/
 ADD webcommand webcommand
+RUN chown localstack.localstack webcommand/bin/*.js
 RUN cd webcommand && npm install && cd ..
 
 # create a storage diectory for webcommand application

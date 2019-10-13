@@ -27,7 +27,7 @@ let pushStream = async ( streamName, fileName, binaryPayload ) => {
 				await streamWrite( streamName, record );
 			}
 		} catch( error ) {
-			console.error( error );
+			//console.error( error ); //TODO: action based on error kind...
 			console.log( line );
 		}
 	}
