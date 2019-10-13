@@ -14,9 +14,6 @@ RUN mkdir -p storage/
 RUN chown -R localstack.localstack storage
 RUN chmod 777 storage
 
-# install forever, as global for localstack user, for maintain running webcommand application...
-# RUN su - localstack -c 'npm install -g forever'
-
 # on localstack image localstack_client package seems isn't installed for localstack user... go to install it for patch...
 RUN su - localstack -c 'pip install localstack_client --user'
 
