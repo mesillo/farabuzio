@@ -3,7 +3,11 @@
 
 const fs = require( "fs" );
 const Executor = require( "../lib/executor/executor" );
-//const zlib = require( "zlib" );
+let kinesis = null; // istance of AWS.kinesis from aws-sdk.
+const kinesisConfig = {
+	region : "us-east-1",
+	endpoint : "http://localhost:4568"
+};
 
 ///// Functions /////
 let pushStream = async ( streamName, fileName ) => {
@@ -13,11 +17,17 @@ let pushStream = async ( streamName, fileName ) => {
 		try {
 			let record = JSON.parse( line );
 			if( options.binaryPayload ) {
+				if( ! kinesis ) {
+					//console.info( "Load AWS-SDK..." );
+					kinesis = new (require( "aws-sdk" ).Kinesis)( kinesisConfig );
+					//console.info( "... done!" );
+				}
 				await streamBinaryWrite( streamName, record );
 			} else {
 				await streamWrite( streamName, record );
 			}
 		} catch( error ) {
+			console.error( error );
 			console.log( line );
 		}
 	}
@@ -39,9 +49,20 @@ let streamWrite = ( streamName, record ) => {
 
 let streamBinaryWrite = ( streamName, record ) => {
 	return new Promise( ( resolve, reject ) => {
-		let data = Buffer.from( record.Data, "base64" ).toString();
-		console.error( "Not yet implemented!" );
-		reject( "Not yet implemented!" );
+		let data = Buffer.from( record.Data, "base64" );
+		let recordParams = {
+			Data : data,
+			PartitionKey : record.PartitionKey,
+			StreamName : streamName
+		};
+		kinesis.putRecord( recordParams, ( error, data ) => {
+			if( error ) {
+				reject( error );
+			} else {
+				//console.log( data );
+				resolve( data ); // data???
+			}
+		} );
 	} );
 };
 
