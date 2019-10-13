@@ -12,7 +12,11 @@ let pushStream = async ( streamName, fileName ) => {
 	for( let line of lines ) {
 		try {
 			let record = JSON.parse( line );
-			await streamWrite( streamName, record );
+			if( options.binaryPayload ) {
+				await streamBinaryWrite( streamName, record );
+			} else {
+				await streamWrite( streamName, record );
+			}
 		} catch( error ) {
 			console.log( line );
 		}
@@ -33,9 +37,18 @@ let streamWrite = ( streamName, record ) => {
 	} );
 };
 
+let streamBinaryWrite = ( streamName, record ) => {
+	return new Promise( ( resolve, reject ) => {
+		let data = Buffer.from( record.Data, "base64" ).toString();
+		console.error( "Not yet implemented!" );
+		reject( "Not yet implemented!" );
+	} );
+};
+
 let options = {
 	fileName : "test.json",
-	streamName : "test"
+	streamName : "test",
+	binaryPayload : false
 };
 // Parameter reading
 for( let i = 0  ; i < process.argv.length ; i++ ) {
@@ -45,6 +58,9 @@ for( let i = 0  ; i < process.argv.length ; i++ ) {
 			break;
 		case "--stream-name":
 			options.streamName = process.argv[++i];
+			break;
+		case "--binary-payload":
+			options.binaryPayload = true;
 			break;
 	}
 }
