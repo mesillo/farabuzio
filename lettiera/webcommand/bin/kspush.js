@@ -19,7 +19,13 @@ let pushStream = async ( streamName, fileName, binaryPayload ) => {
 			if( binaryPayload ) {
 				if( ! kinesis ) {
 					//console.info( "Load AWS-SDK..." );
-					kinesis = new (require( "aws-sdk" ).Kinesis)( kinesisConfig );
+					let AWS = require( "aws-sdk" );
+					AWS.config = new AWS.Config( {
+						accessKeyId : "AKID",
+						secretAccessKey : "SECRET",
+						region : "us-east-1"
+					} );
+					kinesis = new AWS.Kinesis( kinesisConfig );
 					//console.info( "... done!" );
 				}
 				await streamBinaryWrite( streamName, record );
