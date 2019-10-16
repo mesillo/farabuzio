@@ -1,0 +1,24 @@
+{
+  "name": "lambdazio",
+  "version": "0.0.0",
+  "description": "A ugly and inefficient simulation of node.js lambda",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"stocazzo\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mesillo/farabuzio.git"
+  },
+  "keywords": [
+    "lambda",
+    "nodejs",
+    "sandbox"
+  ],
+  "author": "Alberto Mesillo Mesin",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/mesillo/farabuzio/issues"
+  },
+  "homepage": "https://github.com/mesillo/farabuzio#readme"
+}
