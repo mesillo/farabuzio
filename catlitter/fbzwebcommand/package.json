@@ -1,5 +1,5 @@
 {
-	"name": "webcommand",
+	"name": "fbzwebcommand",
 	"version": "0.0.2",
 	"description": "An interface for execute commands... :-|",
 	"main": "index.js",
