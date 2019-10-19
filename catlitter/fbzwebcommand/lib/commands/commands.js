@@ -8,8 +8,8 @@ const COMMANDS_DEFINITIONS = {
 		parameters: [ "streamName", "shardCount" ]
 	},
 	"create_lambda_function": {
-		cmd: `awslocal lambda create-function --function-name=%functionName% --runtime=nodejs8.10  --region=fakeRegion --role=fakeRole --handler=%handlerFile%.%handlerFunction% --zip-file fileb://${defines.STORAGEPATH}%zipFileName%`, //TODO: review Storage and runtime...
-		parameters: [ "functionName", "handlerFile", "handlerFunction", "zipFileName" ]
+		cmd: `awslocal lambda create-function --function-name=%functionName% --runtime=%runtime%  --region=fakeRegion --role=fakeRole --handler=%handlerFile%.%handlerFunction% --zip-file fileb://${defines.STORAGEPATH}%zipFileName%`, //TODO: review Storage and runtime...
+		parameters: [ "functionName", "handlerFile", "handlerFunction", "zipFileName", "runtime" ]
 	},
 	"delete_lambda_function": {
 		cmd: "awslocal lambda delete-function --function-name %functionName%",
@@ -30,6 +30,14 @@ const COMMANDS_DEFINITIONS = {
 	"load_stream": {
 		cmd: `./bin/kspush.js --stream-name %streamName% --file-name ${defines.STORAGEPATH}%fileName% --binary-payload`,  //TODO: review Storage, non binary mode option...
 		parameters: [ "streamName", "fileName" ]
+	},
+	"create_log_groups": {
+		cmd: "awslocal create-log-group --log-group-name <value>",
+		parameters: []
+	},
+	"get_log_groups": {
+		cmd: "awslocal logs describe-log-groups --query logGroups[*].logGroupName",
+		parameters: []
 	},
 	"read_function_log": {
 		cmd: `./bin/klLogs.js --function-name %functionName%`,
