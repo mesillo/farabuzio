@@ -1,6 +1,11 @@
-def my_handler(event, context):
-    message = 'Hello {} {}!'.format(event['first_name'], 
-                                    event['last_name'])  
+import os
+
+def handler( event, context ):
+    
+    os.system( 'curl google.com' )
+
     return { 
-        'message' : message
+        'message' : 'Lambda End.'
     }
+
+handler( 'event', 'context' ) #TODO: remove
