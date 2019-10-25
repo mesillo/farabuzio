@@ -5,10 +5,10 @@ ADD start-services.sh /usr/local/bin/
 RUN chmod a+x /usr/local/bin/start-services.sh
 
 # adding node command server application
-RUN mkdir -p webcommand/
-ADD webcommand webcommand
-RUN chown localstack.localstack webcommand/bin/*.js
-RUN cd webcommand && npm install && cd ..
+RUN mkdir -p fbzwebcommand/
+ADD fbzwebcommand fbzwebcommand
+RUN chown localstack.localstack fbzwebcommand/bin/*.js
+RUN cd fbzwebcommand && npm install && cd ..
 
 # create a storage diectory for webcommand application
 RUN mkdir -p storage/

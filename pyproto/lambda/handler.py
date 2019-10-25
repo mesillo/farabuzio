@@ -1,7 +1,11 @@
 import os
 
+LAMBDA_NAME = "stocazzo"
+
 def handler( event, context ):
-    
+    print( event )
+    print( context )
+    #print( LAMBDA_NAME )
     os.system( 'curl google.com' )
 
     return { 
