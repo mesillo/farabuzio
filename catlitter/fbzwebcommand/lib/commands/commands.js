@@ -32,7 +32,7 @@ const COMMANDS_DEFINITIONS = {
 		parameters: [ "streamName", "fileName" ]
 	},
 	"create_lambda_log_group": {
-		cmd: "awslocal create-log-group --log-group-name %functionName%",
+		cmd: "awslocal create-log-group --log-group-name \"/aws/lambda/%functionName%\"",
 		parameters: [ "functionName" ]
 	},
 	"get_log_groups": {
