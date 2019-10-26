@@ -8,6 +8,7 @@ RUN chmod a+x /usr/local/bin/start-services.sh
 RUN mkdir -p fbzwebcommand/
 ADD fbzwebcommand fbzwebcommand
 RUN chown localstack.localstack fbzwebcommand/bin/*.js
+RUN chmod u+x fbzwebcommand/bin/*.js
 RUN cd fbzwebcommand && npm install && cd ..
 
 # create a storage diectory for webcommand application
