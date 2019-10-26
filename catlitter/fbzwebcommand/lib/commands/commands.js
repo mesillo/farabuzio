@@ -31,9 +31,9 @@ const COMMANDS_DEFINITIONS = {
 		cmd: `./bin/kspush.js --stream-name %streamName% --file-name ${defines.STORAGEPATH}%fileName% --binary-payload`,  //TODO: review Storage, non binary mode option...
 		parameters: [ "streamName", "fileName" ]
 	},
-	"create_log_groups": {
-		cmd: "awslocal create-log-group --log-group-name <value>",
-		parameters: []
+	"create_lambda_log_group": {
+		cmd: "awslocal create-log-group --log-group-name %functionName%",
+		parameters: [ "functionName" ]
 	},
 	"get_log_groups": {
 		cmd: "awslocal logs describe-log-groups --query logGroups[*].logGroupName",
