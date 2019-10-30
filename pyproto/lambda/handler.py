@@ -1,18 +1,20 @@
-#import os
 import subprocess
+import json
 
 LAMBDA_NAME = "stocazzo"
 LAMBDA_PORT = "9999"
 
 def handler( event, context ):
-	print( event )
-	print( context )
-	#print( LAMBDA_NAME )
-	#os.system( 'curl google.com' )
+	body = {
+		"lambda" : LAMBDA_NAME,
+		"event" : event,
+		"context" : context
+	}
+	bodyJSON = json.dumps( body )
 	returned_output = subprocess.check_output( [
 		"curl",
 		"-d",
-		"",
+		bodyJSON,
 		"-X",
 		"POST",
 		"localhost:" + LAMBDA_PORT
@@ -23,4 +25,4 @@ def handler( event, context ):
 		'message' : 'Lambda End.'
 	}
 
-handler( 'event', 'context' ) #TODO: remove
+#handler( 'event', 'context' ) #TODO: remove
