@@ -11,6 +11,11 @@ RUN chown localstack.localstack fbzwebcommand/bin/*.js
 RUN chmod u+x fbzwebcommand/bin/*.js
 RUN cd fbzwebcommand && npm install && cd ..
 
+# adding node lambda server simulator application
+RUN mkdir -p lambdazio/
+ADD lambdazio lambdazio
+RUN cd lambdazio && npm install && cd ..
+
 # create a storage diectory for webcommand application
 RUN mkdir -p storage/
 RUN chown -R localstack.localstack storage

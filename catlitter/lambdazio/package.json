@@ -4,7 +4,8 @@
   "description": "A ugly and inefficient simulation of node.js lambda",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"stocazzo\""
+    "test": "echo \"stocazzo\"",
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
