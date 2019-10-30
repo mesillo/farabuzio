@@ -1,30 +1,17 @@
 "use strict";
 
 const http = require( "http" );
-
 const lambdaServer = require( "./include/lib/lambdaserver" );
+const RequestManager = require( "./include/lib/requestmanager" );
 
 let port = 9999;
-let lambdaName = "lambdaTest";
-//let lambdaFile = "main";
-let lambdaFile = "singletontest";
-let lambdaHandler = "handler";
-
-//let handler = require( `./fs/${lambdaName}/${lambdaFile}` )[ lambdaHandler ];
-
 let lambdaSvr = new lambdaServer( "./fs/" );
+let requestManager = new RequestManager( lambdaSvr );
 
 let requestMnrg = async ( request, response ) => {
-	/*console.dir(
-		request.url,
-		{ depth : null }
-	);*/
-	//await handler( "event", "context" );
-	if( request.url === "/reset" ) {
-		lambdaSvr = new lambdaServer( "./fs/" );
-	}
-	let lresult = await lambdaSvr.fireLambda( "lambdaTest", "event", "context" );
-	response.end( lresult );
+	requestManager.manageRequets( request, response );
+	response.end();
+	return;
 }
 
 let server = http.createServer( requestMnrg );

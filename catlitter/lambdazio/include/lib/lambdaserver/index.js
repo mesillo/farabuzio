@@ -13,16 +13,12 @@ const defaultConfigurations = {
 }
 
 class LambdaServer {
-	/*constructor( configuration = defaultConfigurations ) {
-		// TODO: checks and Exceptions management...
-		this.handler = require( fileSystemDir + configuration.lambdaName + "/" + configuration.lambdaFile )[ configuration.lambdaHandler ];
-	}*/
 	constructor( lambdaStorage = null ) {
 		this.lambdaHandlers = [];
 		if( lambdaStorage && fs.lstatSync( lambdaStorage ).isDirectory() ) {
 			this._scanDirectory( lambdaStorage );
 		}
-		console.dir( this.lambdaHandlers );
+		//console.dir( this.lambdaHandlers );
 	}
 
 	_scanDirectory( lambdaStorage ) {
@@ -59,6 +55,10 @@ class LambdaServer {
 			return await this.lambdaHandlers[ lambdaName ]( event, context );
 		}// else TODO: log something???
 		return null;
+	}
+
+	getLambdaList() {
+		return Object.keys( this.lambdaHandlers );
 	}
 }
 
