@@ -8,9 +8,10 @@ class RequestManager {
 
 	async managePostRequets( request, response ) {
 		let requestBody = await this._getRequestBody( request );
-		console.dir( requestBody );
-		//let lresult = await this.lambdaSvr.fireLambda( "lambdaTest", "event", "context" );
-		//response.write( lresult );
+		let invocation = JSON.parse( requestBody );
+		console.dir( invocation, { depth : null } );
+		let lresult = await this.lambdaSvr.fireLambda( invocation.lambda, invocation.event, invocation.context );
+		response.write( lresult );
 	}
 	
 	async manageGetRequets( request, response ) {
