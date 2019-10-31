@@ -15,6 +15,9 @@ RUN cd fbzwebcommand && npm install && cd ..
 RUN mkdir -p lambdazio/
 ADD lambdazio lambdazio
 RUN cd lambdazio && npm install && cd ..
+# making fs directory writable
+RUN chown -R localstack.localstack lambdazio/fs/
+RUN chmod 777 lambdazio/fs/
 
 # create a storage diectory for webcommand application
 RUN mkdir -p storage/

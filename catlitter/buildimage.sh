@@ -1,4 +1,4 @@
 #! /bin/bash
 
-docker image rm sandbox
-docker build --rm -t sandbox ./
+docker image rm catlitter
+docker build --rm -t catlitter ./

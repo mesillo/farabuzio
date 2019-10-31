@@ -2,11 +2,12 @@ version: '2.1'
 
 services:
   localstack:
-    image: sandbox
+    image: catlitter
     ports:
       - "4567-4597:4567-4597"
       - "${PORT_WEB_UI-8080}:${PORT_WEB_UI-8080}"
       - "8181:8181"
+      - "9999:9999"
     environment:
       - SERVICES=${SERVICES- }
       - DEBUG=${DEBUG- }
