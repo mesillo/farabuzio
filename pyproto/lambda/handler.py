@@ -12,7 +12,6 @@ class Stringinetor:
         self.str += printed
     def getString( self ):
         return self.str.replace( "'", '"' ).replace( "<", '"<' ).replace( ">", '>"' )
-        #return self.str
 
 def handler( event, context ):
 	body = {
