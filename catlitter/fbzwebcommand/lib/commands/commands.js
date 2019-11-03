@@ -55,29 +55,14 @@ const COMMANDS_DEFINITIONS = {
 		cmd: `%cmd%`,
 		parameters: [ "cmd" ]
 	},
-	/*,	"checkUser": {
-		cmd: "whoami",
+	"deploy_zip_node_lambda": {
+		cmd: `./bin/lbzioAddLambda.js --name %functionName% --zip-file ${defines.STORAGEPATH}%zipFileName% --filename %handlerFileName% --handler %handlerName%`,  //TODO: review Storage...
+		parameters: [ "functionName", "zipFileName", "handlerFileName", "handlerName" ]
+	},
+	"list_node_lambda": { //TODO: remove or improve...
+		cmd: `curl localhost:9999`,
 		parameters: []
-	},
-	"uname": {
-		cmd: "uname -a"
-	},
-	"list": {
-		cmd: "ls -lah %dirname%",
-		parameters: [ "dirname" ]
-	},
-	"touch_test": {
-		cmd: "touch storage/testfile",
-		parameters: []
-	},
-	"edit_test": {
-		cmd: "echo FILE_CONTENT >> storage/testfile",
-		parameters: []
-	},
-	"cat_test": {
-		cmd: "cat storage/testfile",
-		parameters: []
-	}*/
+	}
 };
 
 class Commands {
