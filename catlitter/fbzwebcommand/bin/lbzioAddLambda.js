@@ -41,9 +41,9 @@ let createConfigJOSN = async ( config, destDir ) => {
 	let configFile = `${destDir}/${configurations.lambdazioConfigFile}`;
 	console.info( `Creating config file ${configFile}.` );
 	let configContent = JSON.stringify( {
-		lambdaFile : config.functionName,
-		lambdaHandler : config.filename,
-		lambdaName : config.handler
+		lambdaFile : config.filename,
+		lambdaHandler : config.handler,
+		lambdaName : config.functionName
 	} );
 	fs.writeFileSync( configFile, configContent );
 	return;

@@ -16,6 +16,12 @@ class RequestManager {
 	
 	async manageGetRequets( request, response ) {
 		// TODO: do it better...
+		if( request.url === "/reboot" || request.url === "/exit" ) {
+			response.end( JSON.stringify( {
+				message : "Exiting!"
+			} ) );
+			process.exit( 0 ); // TODO: find a better way...
+		}
 		response.write(
 			JSON.stringify(
 				this.lambdaSvr.getLambdaList()

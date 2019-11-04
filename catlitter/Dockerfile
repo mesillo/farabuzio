@@ -18,6 +18,8 @@ RUN cd lambdazio && npm install && cd ..
 # making fs directory writable
 RUN chown -R localstack.localstack lambdazio/fs/
 RUN chmod 777 lambdazio/fs/
+RUN chown localstack.localstack lambdazio/productionrun.sh
+RUN chmod u+x lambdazio/productionrun.sh
 
 # create a storage diectory for webcommand application
 RUN mkdir -p storage/

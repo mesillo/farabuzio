@@ -6,7 +6,7 @@ su - localstack -c 'cd /opt/code/localstack/fbzwebcommand/ && npm start' &
 
 echo "=== starting node lambda server ==="
 # starting node lambda server
-su - localstack -c 'cd /opt/code/localstack/lambdazio/ && npm start' &
+su - localstack -c 'cd /opt/code/localstack/lambdazio/ && ./productionrun.sh' &
 
 echo "=== starting localstack services ==="
 # starting localstack
