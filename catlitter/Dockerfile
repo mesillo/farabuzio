@@ -26,6 +26,11 @@ RUN mkdir -p storage/
 RUN chown -R localstack.localstack storage
 RUN chmod 777 storage
 
+# create a temp diectory for node applications
+RUN mkdir -p temp/
+RUN chown -R localstack.localstack temp
+RUN chmod 777 temp
+
 # on localstack image localstack_client package seems isn't installed for localstack user... go to install it for patch...
 RUN su - localstack -c 'pip install localstack_client --user'
 

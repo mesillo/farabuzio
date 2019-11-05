@@ -67,10 +67,14 @@ const COMMANDS_DEFINITIONS = {
 		cmd: `curl localhost:9999/reboot`,
 		parameters: []
 	},
+	"deploy_lambda": {
+		cmd: `./bin/lbzioDeployLambda.js --name %functionName% --temp-dir ${defines.TEMPFS}`,
+		parameters: [ "functionName" ]
+	},
 	"FULL_deploy_zip_node_lambda": {
 		cmd: `./bin/lbzioAddLambda.js --name %functionName% --zip-file ${defines.STORAGEPATH}%zipFileName% --filename %handlerFileName% --handler %handlerName% && curl localhost:9999/reboot`,  //TODO: review Storage...
 		parameters: [ "functionName", "zipFileName", "handlerFileName", "handlerName" ]
-	},
+	}
 };
 
 class Commands {
