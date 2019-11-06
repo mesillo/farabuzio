@@ -1,7 +1,7 @@
 import subprocess
 
 LAMBDA_NAME = "=lambda=name=placeholder="
-LAMBDA_ENDPOINT = "localhost:9999"
+LAMBDA_ENDPOINT = "127.0.0.1:9999"
 
 class Stringinetor:
     def __init__( self, toWrite ):
