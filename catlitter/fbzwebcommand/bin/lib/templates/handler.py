@@ -29,8 +29,9 @@ def handler( event, context ):
 	] )
 	print( returned_output.decode( "utf-8" ) )
 
-	return { 
-		'message' : 'Lambda End.'
-	}
+	return returned_output.decode( "utf-8" )
+	#return { 
+	#	'message' : 'Lambda End.'
+	#}
 
 #handler( 'event', 'context' ) #TODO: remove
