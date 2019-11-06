@@ -12,7 +12,6 @@ let checkResponse = ( logGroupName, streams ) => {
 	let response = JSON.parse( streams.stdout );
 	//let logGroups = response.logGroups; //TODO: understand why not...
 	let logGroups = response;
-	//console.dir( response, { depth : null } ); //TODO: remove...
 	for( let logGroup of logGroups ) {
 		//if( logGroup.logGroupName === logGroupName ) {//TODO: understand why not...
 		if( logGroup === logGroupName ) { // TODO: probably it can be do better...
@@ -28,7 +27,6 @@ let checkLogGroup = ( config ) => {
 	let createLogGroupCommand = `awslocal logs create-log-group --log-group-name \"${logGroupName}\"`;
 	Executor.execute( getlogCommand )
 		.then( ( streams ) => {
-			//console.dir( streams, { depth : null } ); //TODO: remove...
 			console.info( `Checking for ${logGroupName}...` );
 			if( checkResponse( logGroupName, streams ) ) {
 				console.info( "... found!" );
@@ -63,13 +61,3 @@ for( let i = 0  ; i < process.argv.length ; i++ ) {
 
 /// Main Task ///
 checkLogGroup( options );
-
-/*
-Executor.execute( deployLambdaCommand )
-	.then( ( streams ) => {
-	} )
-	.catch( ( error ) => {
-		console.error( error );
-		process.exit( 255 ); //TODO: redefine...
-	} );
-*/
