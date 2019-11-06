@@ -71,8 +71,12 @@ const COMMANDS_DEFINITIONS = {
 		cmd: `./bin/lbzioDeployLambda.js --name %functionName% --temp-dir ${defines.TEMPFS}`,
 		parameters: [ "functionName" ]
 	},
+	"check_node_lambda_log_group": {
+		cmd: `./bin/lfcheckLogGroup.js --name %functionName%`,
+		parameters: [ "functionName" ]
+	},
 	"FULL_deploy_zip_node_lambda": {
-		cmd: `./bin/lbzioAddLambda.js --name %functionName% --zip-file ${defines.STORAGEPATH}%zipFileName% --filename %handlerFileName% --handler %handlerName% && curl localhost:9999/reboot && ./bin/lbzioDeployLambda.js --name %functionName% --temp-dir ${defines.TEMPFS}`,  //TODO: review Storage...
+		cmd: `./bin/lbzioAddLambda.js --name %functionName% --zip-file ${defines.STORAGEPATH}%zipFileName% --filename %handlerFileName% --handler %handlerName% && curl localhost:9999/reboot && ./bin/lbzioDeployLambda.js --name %functionName% --temp-dir ${defines.TEMPFS} && ./bin/lfcheckLogGroup.js --name %functionName%`,  //TODO: review Storage...
 		parameters: [ "functionName", "zipFileName", "handlerFileName", "handlerName" ]
 	}
 };
