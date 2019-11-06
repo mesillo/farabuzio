@@ -76,7 +76,11 @@ class RequestManager {
 				if( param !==  defines.EXECUTEREQUESTPARAM ) {
 					let placeHolder = defines.PLACEHOLDERBOUNDARIES + param + defines.PLACEHOLDERBOUNDARIES;
 					let value = requestParameters[ param ];
-					commandString = commandString.replace( placeHolder, value );
+					let oldCommand;
+					do { // replace all occurrences //TODO: searcha better way...
+						oldCommand = commandString;
+						commandString = commandString.replace( placeHolder, value );
+					} while( commandString !== oldCommand );
 				}
 			}
 		}
