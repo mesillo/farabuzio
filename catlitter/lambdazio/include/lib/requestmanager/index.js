@@ -3,6 +3,38 @@
 class RequestManager {
 	constructor( lambdaSvr ) {
 		this.lambdaSvr = lambdaSvr;
+		this.responseBuffer = {
+			status : 200,
+			buffer : ""
+		};
+	}
+
+	getResponseBuffer() {
+		return JSON.parse( JSON.stringify( this.responseBuffer ) );
+	}
+
+	getStatus() {
+		return this.responseBuffer.status;
+	}
+
+	getMessage() {
+		return this.responseBuffer.message;
+	}
+
+	_addToMessage( buffer ) {
+		let type = typeof buffer;
+		switch( type ) {
+			"undefined"
+			"object"
+			"boolean"
+			"number"
+			"bigint"
+			"string"
+			"symbol"
+			"function"
+			"object"
+			default:
+		}
 	}
 
 	async managePostRequets( request, response ) {
@@ -54,7 +86,6 @@ class RequestManager {
 				resolve( body );
 			} );
 		} );
-
 	}
 }
 
