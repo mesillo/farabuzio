@@ -9,7 +9,8 @@ let lambdaSvr = new lambdaServer( "./fs/" );
 let requestManager = new RequestManager( lambdaSvr );
 
 let requestMnrg = async ( request, response ) => {
-	requestManager.manageRequets( request, response );
+	// TODO: set the response header...
+	await requestManager.manageRequets( request, response );
 	response.end();
 	return;
 }

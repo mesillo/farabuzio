@@ -1,6 +1,5 @@
 "use strict";
 
-
 class RequestManager {
 	constructor( lambdaSvr ) {
 		this.lambdaSvr = lambdaSvr;
@@ -9,9 +8,16 @@ class RequestManager {
 	async managePostRequets( request, response ) {
 		let requestBody = await this._getRequestBody( request );
 		let invocation = JSON.parse( requestBody );
-		console.dir( invocation, { depth : null } );
-		let lresult = await this.lambdaSvr.fireLambda( invocation.lambda, invocation.event, invocation.context );
-		response.write( lresult );
+		//console.dir( invocation, { depth : null } );
+		let lresult = "";
+		try {
+			lresult = await this.lambdaSvr.fireLambda( invocation.lambda, invocation.event, invocation.context );
+		} catch( error ) {
+			// TODO: change response http code status... <<<=== 
+			lresult = error.message;
+		}
+		response.write( lresult.toString() ); // TODO: use a cache and check response type...
+		return;
 	}
 	
 	async manageGetRequets( request, response ) {
