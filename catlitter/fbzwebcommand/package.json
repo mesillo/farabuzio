@@ -1,0 +1,37 @@
+{
+	"name": "fbzwebcommand",
+	"version": "0.0.2",
+	"description": "An interface for execute commands... :-|",
+	"main": "index.js",
+	"scripts": {
+		"start": "node ./index.js",
+		"debug": "nodemon ./index.js 8888",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "Alberto Mesillo Mesin",
+	"license": "GPL-2.0-only",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/mesillo/farabuzio.git"
+	},
+	"dependencies": {
+		"aws-sdk": "^2.548.0",
+		"formidable": "^1.2.1"
+	},
+	"bugs": {
+		"url": "https://github.com/mesillo/farabuzio/issues"
+	},
+	"homepage": "https://github.com/mesillo/farabuzio#readme",
+	"directories": {
+		"lib": "lib"
+	},
+	"devDependencies": {},
+	"keywords": [
+		"localstack",
+		"awslocal",
+		"commands",
+		"bash",
+		"sh",
+		"awscli-local"
+	]
+}

@@ -1,0 +1,5 @@
+awslocal kinesis describe-stream --stream-name raw
+awslocal kinesis get-shard-iterator --stream-name raw --shard-id 0 --shard-iterator-type TRIM_HORIZON
+awslocal kinesis get-records --shard-iterator <iterator>
+
+$env:SERVICES="kinesis,lambda";$env:LAMBDA_EXECUTOR="docker"; docker-compose up
