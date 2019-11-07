@@ -1,3 +1,3 @@
 #!/bin/bash
 
-zip -q lambdaFns.zip *.zip
+zip -q lambdaFns.zip *.js
