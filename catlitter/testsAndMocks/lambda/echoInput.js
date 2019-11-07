@@ -9,5 +9,5 @@ let JSONEvent = async ( event, context ) => {
     console.log( "============================================================" );
     return 0;
 };
-JSONEvent( {uno:1}, {due:2} ); //TODO: remove or comment
+//JSONEvent( {uno:1}, {due:2} ); //TODO: remove or comment
 exports.handler = JSONEvent;
