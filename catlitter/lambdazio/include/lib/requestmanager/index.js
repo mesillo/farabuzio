@@ -1,11 +1,13 @@
 "use strict";
 
+const LAMBDA_HANDLER_REJECTION_HTTP_CODE = 500; // TODO: define it better; chech the codes mining...
+
 class RequestManager {
 	constructor( lambdaSvr ) {
 		this.lambdaSvr = lambdaSvr;
 		this.responseBuffer = {
 			status : 200,
-			buffer : ""
+			message : ""
 		};
 	}
 
@@ -23,48 +25,61 @@ class RequestManager {
 
 	_addToMessage( buffer ) {
 		let type = typeof buffer;
+		let chunk = "";
 		switch( type ) {
-			"undefined"
-			"object"
-			"boolean"
-			"number"
-			"bigint"
-			"string"
-			"symbol"
-			"function"
-			"object"
+			case "undefined":
+				chunk = "<undefined>";
+				break;
+			case "symbol":
+				chunk = "<symbol>";
+				break;
+			case "function":
+				chunk = "<function>";
+				break;
+			case "object":
+				// null is "object" too...
+				if( buffer === null ){
+					chunk = "<null>";
+				} else {
+					chunk = JSON.stringify( buffer );
+				}
+				break;
+			case "boolean":
+				chunk = buffer ? "TRUE" : "FALSE"; 
+			case "number":
+			case "bigint":
+				chunk = buffer.toString();
+			case "string":
+				chunk = buffer;
+				break;
 			default:
+				chunk = "<UNMANAGED_RETURN_TYPE>";
 		}
+		this.responseBuffer.message += chunk; //TODO: add a newline ???
 	}
 
 	async managePostRequets( request, response ) {
 		let requestBody = await this._getRequestBody( request );
 		let invocation = JSON.parse( requestBody );
 		//console.dir( invocation, { depth : null } );
-		let lresult = "";
 		try {
-			lresult = await this.lambdaSvr.fireLambda( invocation.lambda, invocation.event, invocation.context );
+			this._addToMessage( await this.lambdaSvr.fireLambda( invocation.lambda, invocation.event, invocation.context ) );
 		} catch( error ) {
-			// TODO: change response http code status... <<<=== 
-			lresult = error.message;
+			this.responseBuffer.status = LAMBDA_HANDLER_REJECTION_HTTP_CODE;
+			this._addToMessage( error.message );
 		}
-		response.write( lresult.toString() ); // TODO: use a cache and check response type...
 		return;
 	}
 	
 	async manageGetRequets( request, response ) {
 		// TODO: do it better...
 		if( request.url === "/reboot" || request.url === "/exit" ) {
-			response.end( JSON.stringify( {
+			response.end( JSON.stringify( { //TODO: use a better way that dont request the response object...
 				message : "Exiting!"
 			} ) );
 			process.exit( 0 ); // TODO: find a better way...
 		}
-		response.write(
-			JSON.stringify(
-				this.lambdaSvr.getLambdaList()
-			)
-		);
+		this._addToMessage( this.lambdaSvr.getLambdaList() );
 	}
 	
 	async manageRequets( request, response ) {
