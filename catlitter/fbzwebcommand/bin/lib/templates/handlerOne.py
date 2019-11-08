@@ -1,5 +1,4 @@
-#import subprocess
-import requests
+import subprocess
 
 LAMBDA_NAME = "=lambda=name=placeholder="
 LAMBDA_ENDPOINT = "127.0.0.1:9999"
@@ -20,17 +19,16 @@ def handler( event, context ):
 		"context" : context
 	}
 	payload = Stringinetor( body ).getString()
-	response = requests.post( url = LAMBDA_ENDPOINT, data = payload ) 
-	#returned_output = subprocess.check_output( [
-	#	"curl",
-	#	"--silent",
-	#	"-d",
-	#	payload,
-	#	"-X",
-	#	"POST",
-	#	LAMBDA_ENDPOINT
-	#] )
-	#print( returned_output.decode( "utf-8" ) )
+	returned_output = subprocess.check_output( [
+		"curl",
+		"--silent",
+		"-d",
+		payload,
+		"-X",
+		"POST",
+		LAMBDA_ENDPOINT
+	] )
+	print( returned_output.decode( "utf-8" ) )
 
 	return "=== "+ LAMBDA_NAME +" ==="
 	# return returned_output.decode( "utf-8" ) #TODO: try ro enable.
