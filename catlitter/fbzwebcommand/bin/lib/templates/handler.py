@@ -21,6 +21,7 @@ def handler( event, context ):
 	payload = Stringinetor( body ).getString()
 	returned_output = subprocess.check_output( [
 		"curl",
+		"--silent",
 		"-d",
 		payload,
 		"-X",
@@ -29,7 +30,8 @@ def handler( event, context ):
 	] )
 	print( returned_output.decode( "utf-8" ) )
 
-	return returned_output.decode( "utf-8" )
+	return "=== "+ LAMBDA_NAME +" ==="
+	# return returned_output.decode( "utf-8" ) #TODO: try ro enable.
 	#return { 
 	#	'message' : 'Lambda End.'
 	#}
