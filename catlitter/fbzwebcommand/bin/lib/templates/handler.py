@@ -21,8 +21,10 @@ def handler( event, context ):
 	payload = Stringinetor( body ).getString()
 	response = requests.post( url = LAMBDA_ENDPOINT, data = payload ) 
 	if response.status_code != 200 :
-		raise Exception( "=== "+ LAMBDA_NAME +": Bad status code!!! ===" )
+		raise Exception( response.text )
+		#raise Exception( "=== "+ LAMBDA_NAME +": Bad status code!!! ===" )
 
-	return "=== "+ LAMBDA_NAME +" ==="
+	return response.text
+	#return "=== "+ LAMBDA_NAME +" ==="
 
 #handler( 'event', 'context' ) #TODO: remove

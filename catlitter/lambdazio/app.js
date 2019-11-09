@@ -8,7 +8,6 @@ const RESPONSE_HEADER = { "Content-Type" : "text/plain" };
 
 let port = 9999;
 let lambdaSvr = new lambdaServer( "./fs/" );
-//let requestManager = new RequestManager( lambdaSvr );
 let requestMnrg = async ( request, response ) => {
 	let requestManager = new RequestManager( lambdaSvr );	
 	await requestManager.manageRequets( request, response );
