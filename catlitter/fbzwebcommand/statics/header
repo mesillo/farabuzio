@@ -57,7 +57,9 @@ a {
 </style>
 
 <html>
-  <head></head>
+  <head>
+    <title>Catlitter</title>
+  </head>
   <body>
     <div id="container">
 <!-- HEADER //-->
