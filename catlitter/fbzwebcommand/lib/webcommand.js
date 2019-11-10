@@ -40,9 +40,11 @@ class WebCommand {
         rsp.setHeaders();
         rsp.drawHtmlHeader();
         await upld.manageUpload( request );
+        Render.startHideableDiv( "Files", response ); //TODO: implement object method...
         await upld.listStorageFiles();
         rsp.drawFileUploadForm();
         rsp.drawSeparator();
+        Render.stopHideableDiv( "Files", response );  //TODO: implement object method...
         rsp.drawCommandForm();
         rsp.drawSeparator();
         await RequestManager.commandManage( request, response ); // TODO: move from response to render...
