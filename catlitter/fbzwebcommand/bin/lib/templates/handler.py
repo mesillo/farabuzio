@@ -22,9 +22,7 @@ def handler( event, context ):
 	response = requests.post( url = LAMBDA_ENDPOINT, data = payload ) 
 	if response.status_code != 200 :
 		raise Exception( response.text )
-		#raise Exception( "=== "+ LAMBDA_NAME +": Bad status code!!! ===" )
 
 	return response.text
-	#return "=== "+ LAMBDA_NAME +" ==="
 
 #handler( 'event', 'context' ) #TODO: remove
