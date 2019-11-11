@@ -78,6 +78,10 @@ const COMMANDS_DEFINITIONS = {
 	"FULL_deploy_zip_node_lambda": {
 		cmd: `./bin/lbzioAddLambda.js --name %functionName% --zip-file ${defines.STORAGEPATH}%zipFileName% --filename %handlerFileName% --handler %handlerName% && curl localhost:9999/reboot && ./bin/lbzioDeployLambda.js --name %functionName% --temp-dir ${defines.TEMPFS} && ./bin/lfcheckLogGroup.js --name %functionName%`,  //TODO: review Storage...
 		parameters: [ "functionName", "zipFileName", "handlerFileName", "handlerName" ]
+	},
+	"deploy_node_lambda_on_kinesis": {
+		cmd: `./bin/lbzioAddLambda.js --name %functionName% --zip-file ${defines.STORAGEPATH}%zipFileName% --filename %handlerFileName% --handler %handlerName% && curl localhost:9999/reboot && ./bin/lbzioDeployLambda.js --name %functionName% --temp-dir ${defines.TEMPFS} && awslocal kinesis create-stream --stream-name %streamName% --shard-count 1 && awslocal lambda create-event-source-mapping --function-name %functionName% --event-source arn:aws:kinesis:us-east-1:000000000000:stream/%streamName% --batch-size 1 --starting-position TRIM_HORIZON --region=fakeRegion`,  //TODO: review Storage, batch-size and shard-number...
+		parameters: [ "streamName", "functionName", "zipFileName", "handlerFileName", "handlerName" ]
 	}
 };
 
