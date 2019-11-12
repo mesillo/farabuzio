@@ -1,5 +1,6 @@
 "use strict";
 
+const Xutem = require( "../utils/xutem/xutem" );
 const fileSystemDir = "../../../fs/";
 const fs = require( "fs" );
 const path = require( "path" );
@@ -15,6 +16,7 @@ const defaultConfigurations = {
 class LambdaServer {
 	constructor( lambdaStorage = null ) {
 		this.lambdaHandlers = [];
+		this.executionMutex = new Xutem();
 		this.workingDirectory = process.cwd();
 		if( lambdaStorage && fs.lstatSync( lambdaStorage ).isDirectory() ) {
 			this._storagePath = lambdaStorage;
@@ -51,6 +53,7 @@ class LambdaServer {
 	async fireLambda( lambdaName, event, context ) {
 		let returnValue = null;
 		if( this.lambdaHandlers[ lambdaName ] ) {
+			let releaseMutex = await this.executionMutex.acquire();
 			try {
 				process.chdir( this._storagePath + "/" + lambdaName ); //TODO: check... if it is a Directory for example...
 				// TODO: checks on event and context.. ??
@@ -60,6 +63,7 @@ class LambdaServer {
 				throw error;
 			} finally {
 				process.chdir( this.workingDirectory );
+				releaseMutex();
 			}
 		}// else TODO: log something???
 		return returnValue;

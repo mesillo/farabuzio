@@ -1,13 +1,11 @@
 "use strict";
-
-const Xutem = require( "../utils/xutem/xutem" );
-
+//const Xutem = require( "../utils/xutem/xutem" );
 const LAMBDA_HANDLER_REJECTION_HTTP_CODE = 500; // TODO: define it better; chech the codes mining...
 
 class RequestManager {
 	constructor( lambdaSvr ) {
 		this.lambdaSvr = lambdaSvr;
-		this.executionMutex = new Xutem();
+		//this.executionMutex = new Xutem();
 		this.responseBuffer = {
 			status : 200,
 			message : ""
@@ -65,15 +63,16 @@ class RequestManager {
 		let requestBody = await this._getRequestBody( request );
 		let invocation = JSON.parse( requestBody );
 		//console.dir( invocation, { depth : null } );
-		let releaseMutex = await this.executionMutex.acquire();
+		//let releaseMutex = await this.executionMutex.acquire();
 		try {
 			this._addToMessage( await this.lambdaSvr.fireLambda( invocation.lambda, invocation.event, invocation.context ) );
 		} catch( error ) {
 			this.responseBuffer.status = LAMBDA_HANDLER_REJECTION_HTTP_CODE;
 			this._addToMessage( error.message );
-		} finally {
-			releaseMutex();
 		}
+		//finally {
+		//	releaseMutex();
+		//}
 		return;
 	}
 	
