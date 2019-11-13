@@ -1,6 +1,22 @@
 "use strict";
 //const Xutem = require( "../utils/xutem/xutem" );
 const LAMBDA_HANDLER_REJECTION_HTTP_CODE = 500; // TODO: define it better; chech the codes mining...
+const DEFAULT_CONTEXT_STRING = "{\"callbackWaitsForEmptyEventLoop\":true,\"functionVersion\":\"$LATEST\",\"functionName\":\"testOS\",\"memoryLimitInMB\":\"128\",\"logGroupName\":\"/aws/lambda/testOS\",\"logStreamName\":\"2019/11/13/[$LATEST]09f74d8f97e54accaa5baaebc093c689\",\"invokedFunctionArn\":\"arn:aws:lambda:eu-central-1:102165533286:function:testOS\",\"awsRequestId\":\"36c7c7c1-295f-43f6-a91e-734d940e321e\"}"; //TODO: modify for better realism...
+//TODO: implement a better default context...
+/*{ callbackWaitsForEmptyEventLoop: [Getter/Setter],
+  succeed: [Function],
+  fail: [Function],
+  done: [Function],
+  functionVersion: '$LATEST',
+  functionName: 'testOS',
+  memoryLimitInMB: '128',
+  logGroupName: '/aws/lambda/testOS',
+  logStreamName: '2019/11/13/[$LATEST]09f74d8f97e54accaa5baaebc093c689',
+  clientContext: undefined,
+  identity: undefined,
+  invokedFunctionArn: 'arn:aws:lambda:eu-central-1:102165533286:function:testOS',
+  awsRequestId: '36c7c7c1-295f-43f6-a91e-734d940e321e',
+  getRemainingTimeInMillis: [Function: getRemainingTimeInMillis] }*/
 
 class RequestManager {
 	constructor( lambdaSvr ) {
@@ -59,11 +75,19 @@ class RequestManager {
 		this.responseBuffer.message += chunk; //TODO: add a newline ???
 	}
 
+	_normalizeContext( context ) {
+		let typeofContext = typeof context;
+		if( typeofContext !== "object" )
+			return JSON.parse( DEFAULT_CONTEXT_STRING );
+		return context;
+	}
+
 	async managePostRequets( request, response ) {
 		let requestBody = await this._getRequestBody( request );
 		let invocation = JSON.parse( requestBody );
 		//console.dir( invocation, { depth : null } );
 		//let releaseMutex = await this.executionMutex.acquire();
+		invocation.context = this._normalizeContext( invocation.context );
 		try {
 			this._addToMessage( await this.lambdaSvr.fireLambda( invocation.lambda, invocation.event, invocation.context ) );
 		} catch( error ) {
