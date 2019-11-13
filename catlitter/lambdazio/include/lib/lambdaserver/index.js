@@ -34,13 +34,22 @@ class LambdaServer {
 		}
 	}
 
-	_tryToDesribeLambda( testPath ) {
+	async _tryToDesribeLambda( testPath ) {
 		let files = fs.readdirSync( testPath );
 		for( let file of files ) {
 			if( file === "lambda.json" ) {
 				let relativePath = path.relative( __dirname, testPath );
-				let configData = require( relativePath + "/lambda.json" );
-				this._addConfiguration( relativePath, configData );
+				let releaseMutex = await this.executionMutex.acquire();
+				try {
+					process.chdir( testPath );
+					let configData = require( relativePath + "/lambda.json" );
+					this._addConfiguration( relativePath, configData ); //TODO: why the "configdata" name?!?!?!
+				} catch( error ) {
+					throw error; //TODO: is necessary??? Is possible to do other kind of actions...???
+				} finally {
+					process.chdir( this.workingDirectory );
+					releaseMutex();
+				}
 			}
 		}
 	}
