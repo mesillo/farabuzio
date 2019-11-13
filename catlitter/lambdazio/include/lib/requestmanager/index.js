@@ -1,5 +1,4 @@
 "use strict";
-//const Xutem = require( "../utils/xutem/xutem" );
 const LAMBDA_HANDLER_REJECTION_HTTP_CODE = 500; // TODO: define it better; chech the codes mining...
 const DEFAULT_CONTEXT_STRING = "{\"callbackWaitsForEmptyEventLoop\":true,\"functionVersion\":\"$LATEST\",\"functionName\":\"testOS\",\"memoryLimitInMB\":\"128\",\"logGroupName\":\"/aws/lambda/testOS\",\"logStreamName\":\"2019/11/13/[$LATEST]09f74d8f97e54accaa5baaebc093c689\",\"invokedFunctionArn\":\"arn:aws:lambda:eu-central-1:102165533286:function:testOS\",\"awsRequestId\":\"36c7c7c1-295f-43f6-a91e-734d940e321e\"}"; //TODO: modify for better realism...
 //TODO: implement a better default context...
@@ -21,7 +20,6 @@ const DEFAULT_CONTEXT_STRING = "{\"callbackWaitsForEmptyEventLoop\":true,\"funct
 class RequestManager {
 	constructor( lambdaSvr ) {
 		this.lambdaSvr = lambdaSvr;
-		//this.executionMutex = new Xutem();
 		this.responseBuffer = {
 			status : 200,
 			message : ""
@@ -85,8 +83,6 @@ class RequestManager {
 	async managePostRequets( request, response ) {
 		let requestBody = await this._getRequestBody( request );
 		let invocation = JSON.parse( requestBody );
-		//console.dir( invocation, { depth : null } );
-		//let releaseMutex = await this.executionMutex.acquire();
 		invocation.context = this._normalizeContext( invocation.context );
 		try {
 			this._addToMessage( await this.lambdaSvr.fireLambda( invocation.lambda, invocation.event, invocation.context ) );
@@ -94,9 +90,6 @@ class RequestManager {
 			this.responseBuffer.status = LAMBDA_HANDLER_REJECTION_HTTP_CODE;
 			this._addToMessage( error.message );
 		}
-		//finally {
-		//	releaseMutex();
-		//}
 		return;
 	}
 	
