@@ -4,8 +4,8 @@
 const http = require( "http" );
 
 let lambdaNames = [ "banner", "echo", "exception" ];
-let requestInterval = 100;
-let stopTimeout = 10000;
+let requestInterval = 10;
+let stopTimeout = 100000;
 
 let requestCounter = 0;
 
@@ -19,7 +19,7 @@ let requestData = JSON.stringify( baseObject );
 
 const options = {
 	hostname: "localhost",
-	port: 5555,
+	port: 9999,
 	path: "/",
 	method: "POST",
 	headers: {
@@ -40,7 +40,11 @@ const makeRequets = ( requestData ) => {
 		response.on( "data", ( data ) => {
 			print( data );
 		} );
-	})
+
+		response.on( "end", () => { //TODO: is the rigth event???
+			requestCounter--;
+		} );
+	});
 
 	request.on( "error", ( error ) => {
 		console.error( error );
@@ -64,3 +68,7 @@ let testTrigger = setInterval( () => {
 setTimeout( () => {
 	clearInterval( testTrigger );
 }, stopTimeout );
+
+process.on( "exit", () => {
+	console.log( "Unresolved requests: " + requestCounter );
+} );
