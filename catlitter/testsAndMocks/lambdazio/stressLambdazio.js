@@ -3,20 +3,19 @@
 
 const http = require( "http" );
 
-let lambdaNames = [ "banner", "echo", "exception" ];
-let requestInterval = 10;
-let stopTimeout = 100000;
+let lambdaNames = [ "banner", "echo", "exception", "wait" ];
+let requestInterval = 50;
+let stopTimeout = 60000;
 
 let requestCounter = 0;
+let totalRequestCounter = 0;
 
 const baseObject = {
 	lambda : "",
 	event : {},
 	context : {}
 };
-
-let requestData = JSON.stringify( baseObject );
-
+//let requestData = JSON.stringify( baseObject );
 const options = {
 	hostname: "localhost",
 	port: 9999,
@@ -28,14 +27,18 @@ const options = {
 	}
 };
 
+const debugEcho = ( data ) => {
+	console.log( `${new Date()}:: ${data}` );
+};
+
 const print = ( data ) => {
 	//process.stdout.write( data ); //TODO; console.log() ???????
-	console.log( data.toString() );
+	debugEcho( data.toString() );
 };
 
 const makeRequets = ( requestData ) => {
 	const request = http.request( options, ( response ) => {
-		console.log( `statusCode: ${response.statusCode}` );
+		debugEcho( `statusCode: ${response.statusCode}` );
 
 		response.on( "data", ( data ) => {
 			print( data );
@@ -47,7 +50,8 @@ const makeRequets = ( requestData ) => {
 	});
 
 	request.on( "error", ( error ) => {
-		console.error( error );
+		//console.error( error );
+		debugEcho( error );
 	} );
 
 	request.write( requestData );
@@ -57,11 +61,12 @@ const makeRequets = ( requestData ) => {
 let index = 0;
 
 let testTrigger = setInterval( () => {
-	//console.log( lambdaNames[ index ] );
+	//debugEcho( lambdaNames[ index ] );
 	baseObject.lambda = lambdaNames[ index ];
 	index = (index + 1) % lambdaNames.length;
 	let requestData = JSON.stringify( baseObject );
 	requestCounter++;
+	totalRequestCounter++;
 	makeRequets( requestData );
 }, requestInterval );
 
@@ -70,5 +75,5 @@ setTimeout( () => {
 }, stopTimeout );
 
 process.on( "exit", () => {
-	console.log( "Unresolved requests: " + requestCounter );
+	debugEcho( "Unresolved requests: " + requestCounter + ":" + totalRequestCounter );
 } );
