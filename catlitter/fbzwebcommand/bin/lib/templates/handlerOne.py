@@ -1,7 +1,7 @@
-import requests
+import subprocess
 
 LAMBDA_NAME = "=lambda=name=placeholder="
-LAMBDA_ENDPOINT = "http://localhost:9999"
+LAMBDA_ENDPOINT = "127.0.0.1:9999"
 
 class Stringinetor:
     def __init__( self, toWrite ):
@@ -19,10 +19,21 @@ def handler( event, context ):
 		"context" : context
 	}
 	payload = Stringinetor( body ).getString()
-	response = requests.post( url = LAMBDA_ENDPOINT, data = payload ) 
-	if response.status_code != 200 :
-		raise Exception( response.text )
+	returned_output = subprocess.check_output( [
+		"curl",
+		"--silent",
+		"-d",
+		payload,
+		"-X",
+		"POST",
+		LAMBDA_ENDPOINT
+	] )
+	print( returned_output.decode( "utf-8" ) )
 
-	return response.text
+	return "=== "+ LAMBDA_NAME +" ==="
+	# return returned_output.decode( "utf-8" ) #TODO: try ro enable.
+	#return { 
+	#	'message' : 'Lambda End.'
+	#}
 
 #handler( 'event', 'context' ) #TODO: remove

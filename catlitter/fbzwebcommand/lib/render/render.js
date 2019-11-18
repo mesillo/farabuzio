@@ -165,6 +165,15 @@ class Render {
 		}
 	}
 
+	static startHideableDiv( divId, response ) {
+		response.write( `\n<button onclick="hideDivByName('${divId}')">Hide/Show ${divId}</button>` );
+		response.write( `\n<div id="${divId}">` );
+	}
+
+	static stopHideableDiv( divId, response ) {
+		response.write( "\n</div>" );
+	}
+
 	static drawText( text, response ) {
 		response.write( `\n<pre>\n${text}\n</pre>\n` );
 	}

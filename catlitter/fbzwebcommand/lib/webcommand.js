@@ -39,13 +39,16 @@ class WebCommand {
         //let reqMan = new RequestManager( rsp ); // TODO: use object...
         rsp.setHeaders();
         rsp.drawHtmlHeader();
-        rsp.drawCommandForm();
-        rsp.drawSeparator();
         await upld.manageUpload( request );
+        Render.startHideableDiv( "Files", response ); //TODO: implement object method...
         await upld.listStorageFiles();
         rsp.drawFileUploadForm();
         rsp.drawSeparator();
+        Render.stopHideableDiv( "Files", response );  //TODO: implement object method...
+        rsp.drawCommandForm();
+        rsp.drawSeparator();
         await RequestManager.commandManage( request, response ); // TODO: move from response to render...
+        rsp.drawSeparator();
         rsp.drawHtmlFooter();
         rsp.close();
     };

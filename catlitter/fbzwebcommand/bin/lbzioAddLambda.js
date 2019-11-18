@@ -13,7 +13,7 @@ let configurations = {
 let createFs = ( config ) => {
 	return new Promise( ( resolve, reject ) => {
 		let destDir = `${config.lbziofs}/${config.functionName}`;
-		let unzipCommand = `unzip ${config.zipName} -d ${destDir}`;
+		let unzipCommand = `unzip -qq ${config.zipName} -d ${destDir}`;
 		let mkdirCommand = `mkdir ${destDir}`;	
 		console.info( `Creating ${destDir}.` );
 		Executor.execute( mkdirCommand )
