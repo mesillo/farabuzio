@@ -1,3 +1,4 @@
 #!/bin/bash
 
-zip -q lambdaFns.zip *.js
+rm -fv lambdaFns.zip
+zip -q lambdaFns.zip *.js *.json -r node_modules/
