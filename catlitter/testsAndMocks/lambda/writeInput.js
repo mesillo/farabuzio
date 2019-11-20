@@ -10,7 +10,8 @@ const baserecordParam =  JSON.stringify( {
 
 const kinesisConfig = {
 	region: "papozze",
-	endpoint: "http://localhost:4568",
+	endpoint: "http://localhost:4565", // 4565 = DEFAULT_PORT_KINESIS_BACKEND -> the internal kinesalite port i hope... i want to try to bypass localstack proxy for kinesis.
+	//endpoint: "http://localhost:4568",
 	accessKeyId:  "fakeAccessKeyId",
 	secretAccessKey: "fakeSecretAccessKey",
 	sessionToken: "fakeSessionToken"
@@ -38,6 +39,7 @@ let JSONEvent = async ( event, context ) => {
 		let recordParams = getRecorParam( d );
 		await new Promise( ( resolve, reject ) => {
 			//console.dir( recordParams, { depth : null } );
+			console.info( `Try to put record ${i+1}...` );
 			kinesis.putRecord( recordParams, ( error, data ) => {
 				if( error )
 					reject( error );

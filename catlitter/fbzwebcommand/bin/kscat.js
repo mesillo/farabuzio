@@ -61,7 +61,12 @@ let readRecords = ( streamName, shardId, shardIterator ) => {
 ///// Output Modes /////
 let printPayload = ( record ) => {
 	let dataBuffer = Buffer.from( record.Data, "base64" );
-	let unzippedBuffer = zlib.unzipSync( dataBuffer );
+	let unzippedBuffer = null;
+	try {
+		unzippedBuffer = zlib.unzipSync( dataBuffer );
+	} catch( error ) { //TODO: check the type of error...
+		unzippedBuffer = dataBuffer;
+	}
 	let textBuffer = unzippedBuffer.toString( "ascii" );
 	console.log( textBuffer );
 	//let jsonBuffer = JSON.parse( textBuffer );
