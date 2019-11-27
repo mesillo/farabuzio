@@ -20,6 +20,8 @@ RUN chown -R localstack.localstack lambdazio/fs/
 RUN chmod 777 lambdazio/fs/
 RUN chown localstack.localstack lambdazio/productionrun.sh
 RUN chmod u+x lambdazio/productionrun.sh
+# remove all preloaded lambda on FS
+RUN rm -rfv lambdazio/fs/*
 
 # create a storage diectory for webcommand application
 RUN mkdir -p storage/

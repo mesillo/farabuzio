@@ -17,6 +17,12 @@ const DEFAULT_CONTEXT_STRING = "{\"callbackWaitsForEmptyEventLoop\":true,\"funct
   awsRequestId: '36c7c7c1-295f-43f6-a91e-734d940e321e',
   getRemainingTimeInMillis: [Function: getRemainingTimeInMillis] }*/
 
+const DEBUG = false;
+const debug = ( str ) => { // Orrible debug function... :-(
+	if( DEBUG )
+		console.info( " === lambdazio :: " + str );
+};
+
 class RequestManager {
 	constructor( lambdaSvr ) {
 		this.lambdaSvr = lambdaSvr;
@@ -106,9 +112,15 @@ class RequestManager {
 	
 	async manageRequets( request, response ) {
 		if( request.method === "POST" ) {
+			debug( "POST request..." );
 			await this.managePostRequets( request, response );
-		} else {
+			debug( "... POST done!" );
+		} else if( request.method === "GET" ) {
+			debug( "GET request..." );
 			await this.manageGetRequets( request, response );
+			debug( "... GEt done!" );
+		} else {
+			debug( "Unmanaged request type: " + request.method );
 		}
 	}
 

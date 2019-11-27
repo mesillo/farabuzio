@@ -5,14 +5,18 @@ const fileSystemDir = "../../../fs/";
 const fs = require( "fs" );
 const path = require( "path" );
 
-const defaultConfigurations = {
+const DEBUG = false;
+const debug = ( str ) => { // Orrible debug function... :-(
+	if( DEBUG )
+		console.info( " === lambdazio :: " + str );
+};
+/*const defaultConfigurations = {
 	lambdaName : "lambdaTest",
 	lambdaFile : "main",
 	lambdaHandler : "handler",
 	httpPort : 9000,
 	processTimeToLive : null //Not used for the moment...
-}
-
+}*/
 class LambdaServer {
 	constructor( lambdaStorage = null ) {
 		this.lambdaHandlers = [];
@@ -63,6 +67,7 @@ class LambdaServer {
 		let returnValue = null;
 		if( this.lambdaHandlers[ lambdaName ] ) {
 			let releaseMutex = await this.executionMutex.acquire();
+			debug( "firing " + lambdaName + "..." );
 			try {
 				process.chdir( this._storagePath + "/" + lambdaName ); //TODO: check... if it is a Directory for example...
 				// TODO: checks on event and context.. ??
@@ -72,6 +77,7 @@ class LambdaServer {
 				throw error;
 			} finally {
 				process.chdir( this.workingDirectory );
+				debug( "... end " + lambdaName + "!" );
 				releaseMutex();
 			}
 		}// else TODO: log something???
