@@ -98,6 +98,41 @@ class KinesaliteClient {
 			);
 		} );
 	}
+
+	readShardIterator( shardIterator ) {
+		this.kinesis.getRecords(
+			shardIterator,
+			( error, data ) => {
+				if( error )
+					throw error;
+				console.dir( data );
+			}
+		);
+	}
+
+	readShard( streamName, shardId ) {
+		let shardInfos = {
+			StreamName : streamName,
+			ShardId : shardId,
+			ShardIteratorType : "TRIM_HORIZON"
+		};
+		this.kinesis.getShardIterator(
+			shardInfos,
+			( error, data ) => {
+				if( error )
+					throw error;
+				this.readShardIterator( data );
+			}
+		);
+	}
+
+	async readStream( streamName ) {
+		let shards = ( await this.describeStream( streamName ) ).StreamDescription.Shards;
+		//console.dir( shards );
+		for( let shard of shards ) {
+			this.readShard( streamName, shard.ShardId );
+		}
+	}
 }
 
 module.exports = KinesaliteClient;
