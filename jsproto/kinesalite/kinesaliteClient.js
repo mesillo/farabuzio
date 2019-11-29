@@ -5,8 +5,18 @@ const kinesisConfig = {
 	endpoint : "http://localhost:4567"
 };
 
+const defaultShardDataHandler = ( recordData ) => {
+	console.dir(
+		recordData,
+		{ depth : null }
+	);
+};
+
 const libConfigs = {
-	checkCreationPollingTimer : 500
+	checkCreationPollingTimer : 500,
+	defaultBatchSize : 10,
+	defaultIteratorType : "TRIM_HORIZON",
+	defaultShardDataHandler : defaultShardDataHandler
 };
 
 const AWS = require( "aws-sdk" );
@@ -99,38 +109,46 @@ class KinesaliteClient {
 		} );
 	}
 
-	readShardIterator( shardIterator ) {
+	readShardIterator( shardIterator, shardDataHandler ) {
 		this.kinesis.getRecords(
 			shardIterator,
 			( error, data ) => {
-				if( error )
+				if( error ) {
 					throw error;
-				console.dir( data );
+				} else {
+					shardDataHandler( data );
+				}
 			}
 		);
 	}
 
-	readShard( streamName, shardId ) {
+	readShard( streamName, shardDataHandler, shardId, batchSize, iteratorType ) {
 		let shardInfos = {
 			StreamName : streamName,
 			ShardId : shardId,
-			ShardIteratorType : "TRIM_HORIZON"
+			ShardIteratorType : iteratorType
 		};
 		this.kinesis.getShardIterator(
 			shardInfos,
-			( error, data ) => {
-				if( error )
+			( error, shardIteratorData ) => {
+				if( error ) {
 					throw error;
-				this.readShardIterator( data );
+				} else {
+					let shardReaderInfos = {
+						ShardIterator : shardIteratorData.ShardIterator,
+						Limit : batchSize
+					};
+					this.readShardIterator( shardReaderInfos, shardDataHandler );
+				}
 			}
 		);
 	}
 
-	async readStream( streamName ) {
+	async readStream( streamName, shardDataHandler = libConfigs.defaultShardDataHandler, batchSize = libConfigs.defaultBatchSize, iteratorType = libConfigs.defaultIteratorType ) {
 		let shards = ( await this.describeStream( streamName ) ).StreamDescription.Shards;
 		//console.dir( shards );
 		for( let shard of shards ) {
-			this.readShard( streamName, shard.ShardId );
+			this.readShard( streamName, shardDataHandler, shard.ShardId, batchSize, iteratorType );
 		}
 	}
 }
