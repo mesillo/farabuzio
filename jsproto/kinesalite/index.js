@@ -7,16 +7,24 @@ let streamName = "testStream";
 let shardNum = 2;
 
 kinesis.createStream( streamName, shardNum )
-	.then( ( createResult ) => {
-		kinesis.waitForStream( streamName )
+	.then( async ( createResult ) => {
+		/*kinesis.waitForStream( streamName )
 			.then( () => {
-				kinesis.writeStream( streamName, "PippoPluto", "1" )
-					.then( ( writeData ) => {
-						//kinesis.describeStream( streamName )
-						//	.then( ( describeData ) => {
-						//		console.dir( describeData );
-						//	} );
-						kinesis.readStream( streamName );
-					} );
-			} );
+			} );*/
+		await kinesis.waitForStream( streamName );
+		/*console.dir(
+			await kinesis.listConsumers( streamName ),
+			{ depth : null }
+		);*/
 	} );
+
+kinesis.listStreams()
+		.then( ( strList ) => {
+			console.dir( strList );
+			/*for( let streamName of strList ) {
+				kinesis.deleteStream( streamName );
+			}*/
+		} );
+
+kinesis.streamExists( streamName )
+	.then( console.dir );
