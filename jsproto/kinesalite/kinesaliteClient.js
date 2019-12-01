@@ -6,11 +6,11 @@ const kinesisConfig = {
 };
 
 const defaultRecordHandler = ( records ) => {
-	/*console.dir(
+	console.dir(
 		records,
 		{ depth : null }
-	);*/
-	console.log( "received " + records.Records.length + " records." );
+	);
+	//console.log( "received " + records.Records.length + " records." );
 }
 
 const libConfigs = {
