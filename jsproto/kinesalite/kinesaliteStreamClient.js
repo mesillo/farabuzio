@@ -17,7 +17,12 @@ class KinesaliteStreamClient {
 				await this.client.createStream( streamName );
 			}
 		}
-		await this.client.waitForStream( streamName );
+		try {
+			return await this.client.waitForStream( streamName );
+		} catch( error ) {
+			console.error( error );
+			process.exit( 255 );
+		}
 	}
 
 	_getKinesisClient( client ) {
