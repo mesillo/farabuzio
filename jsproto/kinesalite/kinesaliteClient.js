@@ -5,18 +5,20 @@ const kinesisConfig = {
 	endpoint : "http://localhost:4567"
 };
 
-const defaultShardDataHandler = ( recordData ) => {
+const defaultRecordHandler = ( records ) => {
 	console.dir(
-		recordData,
+		records,
 		{ depth : null }
 	);
-};
+	//console.log( "received " + records.Records.length + " records." );
+}
 
 const libConfigs = {
 	checkCreationPollingTimer : 500,
+	waitForShardReadRetry : 1000,
 	defaultBatchSize : 10,
-	defaultIteratorType : "TRIM_HORIZON",
-	defaultShardDataHandler : defaultShardDataHandler
+	defaultRecordHandler : defaultRecordHandler,
+	defaultIteratorType : "TRIM_HORIZON"
 };
 
 const AWS = require( "aws-sdk" );
@@ -109,20 +111,44 @@ class KinesaliteClient {
 		} );
 	}
 
-	readShardIterator( shardIterator, shardDataHandler ) {
+	async _getNextShardIterator( record ) {
+		if( record.Records.length === 0 || record.MillisBehindLatest === 0 ) { //TODO: is the rigth way??
+			await timerPromise( libConfigs.waitForShardReadRetry );
+		}
+		return record.NextShardIterator;
+	}
+
+	_recordHandlerExecutor( recordHandler, records ) {
+		if( records.Records.length ) {
+			recordHandler( records );
+		}
+	}
+
+	readShardIterator( shardIterator, recordHandler, batchSize ) {
 		this.kinesis.getRecords(
-			shardIterator,
-			( error, data ) => {
+			{
+				ShardIterator : shardIterator.ShardIterator,
+    			Limit : batchSize
+			},
+			async ( error, records ) => {
 				if( error ) {
 					throw error;
 				} else {
-					shardDataHandler( data );
+					let nextIterator = await this._getNextShardIterator( records );
+					this._recordHandlerExecutor( recordHandler, records );
+					this.readShardIterator(
+						{
+							ShardIterator : nextIterator
+						},
+						recordHandler,
+						batchSize
+					);
 				}
 			}
 		);
 	}
 
-	readShard( streamName, shardDataHandler, shardId, batchSize, iteratorType ) {
+	readShard( streamName, shardId, recordHandler, batchSize, iteratorType ) {
 		let shardInfos = {
 			StreamName : streamName,
 			ShardId : shardId,
@@ -130,27 +156,84 @@ class KinesaliteClient {
 		};
 		this.kinesis.getShardIterator(
 			shardInfos,
-			( error, shardIteratorData ) => {
+			( error, data ) => {
 				if( error ) {
 					throw error;
 				} else {
-					let shardReaderInfos = {
-						ShardIterator : shardIteratorData.ShardIterator,
-						Limit : batchSize
-					};
-					this.readShardIterator( shardReaderInfos, shardDataHandler );
+					//console.dir( data );
+					this.readShardIterator( data, recordHandler, batchSize );
 				}
 			}
 		);
 	}
 
-	async readStream( streamName, shardDataHandler = libConfigs.defaultShardDataHandler, batchSize = libConfigs.defaultBatchSize, iteratorType = libConfigs.defaultIteratorType ) {
+	async readStream( streamName, recordHandler = libConfigs.defaultRecordHandler, batchSize = libConfigs.batchSize, iteratorType = libConfigs.defaultIteratorType ) {
 		let shards = ( await this.describeStream( streamName ) ).StreamDescription.Shards;
-		//console.dir( shards );
 		for( let shard of shards ) {
-			this.readShard( streamName, shardDataHandler, shard.ShardId, batchSize, iteratorType );
+			this.readShard( streamName, shard.ShardId, recordHandler, batchSize, iteratorType );
 		}
 	}
+
+	listStreams() {
+		return new Promise( ( resolve, reject ) => {
+			this.kinesis.listStreams( ( error, data ) => {
+				if( error ) {
+					reject( error );
+				} else {
+					//TODO: and if HasMoreStreams is true???
+					resolve( data.StreamNames );
+				}
+			} );
+		} );
+	}
+
+	async streamExists( streamName ) {
+		let streamsNames = await this.listStreams();
+		return streamsNames.includes( streamName );
+	}
+
+	deleteStream( streamName ) {
+		let deleteStreamData = {
+			StreamName: streamName,
+			EnforceConsumerDeletion: true
+		};
+		return new Promise( ( resolve, reject ) => {
+			this.kinesis.deleteStream(
+				deleteStreamData,
+				( error, data ) => {
+					if( error ) {
+						reject( error );
+					} else {
+						resolve( data );
+					}
+				}
+			);
+		} );
+	}
+
+	/* TODO: it seems to be not supported by Kinesalite... :-(
+	listConsumers( streamName ) {
+		let description = null;
+		if( this.streamExists( streamName ) ) {
+			return new Promise( async ( resolve, reject ) => {
+				let streamInfos = await this.describeStream( streamName );
+				//console.dir( streamInfos );
+				this.kinesis.listStreamConsumers(
+					{ StreamARN : streamInfos.StreamDescription.StreamARN },
+					( error, data ) => {
+						if( error ) {
+							console.dir( error );
+							reject( error );
+						} else {
+							resolve( data );
+						}
+					}
+				);
+			} );
+		} else {
+			return Promise.resolve( description );
+		}
+	}*/
 }
 
 module.exports = KinesaliteClient;

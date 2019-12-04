@@ -1,2 +1,2 @@
 #! /bin/bash
-nodemon ./node_modules/kinesalite/cli.js 
+nodemon ./node_modules/kinesalite/cli.js
