@@ -1,5 +1,19 @@
 "use strict";
 
+const KinesaliteStreamClient = require( "./kinesaliteStreamClient" );
+
+let streamName = "testStream";
+let shardNum = 1;
+
+let stream = new KinesaliteStreamClient( streamName, shardNum );
+
+for( let index = 0 ; index < 10 ; index++ )
+	stream.write( "Dati buttati " + index );
+
+console.log( "Done" );
+
+
+/*
 const KinesaliteClient = require( "./kinesaliteClient" );
 
 let kinesis = new KinesaliteClient();
@@ -25,3 +39,4 @@ let writeTimer = 2000;
 				);
 			} );
 //	} );
+*/

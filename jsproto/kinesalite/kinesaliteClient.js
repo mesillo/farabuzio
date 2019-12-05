@@ -11,7 +11,7 @@ const defaultRecordHandler = ( records ) => {
 		{ depth : null }
 	);
 	//console.log( "received " + records.Records.length + " records." );
-}
+};
 
 const libConfigs = {
 	checkCreationPollingTimer : 500,

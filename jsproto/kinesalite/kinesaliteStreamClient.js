@@ -4,6 +4,8 @@ const crypto = require( "crypto" );
 
 const KinesaliteClient = require( "./kinesaliteClient" );
 const DEFAULT_SHARD_NUM = 1;
+const DEFAULT_BATCH_SIZE = 1;
+const DEFAULT_ITERATOR_TYPE = "TRIM_HORIZON";
 
 const defaultPartitionKeyGenerator = ( data ) => {
 	return crypto.createHash( "md5" ).update( data ).digest( "hex" );
@@ -87,10 +89,13 @@ class KinesaliteStreamClient {
 		}
 		return await this.client.writeStream( this.streamName, data, partitionKey );
 	}
-
-	async readStream( streamName, recordHandler = libConfigs.defaultRecordHandler, batchSize = libConfigs.batchSize, iteratorType = libConfigs.defaultIteratorType ) {}
-
-	//deleteStream( streamName ) {} //TODO: todo... :-)
+	//TODO: manage default handlers and stop for running ones...
+	async read( recordHandler = null, batchSize = DEFAULT_BATCH_SIZE, iteratorType = DEFAULT_ITERATOR_TYPE ) {
+		if( recordHandler === null )
+			return null;
+		await this._activePromise;
+		return await this.client.readStream( this.streamName, recordHandler, batchSize, iteratorType );
+	}
 }
 
 module.exports = KinesaliteStreamClient;
