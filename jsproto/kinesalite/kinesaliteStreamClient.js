@@ -1,13 +1,20 @@
 "use strict";
 
+const crypto = require( "crypto" );
+
 const KinesaliteClient = require( "./kinesaliteClient" );
 const DEFAULT_SHARD_NUM = 1;
+
+const defaultPartitionKeyGenerator = ( data ) => {
+	return crypto.createHash( "md5" ).update( data ).digest( "hex" );
+}; 
 
 class KinesaliteStreamClient {
 	constructor( streamName, shardNum = null, client = null ) {
 		this.client = this._getKinesisClient( client );
 		this._activePromise = this._setUpStream( streamName, shardNum );
 		this.streamName = streamName;
+		this.partitionKeyGenerator = defaultPartitionKeyGenerator;
 	}
 
 	async _setUpStream( streamName, shardCount ) {
@@ -73,11 +80,17 @@ class KinesaliteStreamClient {
 		return await this.client.describeStream( this.streamName );
 	}
 
-	writeStream( streamName, data, partitionKey ) {}
+	async write( data, partitionKey = null ) {
+		await this._activePromise;
+		if( partitionKey === null ) {
+			partitionKey = this.partitionKeyGenerator( data );
+		}
+		return await this.client.writeStream( this.streamName, data, partitionKey );
+	}
 
 	async readStream( streamName, recordHandler = libConfigs.defaultRecordHandler, batchSize = libConfigs.batchSize, iteratorType = libConfigs.defaultIteratorType ) {}
 
-	deleteStream( streamName ) {}
+	//deleteStream( streamName ) {} //TODO: todo... :-)
 }
 
 module.exports = KinesaliteStreamClient;
