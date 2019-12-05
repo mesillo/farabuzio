@@ -1,11 +1,12 @@
 "use strict";
 
 const KinesaliteClient = require( "./kinesaliteClient" );
+const DEFAULT_SHARD_NUM = 1;
 
 class KinesaliteStreamClient {
 	constructor( streamName, shardNum = null, client = null ) {
 		this.client = this._getKinesisClient( client );
-		this._setUpStream( streamName, shardNum );
+		this._activePromise = this._setUpStream( streamName, shardNum );
 		this.streamName = streamName;
 	}
 
@@ -17,13 +18,35 @@ class KinesaliteStreamClient {
 				await this.client.createStream( streamName );
 			}
 		}
-		try {
-			return await this.client.waitForStream( streamName );
-		} catch( error ) {
-			console.error( error );
-			process.exit( 255 );
-		}
+		return await this.client.waitForStream( streamName );
 	}
+
+	/*_setUpStream( streamName, shardCount ) {
+		let streamPromise = new Promise( ( resolve, reject ) => {
+			this.client.streamExists( streamName )
+				.then( ( exist ) => {
+					console.log( exist );
+					if( exist ) {
+						resolve( streamName );
+					} else {
+						if( ! shardCount )
+							shardCount = DEFAULT_SHARD_NUM;
+						this.client.createStream( streamName, shardCount )
+							.then( () => {
+								resolve( streamName );
+							} );
+					}
+				} );
+		} );
+		return new Promise( ( resolve, reject ) => {
+			streamPromise.then( ( streamName ) => {
+				this.client.waitForStream( streamName )
+					.then( () => {
+						resolve();
+					} );
+			} );
+		} );
+	}*/
 
 	_getKinesisClient( client ) {
 		let returnValue = null;
@@ -46,6 +69,7 @@ class KinesaliteStreamClient {
 	}
 
 	async describe() {
+		await this._activePromise;
 		return await this.client.describeStream( this.streamName );
 	}
 
