@@ -1,0 +1,14 @@
+{
+  "name": "lambda2proc",
+  "version": "0.0.1",
+  "description": "node lambda handler runner",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alberto Mesillo Mesin",
+  "license": "GPL-2.0-only",
+  "dependencies": {
+    "aws-sdk": "^2.585.0"
+  }
+}
