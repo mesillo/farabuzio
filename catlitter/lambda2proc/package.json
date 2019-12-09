@@ -4,6 +4,7 @@
   "description": "node lambda handler runner",
   "main": "app.js",
   "scripts": {
+    "start": "node app.js --function-name echo",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Alberto Mesillo Mesin",
