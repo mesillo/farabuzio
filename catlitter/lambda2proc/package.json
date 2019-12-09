@@ -4,7 +4,8 @@
   "description": "node lambda handler runner",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js --function-name echo",
+    "debug_echo": "node app.js --function-name echo",
+    "debug_singleton": "node app.js --function-name lambdaTest",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Alberto Mesillo Mesin",

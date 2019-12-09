@@ -12,7 +12,7 @@ class Lambda2Process {
 		this.lambdaDirectory = this._getFunctionDirectory( options );
 		this.configuration = this._getConfigurations();
 		this.handler = this._getHandler();
-		console.dir( this.handler );
+		this._initLambdaContext();
 	}
 
 	_getFunctionDirectory( options ) {
@@ -36,14 +36,33 @@ class Lambda2Process {
 		return require( filename )[ this.configuration.lambdaHandler ];
 	}
 
+	_initLambdaContext() {
+		this.lambdaContext = {};
+	}
+
+	resetContext() {
+		this._initLambdaContext();
+	}
+
 	getHandler() {
 		if( ! this.handler )
 			throw new Error( "Not yet initialized." );
 		return this.handler;
 	}
 
-	invoke( event, context ) {
-		
+	async invoke( event, context ) {
+		try {
+			return this.handler.call(
+				this.lambdaContext,
+				event,
+				context
+			);
+		} catch( error ) { //TODO: design better better...
+			console.dir(
+				error,
+				{ depth : null }	
+			);
+		}
 	}
 }
 
