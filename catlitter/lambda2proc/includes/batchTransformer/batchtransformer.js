@@ -59,8 +59,9 @@ class BatchTranformer {
 	_convertRecord( kinesisRecord ) {
 		let lambdaRecord = JSON.parse( baseRecordStruct );
 		lambdaRecord.kinesis.partitionKey = kinesisRecord.PartitionKey;
-		lambdaRecord.kinesis.data = kinesisRecord.Data; //TODo: Rigth format??
-		lambdaRecord.kinesis.sequenceNumber = kinesisRecord.kinesis.SequenceNumber;
+		lambdaRecord.kinesis.data = kinesisRecord.Data.toString( "base64" ); //TODO: Check format??
+		lambdaRecord.kinesis.sequenceNumber = kinesisRecord.SequenceNumber;
+		return lambdaRecord;
 	}
 
 	getContext() {
