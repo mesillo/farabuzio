@@ -1,6 +1,5 @@
 "use strict";
 
-
 const defaultContext = JSON.stringify( {
 	//callbackWaitsForEmptyEventLoop: [Getter/Setter],
 	//succeed: [Function],
@@ -38,8 +37,12 @@ const baseRecordStruct = JSON.stringify( {
 } );
 
 class BatchTranformer {
-	static toKinesisEvent( records ) {
-
+	toKinesisEvent( records ) {
+		let LRecords = [];
+		for( let kinesisRecord of records.Records ) {
+			LRecords.push( this._convertRecord( kinesisRecord ) );
+		}
+		return this._getRecordStructure( LRecords );
 	}
 	/*{
 		Records: [
@@ -55,10 +58,12 @@ class BatchTranformer {
 	}*/
 	_convertRecord( kinesisRecord ) {
 		let lambdaRecord = JSON.parse( baseRecordStruct );
-
+		lambdaRecord.kinesis.partitionKey = kinesisRecord.PartitionKey;
+		lambdaRecord.kinesis.data = kinesisRecord.Data; //TODo: Rigth format??
+		lambdaRecord.kinesis.sequenceNumber = kinesisRecord.kinesis.SequenceNumber;
 	}
 
-	_getContext() {
+	getContext() {
 		return JSON.parse( defaultContext );
 	}
 

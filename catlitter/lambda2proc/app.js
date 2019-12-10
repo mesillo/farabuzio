@@ -3,17 +3,24 @@
 const configurations = require( "./etc/config.json" );
 const L2P = require( "./includes/l2p/l2p" );
 const KinesaStream = require( "./includes/kinesalite/kinesaliteStreamClient" );
+const BatchTransformer = require( "./includes/batchTransformer/batchtransformer" );
 
-const kinesisHandler = ( records ) => {
+/*const kinesisHandler = ( records ) => {
 	console.dir(
 		records,
 		{ depth : null }
 	);
-};
+};*/
 
 const runLambdaProcess = ( options ) => {
 	let lambda = new L2P( options );
 	let stream = new KinesaStream( options.streamName );
+	let batchTransformer = new BatchTransformer();
+	let kinesisHandler = ( records ) => {
+		let event = batchTransformer.toKinesisEvent( records );
+		let context = batchTransformer.getContext();
+		lambda.invoke( event, context );
+	};
 	stream.read( kinesisHandler );
 };
 
