@@ -42,17 +42,17 @@ class BatchTranformer {
 
 	}
 	/*{
-  Records: [
-    {
-      SequenceNumber: '49602159052169182985118470184069715370891255409436262402',
-      ApproximateArrivalTimestamp: 2019-12-09T15: 26: 15.509Z,
-      Data: Buffer[Uint8Array][...],
-      PartitionKey: '7ee0c703ed8d63a44382f6a40137113b'
-    }
-  ],
-  NextShardIterator: 'AAAAAAAAAAHHEtmbWZu/eTpphaDzrIq2vS4mwA7d2kCOeM6BpG2fDltenj7wSlB8W9MOeL8ELekqbmd3Tj6VobKliDlcwMR0N9eFYvXknYfTIRXi6Yjue/Lh/kH1ctvbN+pqbSu9rZcP2WeveaUyOJv096FKwwhvPOR4iUs6ycVZo/rD3eDq/KBZSo/HY9R747iOa56sLew=',
-  MillisBehindLatest: 0
-}*/
+		Records: [
+			{
+    			SequenceNumber: '49602159052169182985118470184069715370891255409436262402',
+    			ApproximateArrivalTimestamp: 2019-12-09T15: 26: 15.509Z,
+    			Data: Buffer[Uint8Array][...],
+				PartitionKey: '7ee0c703ed8d63a44382f6a40137113b'
+			}
+  		],
+		NextShardIterator: 'AAAAAAAAAAHHEtmbWZu/eTpphaDzrIq2vS4mwA7d2kCOeM6BpG2fDltenj7wSlB8W9MOeL8ELekqbmd3Tj6VobKliDlcwMR0N9eFYvXknYfTIRXi6Yjue/Lh/kH1ctvbN+pqbSu9rZcP2WeveaUyOJv096FKwwhvPOR4iUs6ycVZo/rD3eDq/KBZSo/HY9R747iOa56sLew=',
+		MillisBehindLatest: 0
+	}*/
 	_convertRecord( kinesisRecord ) {
 		let lambdaRecord = JSON.parse( baseRecordStruct );
 
