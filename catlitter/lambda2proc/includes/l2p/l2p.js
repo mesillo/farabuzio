@@ -4,15 +4,24 @@ const fs = require( "fs" );
 const path = require( "path" );
 
 class Lambda2Process {
-	constructor( options ) {
+	constructor( options ) {// TODO: check the order of the functions (CWD management)...
 		if( ! options )
 			throw new Error( "Configurations needed!" );
 		this.name = options.functionName;
+		this.oldCWD = null;
 		this.options = options;
 		this.lambdaDirectory = this._getFunctionDirectory( options );
 		this.configuration = this._getConfigurations();
-		this.handler = this._getHandler();
 		this._initLambdaContext();
+		this._changeCWD();
+		this.handler = this._getHandler();
+	}
+
+	_changeCWD() {
+		if( this.lambdaDirectory ) {
+			this.oldCWD = process.cwd();
+			process.chdir( this.lambdaDirectory );
+		}
 	}
 
 	_getFunctionDirectory( options ) {
