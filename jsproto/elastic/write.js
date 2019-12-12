@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 
 "use strict";
-
-const elasticsearch = require( "elasticsearch" );
+const elasticsearch = require( "@elastic/elasticsearch" );
 const readline = require( "readline" );
 
 let options = {
@@ -10,7 +9,8 @@ let options = {
 };
 
 let client = new elasticsearch.Client( {
-	host: "localhost:9200",
+	//host: "localhost:9200",
+	node: "http://localhost:9200",
 	//log: "trace"
 } );
 
@@ -21,13 +21,30 @@ let rl = readline.createInterface( {
 } );
 
 rl.on( "line", async ( line ) => {
+	//await client.index( {
+	//	//type: "_doc", // Uncomment for 6up version...
+	//	index: options.indexName,
+	//	body: {
+	//		stdin : line
+	//	}
+	//} );
 	await client.index( {
-		type: "_doc",
 		index: options.indexName,
+		type: "doc", // uncomment this line if you are using {es} ≤ 6
 		body: {
-			stdin : line
+			body : line
 		}
 	} );
+	console.dir( ( await client.search( {
+		index: options.indexName,
+		//type: '_doc', // uncomment this line if you are using Elasticsearch ≤ 6
+		body: {
+			query: {
+				//match: { stdin : line }
+			}
+		}
+	} ) )[ "body" ].hits.hits,
+	{ depth : null } );
 } );
 
 // Parameter reading
