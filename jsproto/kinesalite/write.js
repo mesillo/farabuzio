@@ -1,42 +1,43 @@
-"use strict";
+#!/usr/bin/env node
 
+"use strict";
 const KinesaliteStreamClient = require( "./kinesaliteStreamClient" );
 
-let streamName = "testStream";
-let shardNum = 1;
+const readline = require( "readline" );
+const zlib = require( "zlib" );
 
-let stream = new KinesaliteStreamClient( streamName, shardNum );
+let options = {
+    streamName: "testStream",
+    shardNum: 1,
+    zipPayload: false
+};
 
-for( let index = 0 ; index < 10 ; index++ )
-	stream.write( "Dati buttati " + index );
+let rl = readline.createInterface( {
+  input: process.stdin,
+  output: process.stdout,
+  terminal: false
+} );
 
-console.log( "Done" );
+rl.on( "line", async ( line ) => {
+    let linebuf = Buffer.from( line );
+    if( options.zipPayload )
+        linebuf = zlib.gzipSync( linebuf );
+    stream.write( linebuf ); //TODO: or JSON.parse( line );???
+} );
 
-
-/*
-const KinesaliteClient = require( "./kinesaliteClient" );
-
-let kinesis = new KinesaliteClient();
-let streamName = "testStream";
-let shardNum = 2;
-let writeTimer = 2000;
-
-//kinesis.createStream( streamName, shardNum )
-//	.then( ( createResult ) => {
-		kinesis.waitForStream( streamName )
-			.then( () => {
-				let i = 0;
-				setInterval(
-					() => {
-					let streamData = `ShardData number ${i}`;
-					let partKey = `${i++}`;
-					kinesis.writeStream( streamName, streamData, partKey )
-						.then( ( writeData ) => {
-							console.log( `Writed: ${streamData}.` );
-						} );
-					},
-					writeTimer
-				);
-			} );
-//	} );
-*/
+// Parameter reading
+for( let i = 0  ; i < process.argv.length ; i++ ) {
+	switch( process.argv[ i ] ) {
+		case "--stream-name":
+			options.streamName = process.argv[++i];
+            break;
+        case "--shard-number":
+			options.shardNum = parseInt( process.argv[++i] );
+            break;
+        case "--zip-payload":
+            options.zipPayload = true;
+            break;
+	}
+}
+//// Init Stream ////
+let stream = new KinesaliteStreamClient( options.streamName, options.shardNum );
