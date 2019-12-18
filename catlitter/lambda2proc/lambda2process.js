@@ -11,10 +11,15 @@ const runLambdaProcess = ( options ) => {
 	let lambda = new L2P( options );
 	let stream = new KinesaStream( options.streamName );
 	let batchTransformer = new BatchTransformer();
-	let kinesisHandler = ( records ) => {
+	let kinesisHandler = async ( records ) => {
 		let event = batchTransformer.toKinesisEvent( records );
 		let context = batchTransformer.getContext();
-		lambda.invoke( event, context );
+		try {
+			await lambda.invoke( event, context );
+		} catch( error ) {
+			console.error( error );
+			process.exit( -1 );
+		}
 	};
 	stream.read( kinesisHandler );
 };

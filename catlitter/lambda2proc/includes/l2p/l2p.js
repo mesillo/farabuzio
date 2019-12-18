@@ -3,6 +3,9 @@
 const fs = require( "fs" );
 const path = require( "path" );
 
+const INVOKE_DELAY = 1000;
+const INVOKE_RETRY = 10;
+
 class Lambda2Process {
 	constructor( options ) {// TODO: check the order of the functions (CWD management)...
 		if( ! options )
@@ -59,19 +62,30 @@ class Lambda2Process {
 		return this.handler;
 	}
 
+	_retryInvokeSleep() {
+		return new Promise( ( resolve ) => {
+			setTimeout( resolve, INVOKE_DELAY );
+		} );
+	}
+
 	async invoke( event, context ) {
-		try {
-			return this.handler.call(
-				this.lambdaContext,
-				event,
-				context
-			);
-		} catch( error ) { //TODO: design better better...
-			console.dir(
-				error,
-				{ depth : null }	
-			);
+		let lastError = null;
+		for( let leftRetries = INVOKE_RETRY ; leftRetries ; leftRetries-- ) {
+			try {
+				return await this.handler.call(
+					this.lambdaContext,
+					event,
+					context
+				);
+			} catch( error ) { //TODO: design better better...
+				//console.dir( error, { depth : null } );
+				lastError = error;
+				//console.error( error );
+				await this._retryInvokeSleep();
+				//continue;
+			}
 		}
+		throw lastError;
 	}
 }
 

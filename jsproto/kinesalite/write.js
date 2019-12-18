@@ -7,9 +7,9 @@ const readline = require( "readline" );
 const zlib = require( "zlib" );
 
 let options = {
-    streamName: "testStream",
-    shardNum: 1,
-    zipPayload: false
+	streamName: "testStream",
+	shardNum: 1,
+	zipPayload: false
 };
 
 let rl = readline.createInterface( {
@@ -19,10 +19,10 @@ let rl = readline.createInterface( {
 } );
 
 rl.on( "line", async ( line ) => {
-    let linebuf = Buffer.from( line );
-    if( options.zipPayload )
-        linebuf = zlib.gzipSync( linebuf );
-    stream.write( linebuf ); //TODO: or JSON.parse( line );???
+	let linebuf = Buffer.from( line );
+	if( options.zipPayload )
+		linebuf = zlib.gzipSync( linebuf );
+	stream.write( linebuf ); //TODO: or JSON.parse( line );???
 } );
 
 // Parameter reading
@@ -30,13 +30,13 @@ for( let i = 0  ; i < process.argv.length ; i++ ) {
 	switch( process.argv[ i ] ) {
 		case "--stream-name":
 			options.streamName = process.argv[++i];
-            break;
-        case "--shard-number":
+			break;
+		case "--shard-number":
 			options.shardNum = parseInt( process.argv[++i] );
-            break;
-        case "--zip-payload":
-            options.zipPayload = true;
-            break;
+			break;
+		case "--zip-payload":
+			options.zipPayload = true;
+			break;
 	}
 }
 //// Init Stream ////
