@@ -1,18 +1,26 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 class MainClass {
 	protected const ushort UuidLen = 36;
 	protected const ushort POLY = 0x8408;
 
 	public static void Main (string[] args) {
-		string iso8601String = "2019-11-18T11:08:02.890Z";
-		List<byte> timestamp = getUnixTimeStamp( iso8601String );
-		for ( int i = 0 ; i < timestamp.Count ; i++ )
-		{
-			Console.WriteLine( timestamp[ i ] );
-		}
+		string JSON = @"{""TRUE"":true,""FALSE"":false}";
+		Dictionary<string, string> output = JsonConvert.DeserializeObject<Dictionary<string, string>>( JSON );
+		Console.WriteLine( output["TRUE"] == "true" );
+		Console.WriteLine( output["FALSE"] == "false" );
+		Console.WriteLine( "END" );
+		//byte output = (byte) Convert.ToUInt16( "257" );
+		//Console.WriteLine( output );
+		//string iso8601String = "2019-11-18T11:08:02.890Z";
+		//List<byte> timestamp = getUnixTimeStamp( iso8601String );
+		//for ( int i = 0 ; i < timestamp.Count ; i++ )
+		//{
+		//	Console.WriteLine( timestamp[ i ] );
+		//}
 		//DateTime date = fromISO8601( iso8601String );
 		//Console.WriteLine( date );
 		//List<byte> testList = new List<byte>() { 1, 2, 3, 4, 5, 6, 7, 8 };
