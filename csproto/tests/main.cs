@@ -7,14 +7,53 @@ class MainClass {
 	protected const ushort POLY = 0x8408;
 
 	public static void Main (string[] args) {
-		List<byte> testList = new List<byte>() { 1, 2, 3, 4, 5, 6, 7, 8 };
-		
-		List<byte> CRC = CalculateCRC( testList, POLY );
-
-		for ( ushort i = 0 ; i < CRC.Count ; i++ )
+		string iso8601String = "2019-11-18T11:08:02.890Z";
+		List<byte> timestamp = getUnixTimeStamp( iso8601String );
+		for ( int i = 0 ; i < timestamp.Count ; i++ )
 		{
-			Console.WriteLine( CRC[i] );
+			Console.WriteLine( timestamp[ i ] );
 		}
+		//DateTime date = fromISO8601( iso8601String );
+		//Console.WriteLine( date );
+		//List<byte> testList = new List<byte>() { 1, 2, 3, 4, 5, 6, 7, 8 };
+		//
+		//List<byte> CRC = CalculateCRC( testList, POLY );
+		//
+		//for ( ushort i = 0 ; i < CRC.Count ; i++ )
+		//{
+		//	Console.WriteLine( CRC[i] );
+		//}
+	}
+
+	//protected static string ToRfc3339String(DateTime dateTime) // TODO: to be tested.
+	//{
+    //	return dateTime.ToString("yyyy-MM-dd'T'HH:mm:ss.fffzzz", DateTimeFormatInfo.InvariantInfo);
+	//}
+
+	protected static List<byte> getUnixTimeStamp( string iso8601String ) {
+		DateTime date = DateTime.ParseExact(iso8601String, "yyyy-MM-ddTHH:mm:ss.fffK", System.Globalization.CultureInfo.InvariantCulture);
+		UInt32 timeStamp = (UInt32) date.Subtract(DateTime.UnixEpoch).TotalSeconds;
+		byte[] timeStampBytes = BitConverter.GetBytes( timeStamp );
+		//Int32 timeStamp = (Int32) date.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
+		//(Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
+		//Console.WriteLine( timeStamp );
+		return byteArrayToBigEndianList( timeStampBytes );
+	}
+
+	protected static List<byte> byteArrayToBigEndianList( byte[] input )
+	{
+		List<byte> output = new List<byte>();
+		for (int i = (input.Length-1) ; i > -1 ; i--)
+		{
+			output.Add( input[i] );
+		}
+		return output;
+	}
+
+	protected static DateTime fromISO8601( string iso8601String )
+	{
+		return DateTime.ParseExact(iso8601String, "yyyy-MM-ddTHH:mm:ss.fffK", System.Globalization.CultureInfo.InvariantCulture);
+		//return DateTime.Parse( iso8601String );
 	}
 
 	protected static List<byte> CalculateCRC( List<byte> buffer, ushort poly )
