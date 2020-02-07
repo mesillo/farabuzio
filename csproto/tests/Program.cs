@@ -8,34 +8,18 @@ class MainClass {
 	protected const ushort POLY = 0x8408;
 
 	public static void Main (string[] args) {
-		string JSON = @"{""TRUE"":true,""FALSE"":false}";
-		Dictionary<string, string> output = JsonConvert.DeserializeObject<Dictionary<string, string>>( JSON );
-		Console.WriteLine( output["TRUE"] == "true" );
-		Console.WriteLine( output["FALSE"] == "false" );
-		Console.WriteLine( "END" );
-		//byte output = (byte) Convert.ToUInt16( "257" );
-		//Console.WriteLine( output );
-		//string iso8601String = "2019-11-18T11:08:02.890Z";
-		//List<byte> timestamp = getUnixTimeStamp( iso8601String );
-		//for ( int i = 0 ; i < timestamp.Count ; i++ )
-		//{
-		//	Console.WriteLine( timestamp[ i ] );
-		//}
-		//DateTime date = fromISO8601( iso8601String );
-		//Console.WriteLine( date );
-		//List<byte> testList = new List<byte>() { 1, 2, 3, 4, 5, 6, 7, 8 };
-		//
-		//List<byte> CRC = CalculateCRC( testList, POLY );
-		//
-		//for ( ushort i = 0 ; i < CRC.Count ; i++ )
-		//{
-		//	Console.WriteLine( CRC[i] );
-		//}
+		string uuid = "00000000-0000-0000-0000-000000000001";
+		List<byte> uuidlist = UuidStringToBytes( uuid );
+		Console.WriteLine( uuidlist.Count );
+		Console.WriteLine( BitConverter.ToString( uuidlist.ToArray() ) );
+		/*for( int i = 0 ; i < uuidlist.Count ; i++ ) {
+			Console.Write( uuidlist[i] );
+		}*/
 	}
 
 	//protected static string ToRfc3339String(DateTime dateTime) // TODO: to be tested.
 	//{
-    //	return dateTime.ToString("yyyy-MM-dd'T'HH:mm:ss.fffzzz", DateTimeFormatInfo.InvariantInfo);
+	//	return dateTime.ToString("yyyy-MM-dd'T'HH:mm:ss.fffzzz", DateTimeFormatInfo.InvariantInfo);
 	//}
 
 	protected static List<byte> getUnixTimeStamp( string iso8601String ) {
@@ -100,7 +84,20 @@ class MainClass {
 		return returnValue;
 	}
 
-	protected static List<byte> UuidStringToBytes ( string uuid )
+	protected  static List<byte> UuidStringToBytes(string uuid)
+	{
+		List<byte> returnValue = new List<byte>();
+		if (uuid.Length == UuidLen)
+		{
+			string hexUuid = String.Join("", uuid.Split('-'));
+			for (ushort i = 0; i < hexUuid.Length; i += 2)
+			{
+				returnValue.Add(Convert.ToByte(hexUuid.Substring(i, 2), 16));
+			}
+		}
+		return returnValue;
+	}
+	/*protected static List<byte> UuidStringToBytes ( string uuid )
 	{
 		List<byte> returnValue = new List<byte>();
 		if ( uuid.Length == UuidLen )
@@ -112,7 +109,7 @@ class MainClass {
 			}
 		}
 		return returnValue;
-	}
+	}*/
 }
 		//UInt32 testUint = 15;
 		//byte[] output = BitConverter.GetBytes( testUint );
@@ -146,3 +143,27 @@ class MainClass {
 			Console.WriteLine( output[i] );
 		}*/
 		//Console.WriteLine( "\tEnd" );
+
+		//string JSON = @"{""TRUE"":true,""FALSE"":false}";
+		//Dictionary<string, string> output = JsonConvert.DeserializeObject<Dictionary<string, string>>( JSON );
+		//Console.WriteLine( output["TRUE"] == "true" );
+		//Console.WriteLine( output["FALSE"] == "false" );
+		//Console.WriteLine( "END" );
+		//byte output = (byte) Convert.ToUInt16( "257" );
+		//Console.WriteLine( output );
+		//string iso8601String = "2019-11-18T11:08:02.890Z";
+		//List<byte> timestamp = getUnixTimeStamp( iso8601String );
+		//for ( int i = 0 ; i < timestamp.Count ; i++ )
+		//{
+		//	Console.WriteLine( timestamp[ i ] );
+		//}
+		//DateTime date = fromISO8601( iso8601String );
+		//Console.WriteLine( date );
+		//List<byte> testList = new List<byte>() { 1, 2, 3, 4, 5, 6, 7, 8 };
+		//
+		//List<byte> CRC = CalculateCRC( testList, POLY );
+		//
+		//for ( ushort i = 0 ; i < CRC.Count ; i++ )
+		//{
+		//	Console.WriteLine( CRC[i] );
+		//}
