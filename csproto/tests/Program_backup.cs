@@ -1,20 +1,27 @@
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 
 class MainClass {
+	
 	protected const ushort UuidLen = 36;
-	protected const ushort POLY = 0x8408;
+	//protected const ushort POLY = 0x8408;
 
 	public static void Main (string[] args) {
-		string uuid = "00000000-0000-0000-0000-000000000001";
-		List<byte> uuidlist = UuidStringToBytes( uuid );
-		Console.WriteLine( uuidlist.Count );
-		Console.WriteLine( BitConverter.ToString( uuidlist.ToArray() ) );
-		/*for( int i = 0 ; i < uuidlist.Count ; i++ ) {
-			Console.Write( uuidlist[i] );
-		}*/
+		string iso8601String = "2020-02-07T12:30:00.000Z";
+		List<byte> dateBytes = getUnixTimeStamp( iso8601String );
+		Console.WriteLine(
+			String.Join("", BitConverter.ToString( dateBytes.ToArray() ).Split("-") )
+		);
+	//	Console.WriteLine( dateBytes );
+	//	string uuid = "00000000-0000-0000-0000-000000000001";
+	//	List<byte> uuidlist = UuidStringToBytes( uuid );
+	//	Console.WriteLine( uuidlist.Count );
+	//	Console.WriteLine( BitConverter.ToString( uuidlist.ToArray() ) );
+	//	/*for( int i = 0 ; i < uuidlist.Count ; i++ ) {
+	//		Console.Write( uuidlist[i] );
+	//	}*/
 	}
 
 	//protected static string ToRfc3339String(DateTime dateTime) // TODO: to be tested.
@@ -24,7 +31,8 @@ class MainClass {
 
 	protected static List<byte> getUnixTimeStamp( string iso8601String ) {
 		DateTime date = DateTime.ParseExact(iso8601String, "yyyy-MM-ddTHH:mm:ss.fffK", System.Globalization.CultureInfo.InvariantCulture);
-		UInt32 timeStamp = (UInt32) date.Subtract(DateTime.UnixEpoch).TotalSeconds;
+		//UInt32 timeStamp = (UInt32) date.Subtract(DateTime.UnixEpoch).TotalSeconds;
+		UInt32 timeStamp = (UInt32) date.ToUniversalTime().Subtract(DateTime.UnixEpoch).TotalSeconds;
 		byte[] timeStampBytes = BitConverter.GetBytes( timeStamp );
 		//Int32 timeStamp = (Int32) date.Subtract(new DateTime(1970, 1, 1)).TotalSeconds;
 		//(Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
