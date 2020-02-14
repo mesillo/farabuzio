@@ -1,0 +1,13 @@
+c:\Users\alberto.mesin\Documents\sources\farabuzio\csproto\tests\obj\Debug\netcoreapp3.1\tests.csprojAssemblyReference.cache
+c:\Users\alberto.mesin\Documents\sources\farabuzio\csproto\tests\obj\Debug\netcoreapp3.1\tests.AssemblyInfoInputs.cache
+c:\Users\alberto.mesin\Documents\sources\farabuzio\csproto\tests\obj\Debug\netcoreapp3.1\tests.AssemblyInfo.cs
+c:\Users\alberto.mesin\Documents\sources\farabuzio\csproto\tests\bin\Debug\netcoreapp3.1\tests.exe
+c:\Users\alberto.mesin\Documents\sources\farabuzio\csproto\tests\bin\Debug\netcoreapp3.1\tests.deps.json
+c:\Users\alberto.mesin\Documents\sources\farabuzio\csproto\tests\bin\Debug\netcoreapp3.1\tests.runtimeconfig.json
+c:\Users\alberto.mesin\Documents\sources\farabuzio\csproto\tests\bin\Debug\netcoreapp3.1\tests.runtimeconfig.dev.json
+c:\Users\alberto.mesin\Documents\sources\farabuzio\csproto\tests\bin\Debug\netcoreapp3.1\tests.dll
+c:\Users\alberto.mesin\Documents\sources\farabuzio\csproto\tests\bin\Debug\netcoreapp3.1\tests.pdb
+c:\Users\alberto.mesin\Documents\sources\farabuzio\csproto\tests\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+c:\Users\alberto.mesin\Documents\sources\farabuzio\csproto\tests\obj\Debug\netcoreapp3.1\tests.csproj.CopyComplete
+c:\Users\alberto.mesin\Documents\sources\farabuzio\csproto\tests\obj\Debug\netcoreapp3.1\tests.dll
+c:\Users\alberto.mesin\Documents\sources\farabuzio\csproto\tests\obj\Debug\netcoreapp3.1\tests.pdb

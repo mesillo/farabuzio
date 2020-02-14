@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\alberto.mesin\\Documents\\sources\\farabuzio\\csproto\\tests\\tests.csproj": {}
+    "c:\\Users\\alberto.mesin\\Documents\\sources\\farabuzio\\csproto\\tests\\tests.csproj": {}
   },
   "projects": {
-    "C:\\Users\\alberto.mesin\\Documents\\sources\\farabuzio\\csproto\\tests\\tests.csproj": {
+    "c:\\Users\\alberto.mesin\\Documents\\sources\\farabuzio\\csproto\\tests\\tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\alberto.mesin\\Documents\\sources\\farabuzio\\csproto\\tests\\tests.csproj",
+        "projectUniqueName": "c:\\Users\\alberto.mesin\\Documents\\sources\\farabuzio\\csproto\\tests\\tests.csproj",
         "projectName": "tests",
-        "projectPath": "C:\\Users\\alberto.mesin\\Documents\\sources\\farabuzio\\csproto\\tests\\tests.csproj",
+        "projectPath": "c:\\Users\\alberto.mesin\\Documents\\sources\\farabuzio\\csproto\\tests\\tests.csproj",
         "packagesPath": "C:\\Users\\alberto.mesin\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\alberto.mesin\\Documents\\sources\\farabuzio\\csproto\\tests\\obj\\",
+        "outputPath": "c:\\Users\\alberto.mesin\\Documents\\sources\\farabuzio\\csproto\\tests\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\alberto.mesin\\AppData\\Roaming\\NuGet\\NuGet.Config",
