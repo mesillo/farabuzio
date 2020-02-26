@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-//using Newtonsoft.Json;
+using Newtonsoft.Json;
 //using Newtonsoft.Json.Linq;
-using  System.Text.Json.Serialization;
+//using  System.Text.Json.Serialization;
 
 namespace testJson
 {
@@ -10,13 +10,20 @@ namespace testJson
     {
         static void Main(string[] args)
         {
-            runTestJson( "{\"dateTimeUTC\":\"2020-02-20T20:07:22.485Z\"}" );
+            runTestJson( "{\"Parameters\":{\"dateTimeUTC\":\"2020-02-20T20:07:22.485Z\"}}" );
         }
 
         private static void runTestJson( string jsonStr )
         {
-            var converter = new JsonConverter<Dictionary<string, string>>();
+            //var converter = new JsonConverter<Dictionary<string, string>>();
+            //Dictionary<string, string> jsonDictionary = JsonConvert.DeserializeObject(jsonStr); // Seems to do the same thing...
+            Message msg = JsonConvert.DeserializeObject<Message>(jsonStr);
+            Console.WriteLine( msg );
         }
+    }
+
+    class Message {
+        public Dictionary<string, string> Parameters;
     }
 }
 
