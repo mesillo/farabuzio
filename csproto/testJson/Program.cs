@@ -11,7 +11,7 @@ namespace testJson
         static void Main(string[] args)
         {
             runTestJson( "{\"Parameters\":{\"dateTimeUTC\":\"2020-02-20T20:07:22.485Z\"}}" );
-            //runTestJson( "{\"Message\":{\"Parameters\":{\"dateTimeUTC\":\"2020-02-20T20:07:22.485Z\"}}}" );
+            runTestJson( "{\"Message\":{\"Parameters\":{\"dateTimeUTC\":\"2020-02-20T20:07:22.485Z\"}}}" );
         }
 
         private static void runTestJson( string jsonStr )
@@ -19,12 +19,13 @@ namespace testJson
             //var converter = new JsonConverter<Dictionary<string, string>>();
             //Dictionary<string, string> jsonDictionary = JsonConvert.DeserializeObject(jsonStr); // Seems to do the same thing...
             Message msg = JsonConvert.DeserializeObject<Message>(jsonStr);
+            Console.WriteLine( msg );
             //var msg = JsonConvert.DeserializeObject<Object>(jsonStr); //JObject with same probelm...
             //Console.WriteLine( msg.GetType() );
-            foreach( KeyValuePair<string, string> kvp in msg.Parameters )
-            {
-                Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
-            }
+            //foreach( KeyValuePair<string, string> kvp in msg.Parameters )
+            //{
+            //    Console.WriteLine("Key = {0}, Value = {1}", kvp.Key, kvp.Value);
+            //}
         }
     }
 
