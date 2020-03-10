@@ -1,6 +1,6 @@
 async Task Main()
 {
-    var issuer = "http://pippo.local:3000";
+    var issuer = "https:://token.stsv4.50faeb5394d2.dev.us.fm-cloud.com";
     var httpClient = new HttpClient()
     {
         BaseAddress = new Uri(issuer)
