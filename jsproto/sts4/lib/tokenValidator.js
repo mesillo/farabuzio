@@ -1,4 +1,14 @@
 "use strict";
+
+const jose = require( "jose" );
+const {
+    JWE,   // JSON Web Encryption (JWE) 
+    JWK,   // JSON Web Key (JWK)
+    JWKS,  // JSON Web Key Set (JWKS)
+    JWS,   // JSON Web Signature (JWS)
+    JWT,   // JSON Web Token (JWT)
+    errors // errors utilized by jose
+} = jose;
 /*
 const endpoint = {
   protocol: "http/https",
@@ -58,9 +68,23 @@ class TokenValidator {
         return JSON.parse( ( await this._GET( "/.well-known/openid-configuration" ) ).toString() );
     }
 
-    async getJwksUri() {
+    async getJwksUri() { //TOTO: rename...
         let jwks_uri = ( await this.getOpenidConfiguration() ).jwks_uri;
         return JSON.parse( ( await this._GET( jwks_uri ) ).toString() );
+    }
+
+    async getJWKSKeyStore() {
+        let jwks = await this.getJwksUri();
+        let keys = [];
+        for( let jwk of jwks.keys ) {
+            keys.push( JWK.asKey( jwk ) );
+        }
+        return new JWKS.KeyStore( keys );
+    }
+
+    async verifyJWTToken( token ) {
+        let keyStore = await this.getJWKSKeyStore();
+        return JWT.verify( token, keyStore );
     }
 }
 
