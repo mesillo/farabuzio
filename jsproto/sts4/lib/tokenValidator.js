@@ -16,6 +16,10 @@ const endpoint = {
   port: 443
 }
 */
+/* {
+  audience: 'urn:example:client',
+  issuer: 'https://op.example.com',
+} */
 const GOOD_RESPONDE_STATUSCODE = 200;
 
 class TokenValidator {
@@ -82,9 +86,9 @@ class TokenValidator {
         return new JWKS.KeyStore( keys );
     }
 
-    async verifyJWTToken( token ) {
+    async verifyJWTToken( token, options = {} ) {
         let keyStore = await this.getJWKSKeyStore();
-        return JWT.verify( token, keyStore );
+        return JWT.verify( token, keyStore, options );
     }
 }
 
