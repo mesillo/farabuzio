@@ -1,5 +1,7 @@
 "use strict";
 
+const fs = require( "fs" );
+
 let TockenValidator = require( "./lib/tokenValidator" );
 let WsReceiver = require( "./lib/wsServer" );
 
@@ -14,11 +16,12 @@ const endpoint = {
 const WSoptions = {
     port: 8080,
     //protocol: "https",
-    protocol: "http",
+    protocol: "https",
     httpsOptions: {
-        cert: "",
-        key: "" // or Buffers... :-|
+        cert: fs.readFileSync( "./keys/cert.pem" ),
+        key: fs.readFileSync( "./keys/key.pem" ) // or Buffers... :-|
     }
+    //httpsOptions: null
 };
 
 //const JWT = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1lMiIsImlhdCI6MTU1MDU4MTA4NH0.WN5D-BFLypnuklvO3VFQ5ucDjBT68R2Yc-gj8AlkRAs";

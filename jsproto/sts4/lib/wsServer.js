@@ -39,15 +39,19 @@ class WsReceiver {
         this.options = options;
         this.webServer = this._getWebServer();
         this.socketServer = new webSocket.Server( { server : this.webServer } );
+        this._setUpEventsHandlers();
     }
 
     _getWebServer() {
         if( this.options.protocol === "https" ) {
             if( this.options.httpsOptions ) {
+                console.info( "Secured WS whit configuration." );
                 return https.createServer( this.options.httpsOptions ); // TODO: Parse and adapt.
             }
+            console.info( "Secured WS whitout configuration." );
             return https.createServer();
         }
+        console.info( "Unecured WS." );
         return http.createServer();
     }
 
@@ -55,7 +59,12 @@ class WsReceiver {
         this.socketServer.on( "connection", this._webSocketHandler );
     }
 
+    _setUpEventsHandlers() {
+        this._setUpConnectionEvent();
+    }
+
     _webSocketHandler( socket ) {
+        console.log( "=== connection ===" );
         console.dir(
             socket,
             { depth: null }
