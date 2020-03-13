@@ -26,54 +26,76 @@ const https = require( "https" );
 //    }
 //};
 /*const options = {
-    port: 8080,
-    protocol: "https",
-    httpsOptions: {
-        cert: "",
-        key: "" // or Buffers... :-|
-    }
+	port: 8080,
+	protocol: "https",
+	httpsOptions: {
+		cert: "",
+		key: "" // or Buffers... :-|
+	}
 };*/
 
 class WsReceiver {
-    constructor( options ) {
-        this.options = options;
-        this.webServer = this._getWebServer();
-        this.socketServer = new webSocket.Server( { server : this.webServer } );
-        this._setUpEventsHandlers();
-    }
+	constructor( options ) {
+		this.options = options;
+		this.webServer = this._getWebServer();
+		this.socketServer = new webSocket.Server( { server : this.webServer } );
+		this._setUpEventsHandlers();
+	}
 
-    _getWebServer() {
-        if( this.options.protocol === "https" ) {
-            if( this.options.httpsOptions ) {
-                console.info( "Secured WS whit configuration." );
-                return https.createServer( this.options.httpsOptions ); // TODO: Parse and adapt.
-            }
-            console.info( "Secured WS whitout configuration." );
-            return https.createServer();
-        }
-        console.info( "Unecured WS." );
-        return http.createServer();
-    }
+	_getWebServer() {
+		if( this.options.protocol === "https" ) {
+			if( this.options.httpsOptions ) {
+				console.info( "Secured WS whit configuration." );
+				return https.createServer( this.options.httpsOptions ); // TODO: Parse and adapt.
+			}
+			console.info( "Secured WS whitout configuration." );
+			return https.createServer();
+		}
+		console.info( "Unecured WS." );
+		return http.createServer();
+	}
 
-    _setUpConnectionEvent() {
-        this.socketServer.on( "connection", this._webSocketHandler );
-    }
+	_setUpConnectionEvent() {
+		this.socketServer.on( "connection", this._webSocketHandler );
+	}
 
-    _setUpEventsHandlers() {
-        this._setUpConnectionEvent();
-    }
+	_setUpEventsHandlers() {
+		this._setUpConnectionEvent();
+	}
 
-    _webSocketHandler( socket ) {
-        console.log( "=== connection ===" );
-        console.dir(
-            socket,
-            { depth: null }
-        );
-    }
+	_webSocketHandler( webSocket, incomingMessage ) {
+		///webSocket.on( "message", WsReceiver._messageHandler );
+		console.log( "=== connection ===" );
+		console.dir(
+			incomingMessage.headers,
+			{ depth : null }
+		);
+		/*console.dir(
+			incomingMessage.headers,
+			{ depth : null }
+		);*/
+		/*console.dir(
+			webSocket,
+			{ depth: null }
+		);
+		console.log( "=======================================" );
+		console.dir(
+			incomingMessage,
+			{ depth: null }
+		);*/
+	}
 
-    run() {
-        this.webServer.listen( this.options.port );
-    }
+	static _messageHandler( message ) { // for debug prurpose at the moment...
+		console.log( "=== message ===" );
+		console.dir(
+			message,
+			{ depth : 1 }
+		);
+	}
+
+	run() {
+		this.webServer.listen( this.options.port );
+	}
 }
 
 module.exports = WsReceiver;
