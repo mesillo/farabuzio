@@ -3,6 +3,7 @@
 const webSocket = require( "ws" );
 const http = require( "http" );
 const https = require( "https" );
+const url = require( "url" );
 //const wssOptions = {
 //    port: 8080,
 //    perMessageDeflate: {
@@ -65,23 +66,20 @@ class WsReceiver {
 
 	_webSocketHandler( webSocket, incomingMessage ) {
 		///webSocket.on( "message", WsReceiver._messageHandler );
+		let getData = url.parse( incomingMessage.url, true );
+		let headers = incomingMessage.headers;
 		console.log( "=== connection ===" );
 		console.dir(
 			incomingMessage.headers,
 			{ depth : null }
 		);
+		console.dir(
+			url.parse( incomingMessage.url, true ),
+			{ depth : 1 }
+		);
 		/*console.dir(
 			incomingMessage.headers,
 			{ depth : null }
-		);*/
-		/*console.dir(
-			webSocket,
-			{ depth: null }
-		);
-		console.log( "=======================================" );
-		console.dir(
-			incomingMessage,
-			{ depth: null }
 		);*/
 	}
 
