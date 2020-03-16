@@ -2,10 +2,8 @@
 
 const jose = require( "jose" );
 const {
-	//JWE,   // JSON Web Encryption (JWE) 
 	JWK,   // JSON Web Key (JWK)
 	JWKS,  // JSON Web Key Set (JWKS)
-	//JWS,   // JSON Web Signature (JWS)
 	JWT,   // JSON Web Token (JWT)
 	errors // errors utilized by jose
 } = jose;
@@ -92,7 +90,6 @@ class TokenValidator {
 		let expiration = new Date();
 		expiration.setSeconds( expiration.getSeconds() + KEYS_UPDATE_TIMEOUT );
 		this.keyCache.expiration = expiration;
-
 		try {
 			let jwks = await this.getJwksUri();
 			let keys = [];
@@ -104,20 +101,14 @@ class TokenValidator {
 			console.info( "Unable to obtain new keys. Delayed to: " + expiration );
 			return expiration;
 		}
-
-		//let expiration = new Date();
 		expiration.setMinutes( expiration.getMinutes() + KEYS_TTL );
 		this.keyCache.expiration = expiration;
 		console.info( "Refresh JWKS. Next refresh: " + expiration );
-		
 		return this.keyCache.expiration;
 	}
 
-	//async getJWKSKeyStore() {
 	getJWKSKeyStore() {
 		if( this._isKeyCacheExpired() ) {
-			//let expiration = await this._refreshKeyCache();
-			//console.info( "Refresh JWKS. Next refresh: " + expiration );
 			this._refreshKeyCache();
 		}
 		if( this.keyCache.keys === null ) { // never initialized...
