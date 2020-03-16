@@ -5,13 +5,14 @@ const http = require( "http" );
 const https = require( "https" );
 const url = require( "url" );
 
+const UniversaWsReceiver = require( "./universalWsReceiver" );
+
 const UNAUTHORIZED_CODE = 3401;
 const UNAUTHORIZED_STRING = "Unauthorized.";
 
 class WsReceiver {
 	constructor( options ) {
 		this.options = options;
-		//this.tokenValidator = options.tokenValidator;
 		this.webServer = this._getWebServer();
 		this.socketServer = new webSocket.Server( { server : this.webServer } );
 		this._setUpEventsHandlers();
@@ -31,7 +32,7 @@ class WsReceiver {
 	}
 
 	_setUpConnectionEvent() {
-		this.socketServer.on( "connection", ( webSocket, incomingMessage, ) => {
+		this.socketServer.on( "connection", ( webSocket, incomingMessage ) => {
 			this._webSocketHandler( webSocket, incomingMessage, this.options );
 		} );
 	}
@@ -41,35 +42,25 @@ class WsReceiver {
 	}
 
 	async _webSocketHandler( webSocket, incomingMessage, options ) {
-		///webSocket.on( "message", WsReceiver._messageHandler );
 		let getData = url.parse( incomingMessage.url, true );
 		let headers = incomingMessage.headers;
 		console.log( "=== connection ===" );
 		// TODO: verify token.
 		let jwtTocken = getData.query.token;
-		//console.dir( options );
 		if( options.tokenValidator && jwtTocken ) { // TODO make more controls... more sensed controls...
 			try {
-				console.log( "=== Autenticated ===" )
 				let clientInfo = await options.tokenValidator.verifyJWTToken( jwtTocken );
-				//console.dir( clientInfo, { depth : null } );
+				console.log( "=== Autenticated ===" );
 				// TODO: start comunications.
+				//new UniversaWsReceiver( webSocket, clientInfo ); //TODO: mantain a reference and drop after close???
 			} catch( error ) { // Client not autenticated.
-				console.log( "=== not autenticated ===" )
-				//console.dir( incomingMessage, { dept : 1 } );
+				console.log( "=== not autenticated ===" );
+				console.dir( error );
 				webSocket.close( UNAUTHORIZED_CODE, UNAUTHORIZED_STRING );
 			}
 		} else {
 			throw new Error( "WsReceiver unable to autenticate the client" ); //TODO: close connection with a 403;
 		}
-	}
-
-	static _messageHandler( message ) { // for debug prurpose at the moment...
-		console.log( "=== message ===" );
-		console.dir(
-			message,
-			{ depth : 1 }
-		);
 	}
 
 	run() {

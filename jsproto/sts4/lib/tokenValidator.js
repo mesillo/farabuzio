@@ -11,12 +11,18 @@ const {
 } = jose;
 
 const GOOD_RESPONDE_STATUSCODE = 200;
+const KEYS_TTL = 2; // in munutes
 
 class TokenValidator {
 	constructor( endpoint ) {
 		this.endpoint = endpoint;
 		this.agent = ( endpoint.protocol === "http" ) ? require( "http" ) : require( "https" );
 		this.validationOptions = {}
+		this.keyCache = {
+			expiration: null,
+			keys: null
+		};
+		this.getJWKSKeyStore();
 	}
 
 	setValidationOptions( validationOptions ) {
@@ -68,18 +74,43 @@ class TokenValidator {
 		return JSON.parse( ( await this._GET( jwks_uri ) ).toString() );
 	}
 
-	async getJWKSKeyStore() {
-		console.info( "Refresh JWKS: " + new Date() );
+	_isKeyCacheExpired() {
+		let now = new Date();
+		if( this.keyCache.expiration && now.getTime() < this.keyCache.expiration.getTime() ) {
+			return false;
+		}
+		return true;
+	}
+
+	async _refreshKeyCache() {
 		let jwks = await this.getJwksUri();
 		let keys = [];
 		for( let jwk of jwks.keys ) {
 			keys.push( JWK.asKey( jwk ) );
 		}
-		return new JWKS.KeyStore( keys );
+		this.keyCache.keys = new JWKS.KeyStore( keys );
+		let expiration = new Date();
+		expiration.setMinutes( expiration.getMinutes() + KEYS_TTL );
+		this.keyCache.expiration = expiration;
+		return this.keyCache.expiration;
+	}
+
+	async getJWKSKeyStore() {
+		if( this._isKeyCacheExpired() ) {
+			let expiration = await this._refreshKeyCache();
+			console.info( "Refresh JWKS. Next refresh: " + expiration );
+		}
+		return this.keyCache.keys;
+		/*let jwks = await this.getJwksUri();
+		let keys = [];
+		for( let jwk of jwks.keys ) {
+			keys.push( JWK.asKey( jwk ) );
+		}
+		return new JWKS.KeyStore( keys );*/
 	}
 
 	async verifyJWTToken( token, options = this.validationOptions ) {
-		console.info( "Validating JWT: " + token );
+		//console.info( "Validating JWT: " + token );
 		let keyStore = await this.getJWKSKeyStore();
 		return JWT.verify( token, keyStore, options );
 	}

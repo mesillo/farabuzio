@@ -4,11 +4,15 @@ class UniversalWsReceiver {
     constructor( webSoket, clientInfos ) {
         this.ws = webSoket;
         clientInfos = clientInfos;
+        this._setUpEvents( this.ws );
     }
 
-    _setUpEvents() {
-        this.ws.on( "message", ( msg ) => {
-            
+    _setUpEvents( ws ) {
+        console.log( "===== HIT =====" );
+        ws.send( "===== HIT =====" );
+        ws.on( "message", ( message ) => {
+            console.dir( message, { depth: null } );
+            ws.send( "PONG" );
         } );
     }
 }
