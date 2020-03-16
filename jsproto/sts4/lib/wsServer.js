@@ -5,6 +5,9 @@ const http = require( "http" );
 const https = require( "https" );
 const url = require( "url" );
 
+const UNAUTHORIZED_CODE = 3401;
+const UNAUTHORIZED_STRING = "Unauthorized.";
+
 class WsReceiver {
 	constructor( options ) {
 		this.options = options;
@@ -37,7 +40,7 @@ class WsReceiver {
 		this._setUpConnectionEvent();
 	}
 
-	_webSocketHandler( webSocket, incomingMessage, options ) {
+	async _webSocketHandler( webSocket, incomingMessage, options ) {
 		///webSocket.on( "message", WsReceiver._messageHandler );
 		let getData = url.parse( incomingMessage.url, true );
 		let headers = incomingMessage.headers;
@@ -46,11 +49,16 @@ class WsReceiver {
 		let jwtTocken = getData.query.token;
 		//console.dir( options );
 		if( options.tokenValidator && jwtTocken ) { // TODO make more controls... more sensed controls...
-			let clientInfo = options.tokenValidator.verifyJWTToken( jwtTocken );
-			console.dir(
-				clientInfo,
-				{ depth : null }
-			);
+			try {
+				console.log( "=== Autenticated ===" )
+				let clientInfo = await options.tokenValidator.verifyJWTToken( jwtTocken );
+				//console.dir( clientInfo, { depth : null } );
+				// TODO: start comunications.
+			} catch( error ) { // Client not autenticated.
+				console.log( "=== not autenticated ===" )
+				//console.dir( incomingMessage, { dept : 1 } );
+				webSocket.close( UNAUTHORIZED_CODE, UNAUTHORIZED_STRING );
+			}
 		} else {
 			throw new Error( "WsReceiver unable to autenticate the client" ); //TODO: close connection with a 403;
 		}

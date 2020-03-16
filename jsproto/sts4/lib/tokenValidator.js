@@ -69,6 +69,7 @@ class TokenValidator {
 	}
 
 	async getJWKSKeyStore() {
+		console.info( "Refresh JWKS: " + new Date() );
 		let jwks = await this.getJwksUri();
 		let keys = [];
 		for( let jwk of jwks.keys ) {
@@ -78,6 +79,7 @@ class TokenValidator {
 	}
 
 	async verifyJWTToken( token, options = this.validationOptions ) {
+		console.info( "Validating JWT: " + token );
 		let keyStore = await this.getJWKSKeyStore();
 		return JWT.verify( token, keyStore, options );
 	}
