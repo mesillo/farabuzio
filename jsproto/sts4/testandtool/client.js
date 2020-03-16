@@ -15,7 +15,7 @@ let index = 0;
 
 ws.on('open', function open() {
   console.log('connected');
-  ws.send( "=== PING ===" );
+  ws.send( `=== ${process.pid} Connection message! ===` );
 });
  
 ws.on('close', function close() {
@@ -26,6 +26,6 @@ ws.on('message', function incoming(data) {
   console.log( data );
  
   setTimeout(function timeout() {
-    ws.send("PING");
+    ws.send( `${process.pid} Timed message!` );
   }, 500);
 });

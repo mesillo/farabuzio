@@ -8,11 +8,12 @@ class UniversalWsReceiver {
     }
 
     _setUpEvents( ws ) {
-        console.log( "===== HIT =====" );
-        ws.send( "===== HIT =====" );
+        //console.log( "===== HIT =====" );
+        //ws.send( "===== HIT =====" );
         ws.on( "message", ( message ) => {
-            console.dir( message, { depth: null } );
-            ws.send( "PONG" );
+            //console.dir( message, { depth: null } );
+            //ws.send( "PONG" );
+            ws.send( "R: " + message );
         } );
     }
 }

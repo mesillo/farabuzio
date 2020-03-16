@@ -52,8 +52,8 @@ class WsReceiver {
 				let clientInfo = await options.tokenValidator.verifyJWTToken( jwtTocken );
 				console.log( "=== Autenticated ===" );
 				// TODO: start comunications.
-				//new UniversaWsReceiver( webSocket, clientInfo ); //TODO: mantain a reference and drop after close???
-			} catch( error ) { // Client not autenticated.
+				new UniversaWsReceiver( webSocket, clientInfo ); //TODO: mantain a reference and drop after close???
+			} catch( error ) { // Client not autenticated. // TODO: use error for better error message: server can be unable to obtain keys from start...
 				console.log( "=== not autenticated ===" );
 				console.dir( error );
 				webSocket.close( UNAUTHORIZED_CODE, UNAUTHORIZED_STRING );
