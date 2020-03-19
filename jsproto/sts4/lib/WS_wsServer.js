@@ -1,7 +1,6 @@
 "use strict";
 
-//const webSocket = require( "ws" );
-const webSocket = require( "socket.io" );
+const webSocket = require( "ws" );
 const http = require( "http" );
 const https = require( "https" );
 const url = require( "url" );
@@ -11,20 +10,11 @@ const UniversaWsReceiver = require( "./universalWsReceiver" );
 const UNAUTHORIZED_CODE = 3401;
 const UNAUTHORIZED_STRING = "Unauthorized.";
 
-const socketIOoptions = {
-	path: "/",
-	serveClient: false,
-	// below are engine.IO options
-	pingInterval: 10000,
-	pingTimeout: 5000,
-	cookie: false
-};
-
 class WsReceiver {
 	constructor( options ) {
 		this.options = options;
 		this.webServer = this._getWebServer();
-		this.socketServer = webSocket( this.webServer, socketIOoptions );
+		this.socketServer = new webSocket.Server( { server : this.webServer } );
 		this._setUpEventsHandlers();
 	}
 
@@ -43,7 +33,6 @@ class WsReceiver {
 
 	_setUpConnectionEvent() {
 		this.socketServer.on( "connection", ( webSocket, incomingMessage ) => {
-			console.dir( arguments.length, { depth : null } );
 			this._webSocketHandler( webSocket, incomingMessage, this.options );
 		} );
 	}
