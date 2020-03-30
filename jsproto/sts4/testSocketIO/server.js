@@ -43,13 +43,20 @@ class ProtocolManager {
 let webServer = generalOption.agent.createServer( generalOption.agentOptions );
 let io = socketio( webServer, ioOptions );
 
-io.use( async ( socket, next ) => {
+io.use( ( socket, next ) => {
 	console.log( "==== MIDDLEWARE ====" );
 	if( ! socket.handshake.query.tocken || socket.handshake.query.tocken === "" ) {
 		console.log( "== Unauthorized ==" );
-		await next( new Error( "Authentication error") );
+		//next( new Error( "Authentication error" ) );
+		//socket.disconnect( true );
+		socket.error( {
+			code : 401,
+			message : "Authentication error!",
+			info : {}
+		} );
 		socket.disconnect( true );
 	} else {
+		// TODO: move here the protocol creation... things in connect handler.
 		next();
 	}
 } );

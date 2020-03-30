@@ -33,15 +33,16 @@ socket.on( "connect", () => {
 	} );*/
 } );
 
-/*socket.on( "disconnect", () => {
+socket.on( "disconnect", () => {
 	console.log( "Disconnected from server" );
 	//console.dir( arguments, { depth : 0 } );
-	//process.exit();
-} );*/
+	process.exit();
+} );
 
-socket.on( "error", () => {
+socket.on( "error", ( error ) => {
 	console.log( "== ERROR ==" );
-	console.dir( arguments, { depth : 0 } );
+	//console.dir( arguments, { depth : 0 } );
+	console.dir( error );
 } );
 
 let dataProducer = ( delay ) => {
