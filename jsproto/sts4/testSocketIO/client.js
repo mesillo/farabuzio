@@ -33,14 +33,20 @@ socket.on( "connect", () => {
 	} );*/
 } );
 
-socket.on( "disconnect", () => {
+/*socket.on( "disconnect", () => {
 	console.log( "Disconnected from server" );
+	//console.dir( arguments, { depth : 0 } );
+	//process.exit();
+} );*/
+
+socket.on( "error", () => {
+	console.log( "== ERROR ==" );
 	console.dir( arguments, { depth : 0 } );
-	process.exit();
 } );
 
 let dataProducer = ( delay ) => {
 	setTimeout( () => {
+		console.log( "\tdata: " + delay );
 		socket.emit( "data", { data : "somedata: " + delay } );
 		delay *= 2;
 		dataProducer( delay );

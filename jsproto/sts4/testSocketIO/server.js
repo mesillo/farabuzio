@@ -52,21 +52,40 @@ let httpRequestListener = ( request, response ) => {
 let webServer = generalOption.agent.createServer( generalOption.agentOptions );
 let io = socketio( webServer, ioOptions );
 
+//webServer.on( "upgrade", ( connection ) => {
+//	console.log( "\t\t=== WebServer Upgrade ===" );
+//	//const urlObj = url.parse( request.url, true );
+//	//if( ! urlObj.query.tocken || urlObj.query.tocken === "" ) {
+//		//console.log( "\t\t== Http Unauthorized ==" );
+//	//}
+//	console.dir( arguments, { depth : 0 } );
+//} );
+//webServer.on( "connection", ( request, response ) => {
+//	console.log( "\t\t=== WebServer Connection ===" );
+//} );
+//webServer.on( "connect", ( request, response ) => {
+//	console.log( "\t\t=== WebServer Connect ===" );
+//} );
+
 io.use( ( socket, next ) => {
 	console.log( "==== MIDDLEWARE ====" );
 	//let queryObj = url.parse( socket.handshake.query, true );
-	//console.dir( socket.handshake.query );
-	//console.dir( socket.request );
-	//console.dir( socket.request.connection );
+	////console.dir( socket.handshake.query );
+	////console.dir( socket.request );
+	////console.dir( socket.request.connection );
 	if( ! socket.handshake.query.tocken || socket.handshake.query.tocken === "" ) {
 		console.log( "== Unauthorized ==" );
-
 		next( new Error( "Authentication error") );
-		socket.disconnect( true );
+		//socket.disconnect( true );
 	} else {
-	// TODO: e di next che me ne faccio??? Puoi passargli error...
+	//// TODO: e di next che me ne faccio??? Puoi passargli error...
 		next();
 	}
+} );
+io.use( ( socket, next ) => {
+	console.log( "==== MIDDLEWARE 2 ====" );
+	//console.dir( arguments ,{ depth: null } );
+	next();
 } );
 
 io.on( "connect", ( socket ) => {
