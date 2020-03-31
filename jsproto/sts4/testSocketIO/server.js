@@ -19,24 +19,33 @@ class ProtocolManager {
 	constructor( socket, tockenInfo ) {
 		this.socket = socket;
 		this.tockenInfo = tockenInfo;
+		this._setUpStatus();
 		this._setUpEvents();
 	}
 
 	_setUpEvents() {
-		this.socket.on( "message", ( message ) => {
-			console.log( "=== generic Message from client ===" );
-			console.log( "===================================" );
-			console.log( message );
-		} );
 		this.socket.on( "handshake", ( message ) => {
 			console.log( "=== Handshake from client ===" );
 			console.dir( message );
 			//this.socket.emit( "ack", { ackdata : "somedata" } ); //TODo: test this... this... 
 		} );
-		this.socket.on( "data", ( message ) => {
+		this.socket.on( "datachunk", ( message ) => {
 			console.log( "=== Data from client ===" );
 			console.dir( message );
 		} );
+		/// not usefull methods ///
+		this.socket.on( "message", ( message ) => {
+			console.log( "=== generic Message from client ===" );
+			console.log( "===================================" );
+			console.log( message );
+		} );
+	}
+
+	_setUpStatus() {
+		this.status = {
+			datachunkProcessor : null,
+			lastId : null
+		}
 	}
 }
 
@@ -56,15 +65,8 @@ io.use( ( socket, next ) => {
 	} else {
 		let tockenInfo = socket.handshake.query.tocken;
 		let protocolManager = new ProtocolManager( socket, tockenInfo );
-		// TODO: move here the protocol creation... things in connect handler.
 		next();
 	}
 } );
-
-//io.on( "connect", ( socket ) => {
-//	console.info( "Server get connection from " + socket.id );
-//	let tockenInfo = socket.handshake.query.tocken;
-//	let protocolManager = new ProtocolManager( socket, tockenInfo );
-//} );
 
 webServer.listen( generalOption.port );
