@@ -3,6 +3,12 @@
 const socketio = require( "socket.io" );
 const http = require( "http" );
 const https = require( "https" );
+const fs = require( "fs" );
+
+const httpsOptions = {
+	cert: fs.readFileSync( "../keys/cert.pem" ),
+	key: fs.readFileSync( "../keys/key.pem" ) // or Buffers... :-|
+};
 
 const ioOptions = {
 	serveClient: false,
@@ -11,9 +17,19 @@ const ioOptions = {
 };
 const generalOption = {
 	port: 9010,
-	agent: http,
-	agentOptions: {}
+	agent: https,
+	agentOptions: httpsOptions
 };
+
+class DatachunkProcessor {
+	constructor( handshakePayload ) {
+		this._handshakePayload = handshakePayload;
+	}
+
+	processChuck( data ) {
+		console.log( "DatachunkProcessor.processChuck" );
+	}
+}
 
 class ProtocolManager {
 	constructor( socket, tockenInfo ) {
@@ -24,15 +40,28 @@ class ProtocolManager {
 	}
 
 	_setUpEvents() {
-		this.socket.on( "handshake", ( message ) => {
-			console.log( "=== Handshake from client ===" );
-			console.dir( message );
-			//this.socket.emit( "ack", { ackdata : "somedata" } ); //TODo: test this... this... 
+		this.socket.on( "handshake", ( data ) => {
+			ProtocolManager.handshakeHandler( data, this );
 		} );
-		this.socket.on( "datachunk", ( message ) => {
-			console.log( "=== Data from client ===" );
-			console.dir( message );
+		this.socket.on( "datachunk", ( data ) => {
+			ProtocolManager.datachunkHandler( data, this );
 		} );
+	}
+
+	static handshakeHandler( data, protocolManager ) {
+		console.log( "== handshakeHandler ==" );
+		protocolManager.status.datachunkProcessor = new DatachunkProcessor( data );
+		protocolManager.socket.emit( "handshakeAck", { handshakeAck : "somedata" } );
+		//console.dir( arguments, { depth : null } );
+	}
+
+	static datachunkHandler( data, protocolManager ) {
+		console.log( "== datachunkHandler ==" );
+		if( protocolManager.status.datachunkProcessor !== null ) {
+			let message = protocolManager.status.datachunkProcessor.processChuck( data );
+			protocolManager.socket.emit( "datachunkAck", { datachunkAck : "somedata" } );
+		}
+		//console.dir( arguments, { depth : null } );
 	}
 
 	_setUpStatus() {

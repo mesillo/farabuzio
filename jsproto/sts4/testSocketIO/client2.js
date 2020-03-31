@@ -2,8 +2,8 @@
 
 const io = require( "socket.io-client" );
 
-const JWT = "someJWTstring";
-//const JWT = "";
+//const JWT = "someJWTstring";
+const JWT = "";
 
 let socket = io( "https://localhost:9010", {
 	path: "/websocket",
