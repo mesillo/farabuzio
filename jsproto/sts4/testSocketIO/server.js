@@ -47,8 +47,6 @@ io.use( ( socket, next ) => {
 	console.log( "==== MIDDLEWARE ====" );
 	if( ! socket.handshake.query.tocken || socket.handshake.query.tocken === "" ) {
 		console.log( "== Unauthorized ==" );
-		//next( new Error( "Authentication error" ) );
-		//socket.disconnect( true );
 		socket.error( {
 			code : 401,
 			message : "Authentication error!",
@@ -56,15 +54,17 @@ io.use( ( socket, next ) => {
 		} );
 		socket.disconnect( true );
 	} else {
+		let tockenInfo = socket.handshake.query.tocken;
+		let protocolManager = new ProtocolManager( socket, tockenInfo );
 		// TODO: move here the protocol creation... things in connect handler.
 		next();
 	}
 } );
 
-io.on( "connect", ( socket ) => {
-	console.info( "Server get connection from " + socket.id );
-	let tockenInfo = socket.handshake.query.tocken;
-	let protocolManager = new ProtocolManager( socket, tockenInfo );
-} );
+//io.on( "connect", ( socket ) => {
+//	console.info( "Server get connection from " + socket.id );
+//	let tockenInfo = socket.handshake.query.tocken;
+//	let protocolManager = new ProtocolManager( socket, tockenInfo );
+//} );
 
 webServer.listen( generalOption.port );
