@@ -33,12 +33,6 @@ class ProtocolManager {
 			console.log( "=== Data from client ===" );
 			console.dir( message );
 		} );
-		/// not usefull methods ///
-		this.socket.on( "message", ( message ) => {
-			console.log( "=== generic Message from client ===" );
-			console.log( "===================================" );
-			console.log( message );
-		} );
 	}
 
 	_setUpStatus() {
