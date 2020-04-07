@@ -14,7 +14,7 @@ const socket = io( "http://localhost:9010", { // https is supported and can be u
 	}
 } );
 
-// if the server cant validate the token it emit a "error" event an, immediatly after, close the soket.
+// 1) if the server cant validate the token it emit a "error" event an, immediatly after, close the soket.
 // So client must listen to this events
 socket.on( "error", ( error ) => {
 	console.log( "== ERROR ==" );
@@ -50,7 +50,7 @@ class Messages {
 			if( event === "sessionEstablished" && payload.id === id.toString() ) {
 				// ack received, session estabilished.
 				console.log( "= sessionEstablished =" );
-				// start transmita data (in this case position)
+				// 4) start transmita data (in this case position)
 				setInterval( ( ) => {
 					Messages.sendPosition( socket );
 				}, DATA_DELAY);
@@ -61,9 +61,6 @@ class Messages {
 			}
 		}
 		);
-		//socket.on( "sessionEstablished", ( socket, message ) => {
-		//	console.dir( "== sessionEstablished ==" );
-		//} );
 	}
 
 	static sendPosition( socket ) {
@@ -75,7 +72,7 @@ class Messages {
 			44.9877331,
 			12.0287777
 		] },
-		( event, payload ) => {
+		( event, payload ) => { // 5) check receiving
 			if( event === "ack" && payload.id === stringId ) {
 				// packet acked
 			} else if( event === "nack" ) {
@@ -89,9 +86,9 @@ class Messages {
 	} 
 }
 
-// when the server validate the token the "connect" event is raised.
+// 2) when the server validate the token the "connect" event is raised.
 socket.on( "connect", () => {
 	console.log( "== Connected to the server ==" );
-	// now client can emit a "startSession" event
+	// 3) now client can emit a "startSession" event
 	Messages.startSession( socket );
 } );
