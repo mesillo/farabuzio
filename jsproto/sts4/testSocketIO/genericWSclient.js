@@ -2,14 +2,15 @@
 
 const io = require( "socket.io-client" );
 
-const JWT = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjM5RDcxN0Y3QkI3RjE1QUEzMDBCNzRENTA0QzExRjA4REM4RjBBMUQiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJPZGNYOTd0X0Zhb3dDM1RWQk1FZkNOeVBDaDAifQ.eyJuYmYiOjE1ODY0NDU2NTUsImV4cCI6MTU4NjUzMjA1NSwiaXNzIjoiaHR0cHM6Ly90b2tlbi5zdHN2NC41MGE2ODYzMzY2YzUuZXUuZm0tY2xvdWQuY29tIiwiYXVkIjpbImh0dHBzOi8vdG9rZW4uc3RzdjQuNTBhNjg2MzM2NmM1LmV1LmZtLWNsb3VkLmNvbS9yZXNvdXJjZXMiLCJvcGVuaWQiLCJwcm9maWxlIiwicmV2ZWFsIl0sImNsaWVudF9pZCI6Im1hc3RlciIsInN1YiI6IjkxMzI2N2I4LTU0MDUtNDk4ZC03NjE4LTA4ZDc2OWJiMWY4ZiIsImF1dGhfdGltZSI6MTU4NjQ0NTY1NSwiaWRwIjoibG9jYWwiLCJyZXZlYWxfYWNjb3VudF9pZCI6IjEwMTUxMjciLCJyZXZlYWxfdXNlcl9pZCI6IjE1OTgwMjgiLCJyZXZlYWxfdXNlcl90eXBlX2lkIjoiMiIsInVuaXF1ZV9uYW1lIjoibHVjYXNAVEV0ZXN0LmNvbSIsInByZWZlcnJlZF91c2VybmFtZSI6Imx1Y2FzQFRFdGVzdC5jb20iLCJuYW1lIjoibHVjYXNAVEV0ZXN0LmNvbSIsImVtYWlsIjoibHVjYXNAVEV0ZXN0LmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwianRpIjoiZTliZDk1ZjViM2Y3ZDI3OTIzYTUyODZmMzIyNWFhZjYiLCJzY29wZSI6WyJvcGVuaWQiLCJwcm9maWxlIiwicmV2ZWFsIl0sImFtciI6WyJwd2QiXX0.bT_U0j34p7htpvFYyoDOM18rYPFQKse0y2TTS86HWWv76et-vu96agjy_chhUt6okifd_VKFuCv_wQllXdX3AL1_tC31sd8iVdbasK7w9Alt_NpYKcYPNQwnlj4-AQbev-h5wkSBTa7mbFM1OtQF7-DAxc9iF5WvypEhDTXzn9OeOIvF8MdXK_5ckj8IFuLzFZsYcg5LU3nPlH3livoWR9ba_e3ZKVUnDi-X0RfCcvkQF4dxVZq0rdba00lJ9kAzJSP8QapoB_lJ_OhB8lHX5w93L7Wdn6F29Zylrbv4_Q6LP7S7Zye05xbyaQm1a66kDalwcQ6AG1wxE5R18ipTG6AVvoYaghpLR9p0vAB3k0H_npnfHYn51ajPDbjTaUVmQL5NhzqyFIiO_MPo4y0jpSG7wZ3-UUUbo40JuWsQlpWf5hY_UVLyk5QC5woqrvQtkwEqhpZ2ECH2wk3h2lbRQoAAE5tm9wgzbOCGttuDkjWycbRc9tlDVucIW4DTNTDZEEsrZdhX-cr1tUSUzKyO8peAbZLg9BP7AhGTuerQu3gp72iLRPzNZh4tZzM5MHBIMoqudcWxhf2c31DX4XyJshMfOdvQsEKvL47QtyyHsBAzdAtnMhfQtFb1sM1ly1bMtTXmugk29Us6LQ8habxEoiMEinrIBkkQIZLLT0M_go0";
+const JWT = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjM5RDcxN0Y3QkI3RjE1QUEzMDBCNzRENTA0QzExRjA4REM4RjBBMUQiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJPZGNYOTd0X0Zhb3dDM1RWQk1FZkNOeVBDaDAifQ.eyJuYmYiOjE1ODY1MzU4MTQsImV4cCI6MTU4NjYyMjIxNCwiaXNzIjoiaHR0cHM6Ly90b2tlbi5zdHN2NC41MGE2ODYzMzY2YzUuZXUuZm0tY2xvdWQuY29tIiwiYXVkIjpbImh0dHBzOi8vdG9rZW4uc3RzdjQuNTBhNjg2MzM2NmM1LmV1LmZtLWNsb3VkLmNvbS9yZXNvdXJjZXMiLCJvcGVuaWQiLCJwcm9maWxlIiwicmV2ZWFsIl0sImNsaWVudF9pZCI6Im1hc3RlciIsInN1YiI6IjkxMzI2N2I4LTU0MDUtNDk4ZC03NjE4LTA4ZDc2OWJiMWY4ZiIsImF1dGhfdGltZSI6MTU4NjUzNTgxNCwiaWRwIjoibG9jYWwiLCJyZXZlYWxfYWNjb3VudF9pZCI6IjEwMTUxMjciLCJyZXZlYWxfdXNlcl9pZCI6IjE1OTgwMjgiLCJyZXZlYWxfdXNlcl90eXBlX2lkIjoiMiIsInVuaXF1ZV9uYW1lIjoibHVjYXNAVEV0ZXN0LmNvbSIsInByZWZlcnJlZF91c2VybmFtZSI6Imx1Y2FzQFRFdGVzdC5jb20iLCJuYW1lIjoibHVjYXNAVEV0ZXN0LmNvbSIsImVtYWlsIjoibHVjYXNAVEV0ZXN0LmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwianRpIjoiNGJjMWI5Y2Q3Y2I5YjJkYThkMWIwOWJmMTQ1MzU0NTEiLCJzY29wZSI6WyJvcGVuaWQiLCJwcm9maWxlIiwicmV2ZWFsIl0sImFtciI6WyJwd2QiXX0.N6x4r2tIURMT5tCngNZoolWPGpTIFkLLl04W0GkD3yX19VpBttvgiidYjsZGS6tzcfaPaOmftCBYQAS95Jg2I1i5VjmyRYXazE_neOOoXgkuq0TLmQui3UOdcfOe41qGGQW4lBJPFHjAchFzNGnfNny8UaTmJXFpsFhJpzlIXpWu1hQc7xn6X2XpeJb7OAa21adOSE9YapEPKPy4HzI1V4RZaDe9v4Krod5cfQXORkLquY6-Ba46e8iBeLXwMheC4G1U0jXnl0SbbhL8EExHtHlKtBO04VvC-fjESnlASmr1pemU8-rtqADxf7raKOLJLbcs8q7FMe5RAVkEiqjtpTMW6b63WsPWBbJ-TEk6mtpho-va3evovMdw1e5WKihgnxM-iJcOsvlB7IvMZ4g09X9oCLF-uo1iLep2U3hLsX_JIrKJcmUMjvgo9WcqRo3PixD4I6yEltlKLxi5SWirUfckVpr6vxZ8PNJQtZ_NgHCRfFke9rJjNg1mg6QQGhT4euFD3zZpK8pGh58miyixq-7j8zmcL_m96ma7W9_rSCZRZwVxgi6vr19yTZg6ua-Lql8dMtIbKUvsFdZLeNBtjC5uyyPcQnviq8vEX5b1Mwo4PpgNyDAZtT1jamnWmioyvqy7kYRwnaIb5OjDH-G8UJxvEfsXN8rjuf58z8HK69M";
 const DATA_DELAY = 2500;
 
 const socket = io( "http://localhost:9010", { // https is supported and can be used.
 	path: "/ws-receiver", // listening path is configurable.
 	query: {
 		tocken: JWT
-	}
+	},
+	rejectUnauthorized: false // self-signed server cert,
 } );
 
 // 1) if the server cant validate the token it emit a "error" event an, immediatly after, close the soket.
@@ -32,8 +33,8 @@ class Messages {
 			clientProtocolVersion: "1",
 			id: id.toString(),
 	 		schema: {
-				position: {
-					dynamic: [ // name of data schema.
+				position: { // name of data schema.
+					dynamic: [ // dynamic field to be populated with value in position messages.
 						"Header.UpdateTime",
 						"Header.SequenceNumber",
 						"GPS.Latitude",
@@ -48,7 +49,7 @@ class Messages {
 						"Mobile.EventType",
 						"Mobile.CorrelationId"
 					],
-					static: {
+					static: { // static key: value added to all messages.
 						"Mobile.DeviceType": "static-devicetype",
 						"Mobile.DeviceId": "static-deviceid",
 						"Mobile.OS": "WednesdayOS",
