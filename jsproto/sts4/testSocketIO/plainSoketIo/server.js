@@ -6,8 +6,8 @@ const https = require( "https" );
 const fs = require( "fs" );
 
 const httpsOptions = {
-	cert: fs.readFileSync( "../keys/cert.pem" ),
-	key: fs.readFileSync( "../keys/key.pem" ) // or Buffers... :-|
+	cert: fs.readFileSync( "../../keys/cert.pem" ),
+	key: fs.readFileSync( "../../keys/key.pem" ) // or Buffers... :-|
 };
 
 const ioOptions = {
@@ -46,6 +46,7 @@ class ProtocolManager {
 		this.socket.on( "datachunk", ( data ) => {
 			ProtocolManager.datachunkHandler( data, this );
 		} );
+		console.dir( this.socket );
 	}
 
 	static handshakeHandler( data, protocolManager ) {
