@@ -4,37 +4,72 @@ const io = require( "socket.io-client" );
 
 const JWT = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjM5RDcxN0Y3QkI3RjE1QUEzMDBCNzRENTA0QzExRjA4REM4RjBBMUQiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJPZGNYOTd0X0Zhb3dDM1RWQk1FZkNOeVBDaDAifQ.eyJuYmYiOjE1ODczNjk0ODUsImV4cCI6MTU4NzQ1NTg4NSwiaXNzIjoiaHR0cHM6Ly90b2tlbi5zdHN2NC41MGE2ODYzMzY2YzUuZXUuZm0tY2xvdWQuY29tIiwiYXVkIjpbImh0dHBzOi8vdG9rZW4uc3RzdjQuNTBhNjg2MzM2NmM1LmV1LmZtLWNsb3VkLmNvbS9yZXNvdXJjZXMiLCJvcGVuaWQiLCJwcm9maWxlIiwicmV2ZWFsIl0sImNsaWVudF9pZCI6Im1hc3RlciIsInN1YiI6IjkxMzI2N2I4LTU0MDUtNDk4ZC03NjE4LTA4ZDc2OWJiMWY4ZiIsImF1dGhfdGltZSI6MTU4NzM2OTQ4NSwiaWRwIjoibG9jYWwiLCJyZXZlYWxfYWNjb3VudF9pZCI6IjEwMTUxMjciLCJyZXZlYWxfdXNlcl9pZCI6IjE1OTgwMjgiLCJyZXZlYWxfdXNlcl90eXBlX2lkIjoiMiIsInVuaXF1ZV9uYW1lIjoibHVjYXNAVEV0ZXN0LmNvbSIsInByZWZlcnJlZF91c2VybmFtZSI6Imx1Y2FzQFRFdGVzdC5jb20iLCJuYW1lIjoibHVjYXNAVEV0ZXN0LmNvbSIsImVtYWlsIjoibHVjYXNAVEV0ZXN0LmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwianRpIjoiNmIwMmY5MWUyNTRiNTg2YWNmYjdiYzgxMzU2MTdiN2QiLCJzY29wZSI6WyJvcGVuaWQiLCJwcm9maWxlIiwicmV2ZWFsIl0sImFtciI6WyJwd2QiXX0.jb100niNnywTO2FVVT8c2ZyWmsAtJE9kC-wheIQvK3WDDURYYE16oZlfPL0c_qTE0aU6HgaKUO_LCamdWbk-A9qbA8NyZLq3gN7J_3_bMwR_-Lelhg0lMNoc9ngiGC9t_U06cJW_gtD0wFfByW9RcacN2ALAo3SqFz6MBiEXOTDldNxChs1CxAKGrUot0sLIDdxusXPOsCvuR-BiimrtEjAo6ucIS8-rvuZyprvKDrNgDS2zLXbcTn36UHyNzj7wv54tjqxnsuYP6TDTIKkAXQuJPKpDM8abR4s8GbhZTs5uQc5U2orLaNct3PHz6HQUYllC1c5rk0nXy466WBXgeqqMQdLLAEg57HCfwUVebSYki3QAkTf87IeAh0FCZ7hbZIaomnGycWK5nD59D0eyB8J4HPT5AKz7YOUeOhDK7RFaChbovRFjWL32LY809cmD30RXb74WhjnvzCimXHK6O4PezzCP30zqwMb-Aj_CWyKg28ewIRrBzorPcZTFReaR5-ykIBmDMV-XQvfeT_QRWfc0bJpEqvioOdmZ3v2xeo4aejbWrUpMf1Qg78FY--LANacne0334U82bZ2aKvKI7Y789bGBCWvjUUBASTUjHvWgDEOJAZjKPv_Tm9R7Zzpfz8N7HhxgChKIQX4iQ5ScdNgQD5XS45uQVupzKXhO0DE";
 const DATA_DELAY = 2500;
-///////
-const https = require( "https" );
-const options = {
-  hostname: "genericws.dev.smb.vzc-iot.com",
-  port: 443,
-  path: "/status",
-  method: "GET"
+
+const theHost = "https://genericws.dev.smb.vzc-iot.com:443";
+
+///////////////////////////////////////////////////////
+/*
+ *  Little example of how to use ```socket-io.client``` and ```request``` from node.js
+ *  to authenticate thru http, and send the cookies during the socket.io handshake.
+ */
+
+const request = require( "request" );
+
+/*
+ * This is the jar (like a cookie container) we will use always
+ */
+const jar = request.jar();
+
+/*
+ *  First I will patch the xmlhttprequest library that socket.io-client uses
+ *  internally to simulate XMLHttpRequest in the browser world.
+ */
+const originalRequest = require( "xmlhttprequest" ).XMLHttpRequest;
+
+require( "xmlhttprequest" ).XMLHttpRequest = () => {
+  originalRequest.apply( this, arguments );
+  this.setDisableHeaderCheck( true );
+  var stdOpen = this.open;
+
+  /*
+   * I will patch now open in order to set my cookie from the jar request.
+   */
+  this.open = () => {
+		stdOpen.apply( this, arguments );
+		var header = jar.get( { url: theHost } )
+			.map( ( c ) => {
+				console.log( "=====Coockie=======> " + c.name + "=" + c.value );
+				return c.name + "=" + c.value;
+			} ).join("; ");
+		this.setRequestHeader( "cookie", header );
+	};
 };
 
-const request = https.request( options, ( response ) => {
-	//console.log( `statusCode: ${response.statusCode}` ); //if 200
-	console.dir( response.headers["set-cookie"] );
-	response.on( "data", data => {
-		process.stdout.write( data );
-	} );
-});
+/*
+ * Init the balancer.
+ */
+request.get( {
+	jar: jar,
+	url: theHost + "/status" //healthcheck
+}, ( error, response, body ) => {
+	if( error ) {
+		console.dir( error );
+		process.exit( 2 );
+	}
+	console.dir( body );
+	return;
+ // } ); //*** */
 
-request.on( "error", ( error ) => {
-	console.error( error );
-} );
+///////////////////////////////////////////////////////
 
-request.end();
-return;
-///////
-//const socket = io( "http://localhost:9011", { // https is supported and can be used.
-const socket = io( "https://genericws.dev.smb.vzc-iot.com:443", {
+//const socket = io( "http://localhost:6001", { // https is supported and can be used.
+//const socket = io( "https://genericws.dev.smb.vzc-iot.com:443", { // https is supported and can be used.
+const socket = io( theHost, { // https is supported and can be used.
 	path: "/ws-receiver", // listening path is configurable.
 	query: {
 		tocken: JWT
 	},
-	transports: [ "websocket" ],
+	//transports: [ "websocket" ],
 	//rejectUnauthorized: false // self-signed server cert,
 } );
 
@@ -144,3 +179,5 @@ socket.on( "connect", () => {
 	// 3) now client can emit a "startSession" event
 	Messages.startSession( socket );
 } );
+
+} ); //*** */
