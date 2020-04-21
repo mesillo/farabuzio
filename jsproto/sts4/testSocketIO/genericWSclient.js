@@ -9,7 +9,11 @@ let rawCookies = null;
 let parsedCoockies = null;
 
 const prepareCoockie = () => {
-
+	let cookieString = "";
+	for( let setC of rawCookies ) {
+		cookieString += setC.split( " " )[0] + " ";
+	}
+	parsedCoockies = cookieString;
 };
 
 const https = require( "https" );
@@ -41,6 +45,7 @@ request.on( "error", ( error ) => {
 } );
 
 request.end();
+return;
 ///////
 //const socket = io( "http://localhost:9011", { // https is supported and can be used.
 const socket = io( "https://genericws.dev.smb.vzc-iot.com:443", {
@@ -48,7 +53,7 @@ const socket = io( "https://genericws.dev.smb.vzc-iot.com:443", {
 	query: {
 		tocken: JWT
 	},
-	transports: [ "websocket" ],
+	//transports: [ "websocket" ],
 	//rejectUnauthorized: false // self-signed server cert,
 	transportOptions: {
 		polling: {
