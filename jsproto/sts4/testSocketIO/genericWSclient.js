@@ -3,7 +3,8 @@
 const io = require( "socket.io-client" );
 const https = require( "https" );
 
-const JWT = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjM5RDcxN0Y3QkI3RjE1QUEzMDBCNzRENTA0QzExRjA4REM4RjBBMUQiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJPZGNYOTd0X0Zhb3dDM1RWQk1FZkNOeVBDaDAifQ.eyJuYmYiOjE1ODc1NjUxNTIsImV4cCI6MTU4NzY1MTU1MiwiaXNzIjoiaHR0cHM6Ly90b2tlbi5zdHN2NC41MDNhY2E0MWEwOGQudGVzdC51cy5mbS1jbG91ZC5jb20iLCJhdWQiOlsiaHR0cHM6Ly90b2tlbi5zdHN2NC41MDNhY2E0MWEwOGQudGVzdC51cy5mbS1jbG91ZC5jb20vcmVzb3VyY2VzIiwib3BlbmlkIiwicHJvZmlsZSIsInJldmVhbCJdLCJjbGllbnRfaWQiOiJtYXN0ZXIiLCJzdWIiOiI0YTE1MTA5YS01Y2UzLTRhNTAtMGUxZi0wOGQ3M2M2ZTRiOTciLCJhdXRoX3RpbWUiOjE1ODc1NjUxNTIsImlkcCI6ImxvY2FsIiwicmV2ZWFsX2FjY291bnRfaWQiOiIxMTI4NDc2IiwicmV2ZWFsX3VzZXJfaWQiOiI1MDI2MjEyIiwicmV2ZWFsX3VzZXJfdHlwZV9pZCI6IjEiLCJ1bmlxdWVfbmFtZSI6ImFuYXN0YXNzaWFAdmVyaXpvbmNvbm5lY3QuY29tIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiYW5hc3Rhc3NpYUB2ZXJpem9uY29ubmVjdC5jb20iLCJuYW1lIjoiYW5hc3Rhc3NpYUB2ZXJpem9uY29ubmVjdC5jb20iLCJlbWFpbCI6ImFuYXN0YXNzaWFAdmVyaXpvbmNvbm5lY3QuY29tIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJqdGkiOiI5YmE4NjZjODJjMDg1MTg0YmQ5NWI0NWYwZWJlZDJhYSIsInNjb3BlIjpbIm9wZW5pZCIsInByb2ZpbGUiLCJyZXZlYWwiXSwiYW1yIjpbInB3ZCJdfQ.ORFJeZQAQmDq6NEt_rlbd4idNZfluSW_2PYFQJcgskr21FU94TIrvPDPntgt771pTa2gXwkG0xXYqL2akCt1lIaP7jMWXL2clrERFVN8eyvJcCRT9LWohUp32GY25XFY871fhFFA16UGKD8AMo147yK5Y9W3H5LOJN8tI7JCHwecrm7NsYvIHrt3RzWvShi0uwgeblqqkMtwYvYdlVJFq70qfC7riu_nt0I8F-Qe1XQPQE7WW7OVvXJkvJwFEUrOaDW22yTE6LQWlI5VlSdsz--pvJ5wVkbHKN0qVwl4T3Lx_5KeST6dka3ohWu1YX8Kpz1CvOD4mwP6SxAX4Z4UdBATbrBC2XWD_6rRnq-Xp-8jMurR6iGsAU5HWItRuY4Z2mi2FzxCQHVQVvRBD8d4j9FIpC_1h-2kkU25TkvYqQmniTsFXCz4Xyyk6ou86tIVo9pZ7yC5UaITTNCGgiV_1mj2BVgfz2325CEN8wh27TlICzp80xH8-lsirzN15sJBRYTPK2ws-fStyi7rJllwic_MEyQcF0RHtwO4l73ifTksUnXUXcejLGLuQsWTvKzU2exOfRzCbWY_NYdd9OIsLqqn1it_YRLyjK2Y_RGcnlPFjA8REUW4NeZV8G2RTVhzeBmr9lFr3fHiLW3hXXuUPTYR5E8O0kqZvXU28-P8EBk";
+const JWT = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjM5RDcxN0Y3QkI3RjE1QUEzMDBCNzRENTA0QzExRjA4REM4RjBBMUQiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJPZGNYOTd0X0Zhb3dDM1RWQk1FZkNOeVBDaDAifQ.eyJuYmYiOjE1ODgyNTM3MDIsImV4cCI6MTU4ODM0MDEwMiwiaXNzIjoiaHR0cHM6Ly90b2tlbi5zdHN2NC41MGE2ODYzMzY2YzUuZXUuZm0tY2xvdWQuY29tIiwiYXVkIjpbImh0dHBzOi8vdG9rZW4uc3RzdjQuNTBhNjg2MzM2NmM1LmV1LmZtLWNsb3VkLmNvbS9yZXNvdXJjZXMiLCJvcGVuaWQiLCJwcm9maWxlIiwicmV2ZWFsIl0sImNsaWVudF9pZCI6Im1hc3RlciIsInN1YiI6IjkxMzI2N2I4LTU0MDUtNDk4ZC03NjE4LTA4ZDc2OWJiMWY4ZiIsImF1dGhfdGltZSI6MTU4ODI1MzcwMiwiaWRwIjoibG9jYWwiLCJyZXZlYWxfYWNjb3VudF9pZCI6IjEwMTUxMjciLCJyZXZlYWxfdXNlcl9pZCI6IjE1OTgwMjgiLCJyZXZlYWxfdXNlcl90eXBlX2lkIjoiMiIsInVuaXF1ZV9uYW1lIjoibHVjYXNAVEV0ZXN0LmNvbSIsInByZWZlcnJlZF91c2VybmFtZSI6Imx1Y2FzQFRFdGVzdC5jb20iLCJuYW1lIjoibHVjYXNAVEV0ZXN0LmNvbSIsImVtYWlsIjoibHVjYXNAVEV0ZXN0LmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwianRpIjoiNDVhY2E0OTc3N2FlZGM5NDc1ZjJmMDVkNmQwODAxNzYiLCJzY29wZSI6WyJvcGVuaWQiLCJwcm9maWxlIiwicmV2ZWFsIl0sImFtciI6WyJwd2QiXX0.R7C30oQ9LEbj0T_PVyCSwH4Ted5TPnox4vD8Bze7OuGRD2rvD70laueHyvEaz85SnpG9aKxjKmus64Yo1zIdmBw8EwW95hErLyaSmVl1KM3rRNSAmPs77G1996a7XQYO2b32TqTQCLdT1_7BpeURTmjUFUS99Luy660uB5yUgVad1WApJxeHnwHljrB5M0hydCXL-VQFPRBBbAOxxathv2SeSf1UAyFYpZ081Leb7ZV5uw6uazhdSLFXGsrzi660Nan_kIFCci7SYVZ8h0SDNEfm1wInmIEgIDGY-jPjuvRzWPdp8zCMuLLNjjzVmDtyWn-nWJpj6l9AsLBh_n-goWmWoWTfQHu3P3ntsp4ny2A9i5G_tZ2ygj59rLhXdPDzIvBMI5vJf_A2cVQJrjnZEvKuEjwu47GXRXjkrJMT9ATxUqPic8f3TEgxgcKcqSNAilB3rr0luf9zdOwSXDvLzR83qvGctmwARo_lDkFu0KkMFiU5449IYao1XFVGXwg8XPbS7NnZIrQ8cfQR6S4at8h5NIxY1NJoWMzAiOWMv_Ec8ld-XwVdD1JBAAvC27OXdf8FDAsLljI9-JYpSTTfcN1Ry-0PNvuQEKu__ac6lTbVpnqweTwnDo7ba0Uwc3BBYI-a3U_lskt1h7y3nB92h_2MDQtNKJHA5ZgPWcwkPFo";
+//const JWT = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjM5RDcxN0Y3QkI3RjE1QUEzMDBCNzRENTA0QzExRjA4REM4RjBBMUQiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJPZGNYOTd0X0Zhb3dDM1RWQk1FZkNOeVBDaDAifQ.eyJuYmYiOjE1ODcwMjk0NzksImV4cCI6MTU4NzExNTg3OSwiaXNzIjoiaHR0cHM6Ly90b2tlbi5zdHN2NC41MGE2ODYzMzY2YzUuZXUuZm0tY2xvdWQuY29tIiwiYXVkIjpbImh0dHBzOi8vdG9rZW4uc3RzdjQuNTBhNjg2MzM2NmM1LmV1LmZtLWNsb3VkLmNvbS9yZXNvdXJjZXMiLCJvcGVuaWQiLCJwcm9maWxlIiwicmV2ZWFsIl0sImNsaWVudF9pZCI6Im1hc3RlciIsInN1YiI6IjkxMzI2N2I4LTU0MDUtNDk4ZC03NjE4LTA4ZDc2OWJiMWY4ZiIsImF1dGhfdGltZSI6MTU4NzAyOTQ3OSwiaWRwIjoibG9jYWwiLCJyZXZlYWxfYWNjb3VudF9pZCI6IjEwMTUxMjciLCJyZXZlYWxfdXNlcl9pZCI6IjE1OTgwMjgiLCJyZXZlYWxfdXNlcl90eXBlX2lkIjoiMiIsInVuaXF1ZV9uYW1lIjoibHVjYXNAVEV0ZXN0LmNvbSIsInByZWZlcnJlZF91c2VybmFtZSI6Imx1Y2FzQFRFdGVzdC5jb20iLCJuYW1lIjoibHVjYXNAVEV0ZXN0LmNvbSIsImVtYWlsIjoibHVjYXNAVEV0ZXN0LmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwianRpIjoiYzVjMjNmNDRkYjVkNWRjOWNjMGQyMjUwOWQwNzg5YTIiLCJzY29wZSI6WyJvcGVuaWQiLCJwcm9maWxlIiwicmV2ZWFsIl0sImFtciI6WyJwd2QiXX0.gXgWz3EsX7w-Lb7qdyUI_0_rXeeK4PlUIeFZl4KwlN5vdDT99sKTe5L3Hpw_5KUl9KnjHZN4xLRdABDiVtvDm_f5hH7BiCnx-jI9EU8QerG7ftVTNpAoBMLk4R0YYE8mn_-rcMc2VLEnATnzyAlihre8PVCtZsiST5nloX_LPi0JqAUzZ7qOIr_34u_2-n63xGuHPDMiP1schvemHf8M42EP4RFjtc5fZ83rhrhQOSAFzXjxQOeW99KXt4YSNc0u2-Vytro0U7k_lX22W-PSKnuJzYVaTf5mKar8wi28rGjTwrrN18TI5Dusq05oJhO-87G3ufSNSOJNibHfMpeULvmEgHB6MIWkSt6msbVYcBb5es1LPqvH571jczuMe0LESPpid5Dm2VBdcqMVrpYLStMTwGIvME41cGidjmPeW9BBYcKblicVyixHQ_ht0VB80j3GKOLh1jzRvHZxFEvYMn-JQRCJTVEJ1fPrnxbgwzkglorZN2w5P_1YBoBUhcwVaazXA9txoUM42CRzS0hiWtSyJFeVbb3OLOCnitXh3pcGLBej5Cr5iGhhDtKWrSI2EEpmqzBeKYf8chQ66YvHaowFFd-wtj0NYzX3Bvein7pb_YBA7Sd4evUc9899v_-7Ez020HN-iMVBBkJ-G4apSbkeSl-MdKkM82z-X_8FSdE";
 const DATA_DELAY = 2500;
 
 // 0) Getting Cookies from ALB (Load balancer)... this is not a part of protocol but a method to simulate the behavior of a Browser/WebView in NodeJS environment.
@@ -41,14 +42,14 @@ const getCookieFormALB = ( options ) => { // Query the ALB HealthCheck path for 
 	} );
 };
 
-getCookieFormALB( options ).then( ( parsedCoockies ) => {
-	runClient( parsedCoockies ); // Start the Socket.IO client application with ALB Cookies.
-	//runClient( null );
-	// If you will run the client in a Browser/WebView Like environment the parsedCoockies options nust be null or undefined.
-} ).catch( ( error ) => {
-	console.error( error );
-	process.exit( 1 );
-} );
+//getCookieFormALB( options ).then( ( parsedCoockies ) => {
+//	runClient( parsedCoockies ); // Start the Socket.IO client application with ALB Cookies.
+//	//runClient( null );
+//	// If you will run the client in a Browser/WebView Like environment the parsedCoockies options nust be null or undefined.
+//} ).catch( ( error ) => {
+//	console.error( error );
+//	process.exit( 1 );
+//} );
 
 // 0.1) Running the client.
 const runClient = ( parsedCoockies = null ) => {
@@ -70,8 +71,8 @@ const runClient = ( parsedCoockies = null ) => {
 			}
 		};
 	}
-	const socket = io( "https://genericws.dev.smb.vzc-iot.com:443", ioClientOptions );
-	//const socket = io( "http://localhost:6001", ioClientOptions );
+	//const socket = io( "https://genericws.dev.smb.vzc-iot.com:443", ioClientOptions );
+	const socket = io( "http://localhost:6001", ioClientOptions );
 
 	// 1) if the server cant validate the token it emit a "error" event an, immediatly after, close the soket.
 	// So client must listen to this events
@@ -186,3 +187,5 @@ const runClient = ( parsedCoockies = null ) => {
 		Messages.startSession( socket );
 	} );
 };
+
+runClient( null );
