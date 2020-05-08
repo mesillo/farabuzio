@@ -1,0 +1,16 @@
+{
+  "name": "localizazio",
+  "version": "0.0.1",
+  "description": "simple traking anonimous web application",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"no test!\""
+  },
+  "keywords": [
+    "GPS",
+    "tracking",
+    "web"
+  ],
+  "author": "Alberto Mesillo Mesin",
+  "license": "GPL-3.0-or-later"
+}
