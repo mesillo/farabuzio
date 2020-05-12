@@ -5,8 +5,10 @@ const https = require( "https" );
 
 //const JWT = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjM5RDcxN0Y3QkI3RjE1QUEzMDBCNzRENTA0QzExRjA4REM4RjBBMUQiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJPZGNYOTd0X0Zhb3dDM1RWQk1FZkNOeVBDaDAifQ.eyJuYmYiOjE1ODg1ODk4NDIsImV4cCI6MTU4ODY3NjI0MiwiaXNzIjoiaHR0cHM6Ly90b2tlbi5zdHN2NC41MGE2ODYzMzY2YzUuZXUuZm0tY2xvdWQuY29tIiwiYXVkIjpbImh0dHBzOi8vdG9rZW4uc3RzdjQuNTBhNjg2MzM2NmM1LmV1LmZtLWNsb3VkLmNvbS9yZXNvdXJjZXMiLCJvcGVuaWQiLCJwcm9maWxlIiwicmV2ZWFsIl0sImNsaWVudF9pZCI6Im1hc3RlciIsInN1YiI6IjkxMzI2N2I4LTU0MDUtNDk4ZC03NjE4LTA4ZDc2OWJiMWY4ZiIsImF1dGhfdGltZSI6MTU4ODU4OTg0MiwiaWRwIjoibG9jYWwiLCJyZXZlYWxfYWNjb3VudF9pZCI6IjEwMTUxMjciLCJyZXZlYWxfdXNlcl9pZCI6IjE1OTgwMjgiLCJyZXZlYWxfdXNlcl90eXBlX2lkIjoiMiIsInVuaXF1ZV9uYW1lIjoibHVjYXNAVEV0ZXN0LmNvbSIsInByZWZlcnJlZF91c2VybmFtZSI6Imx1Y2FzQFRFdGVzdC5jb20iLCJuYW1lIjoibHVjYXNAVEV0ZXN0LmNvbSIsImVtYWlsIjoibHVjYXNAVEV0ZXN0LmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwianRpIjoiYjkwZjllYWQwMDNkYTkwYzJjNDJmMGIyYjIzMDE1YTkiLCJzY29wZSI6WyJvcGVuaWQiLCJwcm9maWxlIiwicmV2ZWFsIl0sImFtciI6WyJwd2QiXX0.LIGwqPy_X4v08FeXhMJT4JvLEe5BCl1YpU1auio0164Sh7H0Ti2SydHqMKLg3iCsAS7jAkps3Bl5rTPYRPYWUDYP08WlhdM_OWybu4ZpfqVPPjJ6YY0DoJ9DuVImCER9gHj-lpV9qRxrkSRp6nsgQSVpj7AAab7siTSZZCmQLt1up9O2O-USUawsRYzl6d6oYi_HPuE5x6cojF_qGp8fDldnqeV8NaTtZHDhF_bqlJ01lMAZMFg50KgpSQGlNFt5Ji8CqJCOML7hyRkksWdoLu-rRmecq5e5-h39ogeg2Znd1yLsSsjRcaofo4CgNm3q7iuIe53TItekF7LoSQLZpsWyBGggkJnqb-i1foHkWzfTj3ruzBBvX3_ecGswxaQj44qyIdt_iVC_Nxs8YstzS_ca4HL_18Gterb8U5PmpjdROy9FLE2dGDhH2xJjgi6U8FqxWp2TjB3niPa-qtp7xnqrZSvPMj9x_DwRpslYoilwlPAcEFKprKHcs-uVeLm6Zjx7X3pshD8fkiC21gF2OT6nfZp_8ypAJp1Yb8MYD16-fBggBqcBdxzRzGoTCRXThhZ6GO3KuwgHI_lq_ZIRP2m-GM7umvsKRArPr8e-iKI2I2rPMj3RnOTFQ7-r2SYlKoS33ijwAJPgDNIc1Xenk0ucl45SusMnjnBmhdXP8kE";
 //const JWT = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjM5RDcxN0Y3QkI3RjE1QUEzMDBCNzRENTA0QzExRjA4REM4RjBBMUQiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJPZGNYOTd0X0Zhb3dDM1RWQk1FZkNOeVBDaDAifQ.eyJuYmYiOjE1ODcwMjk0NzksImV4cCI6MTU4NzExNTg3OSwiaXNzIjoiaHR0cHM6Ly90b2tlbi5zdHN2NC41MGE2ODYzMzY2YzUuZXUuZm0tY2xvdWQuY29tIiwiYXVkIjpbImh0dHBzOi8vdG9rZW4uc3RzdjQuNTBhNjg2MzM2NmM1LmV1LmZtLWNsb3VkLmNvbS9yZXNvdXJjZXMiLCJvcGVuaWQiLCJwcm9maWxlIiwicmV2ZWFsIl0sImNsaWVudF9pZCI6Im1hc3RlciIsInN1YiI6IjkxMzI2N2I4LTU0MDUtNDk4ZC03NjE4LTA4ZDc2OWJiMWY4ZiIsImF1dGhfdGltZSI6MTU4NzAyOTQ3OSwiaWRwIjoibG9jYWwiLCJyZXZlYWxfYWNjb3VudF9pZCI6IjEwMTUxMjciLCJyZXZlYWxfdXNlcl9pZCI6IjE1OTgwMjgiLCJyZXZlYWxfdXNlcl90eXBlX2lkIjoiMiIsInVuaXF1ZV9uYW1lIjoibHVjYXNAVEV0ZXN0LmNvbSIsInByZWZlcnJlZF91c2VybmFtZSI6Imx1Y2FzQFRFdGVzdC5jb20iLCJuYW1lIjoibHVjYXNAVEV0ZXN0LmNvbSIsImVtYWlsIjoibHVjYXNAVEV0ZXN0LmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwianRpIjoiYzVjMjNmNDRkYjVkNWRjOWNjMGQyMjUwOWQwNzg5YTIiLCJzY29wZSI6WyJvcGVuaWQiLCJwcm9maWxlIiwicmV2ZWFsIl0sImFtciI6WyJwd2QiXX0.gXgWz3EsX7w-Lb7qdyUI_0_rXeeK4PlUIeFZl4KwlN5vdDT99sKTe5L3Hpw_5KUl9KnjHZN4xLRdABDiVtvDm_f5hH7BiCnx-jI9EU8QerG7ftVTNpAoBMLk4R0YYE8mn_-rcMc2VLEnATnzyAlihre8PVCtZsiST5nloX_LPi0JqAUzZ7qOIr_34u_2-n63xGuHPDMiP1schvemHf8M42EP4RFjtc5fZ83rhrhQOSAFzXjxQOeW99KXt4YSNc0u2-Vytro0U7k_lX22W-PSKnuJzYVaTf5mKar8wi28rGjTwrrN18TI5Dusq05oJhO-87G3ufSNSOJNibHfMpeULvmEgHB6MIWkSt6msbVYcBb5es1LPqvH571jczuMe0LESPpid5Dm2VBdcqMVrpYLStMTwGIvME41cGidjmPeW9BBYcKblicVyixHQ_ht0VB80j3GKOLh1jzRvHZxFEvYMn-JQRCJTVEJ1fPrnxbgwzkglorZN2w5P_1YBoBUhcwVaazXA9txoUM42CRzS0hiWtSyJFeVbb3OLOCnitXh3pcGLBej5Cr5iGhhDtKWrSI2EEpmqzBeKYf8chQ66YvHaowFFd-wtj0NYzX3Bvein7pb_YBA7Sd4evUc9899v_-7Ez020HN-iMVBBkJ-G4apSbkeSl-MdKkM82z-X_8FSdE";
-const JWT = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjM5RDcxN0Y3QkI3RjE1QUEzMDBCNzRENTA0QzExRjA4REM4RjBBMUQiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJPZGNYOTd0X0Zhb3dDM1RWQk1FZkNOeVBDaDAifQ.eyJuYmYiOjE1ODg5NDA4NTAsImV4cCI6MTU4OTAyNzI1MCwiaXNzIjoiaHR0cHM6Ly90b2tlbi5zdHN2NC41MGE2ODYzMzY2YzUuZXUuZm0tY2xvdWQuY29tIiwiYXVkIjpbImh0dHBzOi8vdG9rZW4uc3RzdjQuNTBhNjg2MzM2NmM1LmV1LmZtLWNsb3VkLmNvbS9yZXNvdXJjZXMiLCJvcGVuaWQiLCJwcm9maWxlIiwicmV2ZWFsIl0sImNsaWVudF9pZCI6Im1hc3RlciIsInN1YiI6IjkxMzI2N2I4LTU0MDUtNDk4ZC03NjE4LTA4ZDc2OWJiMWY4ZiIsImF1dGhfdGltZSI6MTU4ODk0MDg1MCwiaWRwIjoibG9jYWwiLCJyZXZlYWxfYWNjb3VudF9pZCI6IjEwMTUxMjciLCJyZXZlYWxfdXNlcl9pZCI6IjE1OTgwMjgiLCJyZXZlYWxfdXNlcl90eXBlX2lkIjoiMiIsInVuaXF1ZV9uYW1lIjoibHVjYXNAVEV0ZXN0LmNvbSIsInByZWZlcnJlZF91c2VybmFtZSI6Imx1Y2FzQFRFdGVzdC5jb20iLCJuYW1lIjoibHVjYXNAVEV0ZXN0LmNvbSIsImVtYWlsIjoibHVjYXNAVEV0ZXN0LmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwianRpIjoiY2JiOTQxMWJmOTFmZTZjMDEzYTk4MTJmNGQ2NTE2NGUiLCJzY29wZSI6WyJvcGVuaWQiLCJwcm9maWxlIiwicmV2ZWFsIl0sImFtciI6WyJwd2QiXX0.J00X7tIdQTYvgT-bNZ6gwxQvwRZmfsHg3tMqupsjCCyu-HR6oGrGNcFHfE54ls3RNlQZHK8z6gjQfGKLQMZZTg-SjMYAKao6WH2pck1TNusSpQIrmWxiXycDTP9RpZhNMI6kLyNVImqybcbQ3kT65bP5tihcj27CUqds5uTgVdbXW7L5nMVkefoagyfyttYC2f4ESurA4BmZo6vV0yxIh3a0wlSyn61gpkRM15H4XIDuoVbCGFzsRMs045NQkWKBV8ODtllSrake8xkcWgM73CYctncnG6-k9Mz8_QndCJgMdpD3ccqWyRBOXir-5ZHL3ES0WiOs_CfIXZQA3TYVsldNlp78k33P0EI5NIuW6ahaGmmjzUafCrGO2iLW0kW-BKdbfwMMeO1YUahX9ohRIxP9tfl7aSEMdYxqSjUymkrecuD2o6MGJaPsEmFrCTfbBNrHThKqS91KgdmZ4mx-Q3pBidNgNlV9mYwEYo1UIA-R01jkD-9dbNdhHQC0qLVJSwt2DZfkOhUf_m8gtyfYRgd6h3hJCxhgUIEuK66zxYxJ6HIUHoJTNclSqLCmmMvaEwW_RHBn5stzNXYIyqus3Qn-ehkmE_V8XAwt35A_K64za18Q-8jHqKTSVkz16JlB9telRn5SAmMaPjiMVFECfEax9hOHkSLesfUoC-l5-fM";
+const JWT = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjM5RDcxN0Y3QkI3RjE1QUEzMDBCNzRENTA0QzExRjA4REM4RjBBMUQiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJPZGNYOTd0X0Zhb3dDM1RWQk1FZkNOeVBDaDAifQ.eyJuYmYiOjE1ODkyNzAxNDgsImV4cCI6MTU4OTM1NjU0OCwiaXNzIjoiaHR0cHM6Ly90b2tlbi5zdHN2NC41MGE2ODYzMzY2YzUuZXUuZm0tY2xvdWQuY29tIiwiYXVkIjpbImh0dHBzOi8vdG9rZW4uc3RzdjQuNTBhNjg2MzM2NmM1LmV1LmZtLWNsb3VkLmNvbS9yZXNvdXJjZXMiLCJvcGVuaWQiLCJwcm9maWxlIiwicmV2ZWFsIl0sImNsaWVudF9pZCI6Im1hc3RlciIsInN1YiI6IjkxMzI2N2I4LTU0MDUtNDk4ZC03NjE4LTA4ZDc2OWJiMWY4ZiIsImF1dGhfdGltZSI6MTU4OTI3MDE0OCwiaWRwIjoibG9jYWwiLCJyZXZlYWxfYWNjb3VudF9pZCI6IjEwMTUxMjciLCJyZXZlYWxfdXNlcl9pZCI6IjE1OTgwMjgiLCJyZXZlYWxfdXNlcl90eXBlX2lkIjoiMiIsInVuaXF1ZV9uYW1lIjoibHVjYXNAVEV0ZXN0LmNvbSIsInByZWZlcnJlZF91c2VybmFtZSI6Imx1Y2FzQFRFdGVzdC5jb20iLCJuYW1lIjoibHVjYXNAVEV0ZXN0LmNvbSIsImVtYWlsIjoibHVjYXNAVEV0ZXN0LmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwianRpIjoiMzBmNDFhMzZhYWZhMWJlMDdkYmEwNGJjMTY3MDM1NjkiLCJzY29wZSI6WyJvcGVuaWQiLCJwcm9maWxlIiwicmV2ZWFsIl0sImFtciI6WyJwd2QiXX0.j9F509KL0Z-XZFeXkL0IKzjCUixg-RW99TZgS9oKpe17LC_0zuHtRUqqhlKsZywnSzk4ku4zFNGj18XWDSWhTTa-UE9IeNXDOlrGwBjZGpwgfsnOWkBl8tGKu5irK_f0bJf-dgSJEEflzySamCXboCkySWXvSfTqfdKJtUYZaAnB0k7aJAuZQ3S1ZMPFI92eueM-MhbYRMdN4oR3uzL0qXUt12FpqUvfwPWdo-feV-SgcObfYoZro8JKYSNV8Ujw6Ef-TmFqNcRm9Zf7Ca-CcrZYuT4EXfb2AIQKJYfY59sGbm-k1HU6YRuXMrftC9gCr0FMqCFCVJ1-3gfJuAMallk9pjB2R-tnTPMI3O5xB368xo8sPZHoilrvy7SaFabWxAGUPiTbO00NaPyqVYKCaKQON1Rzpsi4aAEi6LumQyWONcNcOg0JP2HEyRtSvGTmck1W3pMiR5H_10bPnbZh8QYuZqLccgIbRdqsBaPhm4XdujYT7vtxLEF6264Dsgi7PfWffzJVoq0v4WyQzL0HHvDDG6gviWLviIL1cEnOR_91v0xkqRARODLqI423rnGpAmtDbOTo458quGNTlzPS-K_H_KpvzTsHTwf2s3XIT_9gpVimrz0tJ9YaVx5uplBeraJ1FKLWfdK3Hy8Uz1h1VKTyYraSGIqnZhC2vrAkCvQ";
 const DATA_DELAY = 2500;
+//const DATA_DELAY = 60000;
+const PROCESS_EXIT_DELAY = 5000;
 
 // 0) Getting Cookies from ALB (Load balancer)... this is not a part of protocol but a method to simulate the behavior of a Browser/WebView in NodeJS environment.
 // AWS ALB is designed to deal with Web Clients.
@@ -63,6 +65,7 @@ const runClient = ( parsedCoockies = null ) => {
 		query: {
 			token: JWT
 		},
+		reconnection: true,
 		//transports: [ "websocket" ],
 		transports: [ "polling" ],
 		//rejectUnauthorized: false // self-signed server cert,
@@ -78,25 +81,30 @@ const runClient = ( parsedCoockies = null ) => {
 	}
 	const socket = io( "https://genericws.test.eu.smb.vzc-iot.com:443", ioClientOptions );
 	//const socket = io( "https://genericws.dev.smb.vzc-iot.com:443", ioClientOptions );
+	//const socket = io( "http://52.58.37.156:6001", ioClientOptions );
 	//const socket = io( "https://alb-LoadB-1E8MBKLKFWMKP-2012367290.eu-west-1.elb.amazonaws.com:443", ioClientOptions );
 	//const socket = io( "https://genericws-development.eu-west-1.origin.fm-cloud.com:443", ioClientOptions );
 	//const socket = io( "http://localhost:6001", ioClientOptions );
 
 	// 1) if the server cant validate the token it emit a "error" event an, immediatly after, close the soket.
 	// So client must listen to this events
-	socket.on( "connecting", () => {
-		console.log( "==============" );
-		console.log( "= connecting =" );
-		console.log( "==============" );
-	} );
+	//socket.on( "connecting", () => {
+	//	console.log( "==============" );
+	//	console.log( "= connecting =" );
+	//	console.log( "==============" );
+	//} );
 
 	socket.on( "error", ( error ) => {
-		console.log( "== ERROR ==" );
+		console.log( "== ERROR SOCKET EVENT ==" );
+		console.log( new Date().toUTCString() );
 		console.dir( error );
 	} );
 	socket.on( "disconnect", () => {
-		console.log( "== Disconnected from server ==" );
-		process.exit();
+		console.log( "\t\t\t=== Disconnected from server: " + new Date().toUTCString() + " ===" );
+		//setTimeout(
+		//	() => { process.exit(); },
+		//	PROCESS_EXIT_DELAY
+		//);
 	} );
 
 	let id = 0;
@@ -177,10 +185,12 @@ const runClient = ( parsedCoockies = null ) => {
 			] },
 			( event, payload ) => { // 5) check receiving
 				if( event === "ack" && payload.id === stringId ) {
-					console.log( "Ack pkt " + stringId );
+					console.log( new Date().toUTCString() + ": Ack pkt " + stringId );
 					// packet acked
 				} else if( event === "nack" ) {
 					// packet nacked; retry o discard.
+					console.log( "=== ERROR ===" );
+					console.log( new Date().toUTCString() );
 					console.error( payload.error );
 					process.exit();
 				}
