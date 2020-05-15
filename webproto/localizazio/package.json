@@ -4,7 +4,9 @@
   "description": "simple traking anonimous web application",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"no test!\""
+    "test": "echo \"no test!\"",
+    "start": "node node/main.js",
+    "debug": "nodemon node/main.js"
   },
   "keywords": [
     "GPS",
