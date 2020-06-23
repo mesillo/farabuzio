@@ -8,7 +8,8 @@ let passwd = "tiger.test";
 let endpoint = "fsdapi.test.us.fm-cloud.com";
 let path = "/mobile/v1/auth/token";
 
-let correlationId = "926181b7-9102-4278-8638-6b40f88c6d7e";
+//let correlationId = "926181b7-9102-4278-8638-6b40f88c6d7e";
+let correlationId = "uuid-a-caso";
 
 let authString = Buffer.from( `${user}:${passwd}` ).toString( "base64" );
 
@@ -20,7 +21,8 @@ let postOptions = {
 	method: "POST",
 	headers: {
 		"Correlation-Id": correlationId,
-		"accept": "*/*",
+		//"accept": "*/*",
+		"accept": "application/json",
 		"Authorization": `Basic ${authString}`
 	}
 };
