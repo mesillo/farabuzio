@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  elasticsearch:
+    image: elasticsearch:5.2.1
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      discovery.type: single-node
+  kibana:
+    image: kibana:5.2.1
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+networks:
+   default:
+    driver: bridge

@@ -1,0 +1,18 @@
+{
+	"name": "lambda2proc",
+	"version": "0.0.1",
+	"description": "node lambda handler runner",
+	"main": "app.js",
+	"scripts": {
+		"test": "echo \"Not yet implemented! :-(\" && exit 255"
+	},
+	"bin": {
+		"deployLambda": "./deployLambda.js",
+		"lambda2process": "./lambda2process.js"
+	},
+	"author": "Alberto Mesillo Mesin",
+	"license": "GPL-2.0-only",
+	"dependencies": {
+		"aws-sdk": "^2.585.0"
+	}
+}

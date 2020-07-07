@@ -1,0 +1,22 @@
+{
+  "name": "sts4",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jose": "^1.24.1",
+    "request": "^2.88.2",
+    "socket.io": "^2.3.0",
+    "ws": "^7.2.3",
+    "xmlhttprequest": "^1.8.0"
+  }
+}
