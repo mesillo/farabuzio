@@ -1,0 +1,16 @@
+{
+  "name": "blacklist.olo",
+  "version": "0.0.1",
+  "description": "Backup, store and notify.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"to be implemented :-P\""
+  },
+  "keywords": [
+    "mysql",
+    "telegram",
+    "glacier"
+  ],
+  "author": "Alberto Mesillo Mesin",
+  "license": "GPL-3.0-or-later"
+}
