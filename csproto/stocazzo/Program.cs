@@ -44,6 +44,7 @@ public class Program
 	public static void Main()
 	{
 		var pippo = new EdiContent();
-		Console.WriteLine(pippo.WifiSSID);
+		//Console.WriteLine(pippo.WifiSSID);
+		Console.WriteLine( $"{@pippo}" );
 	}
 }
