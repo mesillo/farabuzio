@@ -7,7 +7,9 @@
 #include <WebSocketsServer.h>
 #include <ESP8266WebServer.h>
 #include <FS.h>
-#include <LittleFS.h>
+//#include <LittleFS.h>
+
+#define FSLIB SPIFFS
 
 #define DELAY 1000
 #define SERIAL_SPEED 9600
@@ -37,6 +39,8 @@ void startSoftAP();
 
 void configureWebServer();
 void startWebServer();
+bool initFileSystem();
+
 void handleClientsRequest();
 void handlerOnRoot();
 void handlerToggleLed();
@@ -47,12 +51,17 @@ String getContentType( String );
 void turnOffLeds();
 void toggleAuxLed();
 
+//void listDir(const char *);
+
 void setup() {
 	Serial.begin( SERIAL_SPEED );
 	Serial.setDebugOutput( SERIAL_WIFI_DEBUG );
 	pinMode( A0, INPUT );
 	startSoftAP();
 	configureWebServer();
+	if( ! initFileSystem() ) {
+		Serial.println( "Error: unable to mount local FS!" );
+	}
 	startWebServer();
 	turnOffLeds();
 	// Serial.println( "=== Setup Done ===" ); // TODO: non funge! Perchè???
@@ -90,7 +99,7 @@ void startSoftAP() {
 }
 
 void configureWebServer() {
-	server.on( "/", handlerOnRoot );
+	//server.on( "/", handlerOnRoot );
 	server.on( "/toggleLed", handlerToggleLed );
 	server.onNotFound( handlerNotFound );
 }
@@ -99,13 +108,18 @@ void startWebServer() {
 	server.begin();
 }
 
+bool initFileSystem() {
+	return FSLIB.begin(); // TODO: CHECk the bool
+}
+
 void handleClientsRequest() {
 	server.handleClient();
 }
 
 void handlerOnRoot() {
-	//server.send( 200, "text/plain", "Hello World!" );
-	handlerFileSystemRead( DEFAULT_HOMEPAGE_NAME );
+	server.send( 200, "text/plain", "Hello World!" );
+	//handlerFileSystemRead( DEFAULT_HOMEPAGE_NAME );
+	//listDir("/");
 }
 
 void handlerToggleLed() {
@@ -124,8 +138,8 @@ bool handlerFileSystemRead( String path ) {
 		path += DEFAULT_HOMEPAGE_NAME;
 	}
 	String contentType = getContentType( path );
-	if( LittleFS.exists( path ) ) {
-    	File file = LittleFS.open( path, "r" );
+	if( FSLIB.exists( path ) ) {
+    	File file = FSLIB.open( path, "r" );
 		server.streamFile( file, contentType );
 		file.close();
     	return true;
@@ -161,3 +175,25 @@ void toggleAuxLed() {
 	auxLedStatus = auxLedStatus == 0 ? 1 : 0;
 	digitalWrite( LED_BUILTIN_AUX, auxLedStatus );
 }
+
+//void listDir(const char * dirname) {
+//	Serial.printf("Listing directory: %s\n", dirname);
+//
+//	Dir root = FSLIB.openDir(dirname);
+//
+//	while (root.next()) {
+//		File file = root.openFile("r");
+//		Serial.print("  FILE: ");
+//		Serial.print(root.fileName());
+//		Serial.print("  SIZE: ");
+//		Serial.print(file.size());
+//		time_t cr = file.getCreationTime();
+//		time_t lw = file.getLastWrite();
+//		file.close();
+//		struct tm * tmstruct = localtime(&cr);
+//		Serial.printf("    CREATION: %d-%02d-%02d %02d:%02d:%02d\n", (tmstruct->tm_year) + 1900, (tmstruct->tm_mon) + 1, tmstruct->tm_mday, tmstruct->tm_hour, tmstruct->tm_min, tmstruct->tm_sec);
+//		tmstruct = localtime(&lw);
+//		Serial.printf("  LAST WRITE: %d-%02d-%02d %02d:%02d:%02d\n", (tmstruct->tm_year) + 1900, (tmstruct->tm_mon) + 1, tmstruct->tm_mday, tmstruct->tm_hour, tmstruct->tm_min, tmstruct->tm_sec);
+//	}
+//	Serial.println( "=== list done ===" );
+//}
