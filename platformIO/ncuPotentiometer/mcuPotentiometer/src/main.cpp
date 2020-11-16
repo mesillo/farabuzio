@@ -20,6 +20,7 @@
 #define PASSWD "_nodeMcu_"
 
 #define WEBSERVER_PORT 80
+#define WEBSOCKET_PORT 81
 
 #define DEFAULT_HOMEPAGE_NAME "index.html"
 
@@ -28,6 +29,7 @@
 //const char *password = "Venerdi42!"; //Enter your WIFI password
 
 ESP8266WebServer server( WEBSERVER_PORT );
+WebSocketsServer webSocket = WebSocketsServer( WEBSOCKET_PORT );
 int cacheValue = 0;
 int auxLedStatus = 0;
 
@@ -47,6 +49,7 @@ void handlerToggleLed();
 void handlerNotFound();
 bool handlerFileSystemRead( String );
 String getContentType( String );
+void webSocketEvent( uint8_t, WStype_t, uint8_t *, size_t );
 
 void turnOffLeds();
 void toggleAuxLed();
@@ -71,7 +74,9 @@ void loop() {
 	loopWait();
 	handleClientsRequest();
 	if( checkValue() ) {
-		Serial.println( getValue() );
+		//Serial.println( getValue() );
+		String valueStr = String( getValue() );
+		webSocket.broadcastTXT( valueStr );
 	}
 }
 
@@ -102,10 +107,14 @@ void configureWebServer() {
 	//server.on( "/", handlerOnRoot );
 	server.on( "/toggleLed", handlerToggleLed );
 	server.onNotFound( handlerNotFound );
+
+	webSocket.onEvent( webSocketEvent );
 }
 
 void startWebServer() {
 	server.begin();
+
+	webSocket.begin();
 }
 
 bool initFileSystem() {
@@ -114,6 +123,9 @@ bool initFileSystem() {
 
 void handleClientsRequest() {
 	server.handleClient();
+
+	webSocket.loop();
+	webSocket.enableHeartbeat( 2000, 1500, 0 );
 }
 
 void handlerOnRoot() {
@@ -162,6 +174,31 @@ String getContentType( String filename ) {
 	else if( filename.endsWith( ".zip" ) ) return "application/x-zip";
 	else if( filename.endsWith( ".gz" ) ) return "application/x-gzip";
 	return "text/plain";
+}
+
+void webSocketEvent( uint8_t num, WStype_t type, uint8_t * payload, size_t length ) {
+	switch( type ) {
+		case WStype_DISCONNECTED:
+			Serial.printf( "[%u] Disconnected!\n", num );
+			break;
+		case WStype_CONNECTED:
+			{
+				IPAddress ip = webSocket.remoteIP( num );
+				Serial.printf( "[%u] Connected from %d.%d.%d.%d url: %s\n", num, ip[0], ip[1], ip[2], ip[3], payload );
+				//webSocket.sendTXT( num, "Connected" );
+			}
+			break;
+		case WStype_TEXT:
+			//Serial.printf( "[%u] get Text: %s\n", num, payload );
+			// webSocket.sendTXT( num, "message here" );
+			// webSocket.broadcastTXT( "message here" );
+			break;
+		case WStype_BIN:
+			//Serial.printf( "[%u] get binary length: %u\n", num, length );
+			//hexdump(payload, length);
+			// webSocket.sendBIN( num, payload, length );
+			break;
+	}
 }
 
 void turnOffLeds() {

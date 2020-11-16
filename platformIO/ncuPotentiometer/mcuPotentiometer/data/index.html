@@ -1,24 +1,35 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Test Node MCU</title>
-    </head>
-    <script type="text/javascript">
-        const toggleLed = () => {
-            const xhr = new XMLHttpRequest();
-            xhr.open( "GET", "/toggleLed" );
-            xhr.onload = () => {
-                if( xhr.status === 200 ) {
-                    console.log( xhr.responseText );
-                } else {
-                    console.error( "Error: " + xhr.status );
-                }
-            };
-            xhr.send();
-        };
-    </script>
-    <body>
-        <h1>Hello Home Page!</h1>
-        <button onclick="toggleLed()"> Toggle AUX LED </button> 
-    </body>
+	<head>
+		<title>Test Node MCU</title>
+	</head>
+	<script type="text/javascript">
+		let webSocket = null;
+		const toggleLed = () => {
+			const xhr = new XMLHttpRequest();
+			xhr.open( "GET", "/toggleLed" );
+			xhr.onload = () => {
+				if( xhr.status === 200 ) {
+					console.log( xhr.responseText );
+				} else {
+					console.error( "Error: " + xhr.status );
+				}
+			};
+			xhr.send();
+		};
+		const webSocketConnect = () => {
+			const hostname = window.location.hostname;
+			webSocket = new WebSocket( `ws://${hostname}:81/`, [ "nodemcu" ] );
+			webSocket.onmessage = ( event ) => {
+				console.dir( event );
+			}
+		};
+	</script>
+	<body>
+		<h1>Hello Home Page!</h1>
+		<button onclick="toggleLed"> Toggle AUX LED </button> 
+		<script type="text/javascript">
+			webSocketConnect();
+		</script>
+	</body>
 </html>
