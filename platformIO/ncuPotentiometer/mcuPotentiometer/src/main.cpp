@@ -11,7 +11,7 @@
 
 #define FSLIB SPIFFS
 
-#define DELAY 1000
+#define DELAY 250
 #define SERIAL_SPEED 9600
 #define SERIAL_WIFI_DEBUG true
 
@@ -112,9 +112,11 @@ void configureWebServer() {
 }
 
 void startWebServer() {
-	server.begin();
-
 	webSocket.begin();
+	//webSocket.enableHeartbeat( 2000, 1500, 0 );
+	//webSocket.disableHeartbeat();
+
+	server.begin();
 }
 
 bool initFileSystem() {
@@ -122,10 +124,9 @@ bool initFileSystem() {
 }
 
 void handleClientsRequest() {
-	server.handleClient();
-
 	webSocket.loop();
-	webSocket.enableHeartbeat( 2000, 1500, 0 );
+
+	server.handleClient();
 }
 
 void handlerOnRoot() {
