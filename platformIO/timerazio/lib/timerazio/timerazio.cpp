@@ -50,7 +50,7 @@ bool Timerazio::check() {
 	return false;
 }
 
-void Timerazio::setHandler( void ( *handler )() ) {
+void Timerazio::setHandler( tmzHandlerFn handler ) {
 	handlerFn = handler;
 }
 

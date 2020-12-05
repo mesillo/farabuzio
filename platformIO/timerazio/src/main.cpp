@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <timerazio.h>
 
-Timerazio *tmz = new Timerazio( 500 );
+Timerazio tmz = Timerazio( 1000 );
 
 unsigned long count = 0;
 
@@ -19,12 +19,16 @@ void handlerazio() {
 void setup() {
 	Serial.begin( 9600 );
 	pinMode( LED_BUILTIN, OUTPUT );
-	tmz->setHandler( &handlerazio );
-	tmz->start();
+	tmz.setHandler( &handlerazio );
+	tmz.start();
 }
 
 void loop() {
-	if( tmz->loop() ) {
-		Serial.println( count );
+	if( tmz.loop() ) {
+		Serial.print( "." );
+		if( count > 19 ) {
+			tmz.stop();
+			Serial.println( "STOP!" );
+		}
 	}
 }
