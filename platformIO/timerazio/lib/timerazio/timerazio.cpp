@@ -5,11 +5,6 @@ Timerazio::Timerazio( unsigned long mls ) {
 	init( mls );
 }
 
-//Timerazio::Timerazio() {
-//	setPeriod( _DEFAULT_TIMERAZIO_MILLISPERIOD_ );
-//	stop();
-//}
-
 void Timerazio::setPeriod( unsigned long mls ) {
 	millisPeriod = mls;
 }

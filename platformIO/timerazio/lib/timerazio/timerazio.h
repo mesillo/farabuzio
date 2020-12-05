@@ -10,10 +10,8 @@ class Timerazio {
 		tmzHandlerFn handlerFn;
 
 		void init( unsigned long );
-		//Timerazio();
 	public:
 		Timerazio( unsigned long );
-		//Timerazio() override;
 		void setPeriod( unsigned long );
 		void start();
 		void stop();
