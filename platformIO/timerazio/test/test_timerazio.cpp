@@ -153,6 +153,12 @@ void should_correcly_change_period( void ) {
 void setup( void ) {
 	delay( 2000 ); // from unit test doc.
 	UNITY_BEGIN();
+
+	Serial.print( "=> Testing with: TIMESLOT " );
+	Serial.print( TIMESLOT );
+	Serial.print( " and TIMETOLLERANCE " );
+	Serial.print( TIMETOLLERANCE );
+	Serial.println( " <=" );
 }
 
 void loop( void ) {
