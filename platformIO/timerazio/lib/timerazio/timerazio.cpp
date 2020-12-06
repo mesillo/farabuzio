@@ -15,16 +15,16 @@ void Timerazio::init( unsigned long mls ) {
 	setHandler( NULL );
 }
 
-void Timerazio::start() {
+void Timerazio::start( void ) {
 	reload();
 	armed = true;
 }
 
-void Timerazio::stop() {
+void Timerazio::stop( void ) {
 	armed = false;
 }
 
-bool Timerazio::isElapsed() {
+bool Timerazio::isElapsed( void ) {
 	if( armed ) { // Lazy evaluation...
 		if( millis() > lastTick + millisPeriod ) { // ... dont call millis() if not armed.
 			return true;
@@ -33,11 +33,11 @@ bool Timerazio::isElapsed() {
 	return false;
 }
 
-void Timerazio::reload() {
+void Timerazio::reload( void ) {
 	lastTick = millis();
 }
 
-bool Timerazio::check() {
+bool Timerazio::check( void ) {
 	if( isElapsed() ) {
 		reload();
 		return true;
@@ -49,7 +49,7 @@ void Timerazio::setHandler( tmzHandlerFn handler ) {
 	handlerFn = handler;
 }
 
-bool Timerazio::loop() {
+bool Timerazio::loop( void ) {
 	if( handlerFn != NULL ) {
 		if( check() ) {
 			handlerFn();
@@ -57,4 +57,8 @@ bool Timerazio::loop() {
 		}
 	}
 	return false;
+}
+
+void Timerazio::reset( void ) {
+	init( millisPeriod );
 }

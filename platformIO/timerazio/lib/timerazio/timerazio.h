@@ -1,4 +1,5 @@
-#define _DEFAULT_TIMERAZIO_MILLISPERIOD_ 1000
+#ifndef _TIMERAZIO_MAIN_CLASS_
+#define _TIMERAZIO_MAIN_CLASS_
 
 typedef void (*tmzHandlerFn)();
 
@@ -13,11 +14,14 @@ class Timerazio {
 	public:
 		Timerazio( unsigned long );
 		void setPeriod( unsigned long );
-		void start();
-		void stop();
-		bool isElapsed();
-		void reload();
-		bool check();
+		void start( void );
+		void stop( void );
+		bool isElapsed( void );
+		void reload( void );
+		bool check( void );
 		void setHandler( tmzHandlerFn );
-		bool loop();
+		bool loop( void );
+		void reset( void );
 };
+
+#endif
