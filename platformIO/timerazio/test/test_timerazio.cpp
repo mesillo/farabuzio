@@ -21,6 +21,10 @@ void increaseCounter( void ) {
 	count ++;
 }
 
+bool checkCount( unsigned int expected ) {
+	return count == expected;
+}
+
 void startTime( void ) {
 	sTime = millis();
 }
@@ -34,8 +38,13 @@ bool checkTime( unsigned int mls ) {
 
 /// TEST ///
 
-void should_not_start_before_activation( void ) {
+void prepare() {
+	tmz.setPeriod( TIMESLOT );
 	tmz.reset();
+}
+
+void should_not_start_before_activation( void ) {
+	prepare();
 	startTime();
 	while( ! checkTime( ( TIMESLOT * 3 ) ) ) {
 		if( tmz.isElapsed() || tmz.check() ) {
@@ -45,7 +54,7 @@ void should_not_start_before_activation( void ) {
 }
 
 void should_correctly_signal_elapsed_time( void ) {
-	tmz.reset();
+	prepare();
 	tmz.start();
 	startTime();
 	delay( TIMESLOT + TIMETOLLERANCE );
@@ -58,7 +67,7 @@ void should_correctly_signal_elapsed_time( void ) {
 }
 
 void should_correcly_reload_after_check( void ) {
-	tmz.reset();
+	prepare();
 	tmz.start();
 	startTime();
 	while( ! tmz.check() ) {
@@ -67,6 +76,74 @@ void should_correcly_reload_after_check( void ) {
 		}
 	}
 	if( tmz.check() ) { // if is correclty reloaded this must be false.
+		TEST_FAIL();
+	}
+}
+
+void should_correctly_trigger_handler( void ) {
+	prepare();
+	resetCounter();
+	tmz.setHandler( increaseCounter );
+	tmz.start();
+	startTime();
+	while( ! checkTime( ( TIMESLOT * 3 ) + TIMETOLLERANCE ) ) {
+		tmz.loop();
+	}
+	if( ! checkCount( 3 ) ) {
+		TEST_FAIL();
+	}
+}
+
+void should_correctly_stop_triggering_handler( void ) {
+	prepare();
+	resetCounter();
+	tmz.setHandler( increaseCounter );
+	tmz.start();
+	startTime();
+	while( ! checkTime( ( TIMESLOT * 1 ) + TIMETOLLERANCE ) ) {
+		tmz.loop();
+	}
+	if( ! checkCount( 1 ) ) {
+		TEST_FAIL_MESSAGE( "Handler never triggered!" );
+	}
+	tmz.stop();
+	while( ! checkTime( ( TIMESLOT * 3 ) + TIMETOLLERANCE ) ) {
+		tmz.loop();
+	}
+	if( ! checkCount( 1 ) ) {
+		TEST_FAIL();
+	}
+}
+
+void should_correctly_reset( void ) {
+	prepare();
+	resetCounter();
+	tmz.setHandler( increaseCounter );
+	tmz.start();
+	startTime();
+	tmz.reset();
+	while( ! checkTime( ( TIMESLOT * 2 ) + TIMETOLLERANCE ) ) {
+		tmz.loop();
+	}
+	if( ! checkCount( 0 ) ) {
+		TEST_FAIL();
+	}
+	if( tmz.isElapsed() ) {
+		TEST_FAIL();
+	}
+}
+
+void should_correcly_change_period( void ) {
+	prepare();
+	resetCounter();
+	tmz.setHandler( increaseCounter );
+	tmz.setPeriod( TIMESLOT * 2 );
+	tmz.start();
+	startTime();
+	while( ! checkTime( ( TIMESLOT * 2 ) + TIMETOLLERANCE ) ) {
+		tmz.loop();
+	}
+	if( ! checkCount( 1 ) ) {
 		TEST_FAIL();
 	}
 }
@@ -82,5 +159,10 @@ void loop( void ) {
 	RUN_TEST( should_not_start_before_activation );
 	RUN_TEST( should_correctly_signal_elapsed_time );
 	RUN_TEST( should_correcly_reload_after_check );
-	Serial.println( "============================================" );
+	RUN_TEST( should_correctly_trigger_handler );
+	RUN_TEST( should_correctly_stop_triggering_handler );
+	RUN_TEST( should_correctly_reset );
+	RUN_TEST( should_correcly_change_period );
+	Serial.println( "[==================================================]" );
+	delay( 10000 );
 }
