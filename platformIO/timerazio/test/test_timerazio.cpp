@@ -47,9 +47,7 @@ void should_not_start_before_activation( void ) {
 	prepare();
 	startTime();
 	while( ! checkTime( ( TIMESLOT * 3 ) ) ) {
-		if( tmz.isElapsed() || tmz.check() ) {
-			TEST_FAIL();
-		}
+		TEST_ASSERT( ! ( tmz.isElapsed() || tmz.check() ) );
 	}
 }
 
@@ -58,12 +56,8 @@ void should_correctly_signal_elapsed_time( void ) {
 	tmz.start();
 	startTime();
 	delay( TIMESLOT + TIMETOLLERANCE );
-	if( ! tmz.isElapsed() ) { // first test this...
-		TEST_FAIL();
-	}
-	if( ! tmz.check() ) { // ... this after because it reload() the timer!
-		TEST_FAIL();
-	}
+	TEST_ASSERT( tmz.isElapsed() ); // first test this...
+	TEST_ASSERT( tmz.check() ); // ... this after because it reload() the timer!
 }
 
 void should_correcly_reload_after_check( void ) {
@@ -75,9 +69,7 @@ void should_correcly_reload_after_check( void ) {
 			TEST_FAIL_MESSAGE( "Timer did not work as it should have." );
 		}
 	}
-	if( tmz.check() ) { // if is correclty reloaded this must be false.
-		TEST_FAIL();
-	}
+	TEST_ASSERT( ! tmz.check() ); // if is correclty reloaded this must be false.
 }
 
 void should_correctly_trigger_handler( void ) {
@@ -89,9 +81,7 @@ void should_correctly_trigger_handler( void ) {
 	while( ! checkTime( ( TIMESLOT * 3 ) + TIMETOLLERANCE ) ) {
 		tmz.loop();
 	}
-	if( ! checkCount( 3 ) ) {
-		TEST_FAIL();
-	}
+	TEST_ASSERT( checkCount( 3 ) );
 }
 
 void should_correctly_stop_triggering_handler( void ) {
@@ -110,9 +100,7 @@ void should_correctly_stop_triggering_handler( void ) {
 	while( ! checkTime( ( TIMESLOT * 3 ) + TIMETOLLERANCE ) ) {
 		tmz.loop();
 	}
-	if( ! checkCount( 1 ) ) {
-		TEST_FAIL();
-	}
+	TEST_ASSERT( checkCount( 1 ) );
 }
 
 void should_correctly_reset( void ) {
@@ -128,9 +116,7 @@ void should_correctly_reset( void ) {
 	if( ! checkCount( 0 ) ) {
 		TEST_FAIL();
 	}
-	if( tmz.isElapsed() ) {
-		TEST_FAIL();
-	}
+	TEST_ASSERT( ! tmz.isElapsed() );
 }
 
 void should_correcly_change_period( void ) {
@@ -143,9 +129,7 @@ void should_correcly_change_period( void ) {
 	while( ! checkTime( ( TIMESLOT * 2 ) + TIMETOLLERANCE ) ) {
 		tmz.loop();
 	}
-	if( ! checkCount( 1 ) ) {
-		TEST_FAIL();
-	}
+	TEST_ASSERT( checkCount( 1 ) );
 }
 
 /// SETUP and RUN ///
