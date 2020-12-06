@@ -3,32 +3,25 @@
 
 Timerazio tmz = Timerazio( 1000 );
 
-unsigned long count = 0;
-
-bool toggle() {
+bool toggle( void ) {
 	static bool status = LOW;
 	status = ! status;
 	return status;
 }
 
-void handlerazio() {
+void handlerFn( void ) {
 	digitalWrite( LED_BUILTIN, toggle() );
-	count++;
 }
 
-void setup() {
+void setup( void ) {
 	Serial.begin( 9600 );
 	pinMode( LED_BUILTIN, OUTPUT );
-	tmz.setHandler( &handlerazio );
+	tmz.setHandler( &handlerFn );
 	tmz.start();
 }
 
-void loop() {
+void loop( void ) {
 	if( tmz.loop() ) {
 		Serial.print( "." );
-		if( count > 19 ) {
-			tmz.stop();
-			Serial.println( "STOP!" );
-		}
 	}
 }
