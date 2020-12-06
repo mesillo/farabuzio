@@ -60,7 +60,12 @@ void should_correctly_signal_elapsed_time( void ) {
 void should_correcly_reload_after_check( void ) {
 	tmz.reset();
 	tmz.start();
-	while( ! tmz.check() ); // this loop wait for the timer bell... hope it append :-)
+	startTime();
+	while( ! tmz.check() ) {
+		if( checkTime( TIMESLOT + TIMETOLLERANCE ) ) { // timer should to be elapsed...
+			TEST_FAIL_MESSAGE( "Timer did not work as it should have." );
+		}
+	}
 	if( tmz.check() ) { // if is correclty reloaded this must be false.
 		TEST_FAIL();
 	}
