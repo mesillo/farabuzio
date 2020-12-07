@@ -18,7 +18,7 @@ bool Eventazio::on( const char* eventName, tEventHandler eventHandler ) {
 }
 
 void Eventazio::init( void ) {
-	unsigned int i, y;
+	unsigned int i; //, y;
 	for( i = 0 ; i < _EVENT_CAPABILITY_ ; i++ ) {
 		eventNames[i] = NULL;
 		/* for( y = 0 ; y < _PER_EVENT_HANDLER_CAPABILITY_ ; y++ )
@@ -45,7 +45,9 @@ int Eventazio::addEvent( const char* evNm, tEventHandler eventHandler ) {
 		if( index == -1 ) {
 			return -1;
 		}
+		//eventNames[ index ] = new String( evNm );
 		eventNames[ index ] = new String( evNm );
+		Serial.print( " ==> " ); //Serial.println( *(eventNames[ index ]) );
 		clearHandlers( index );
 	}
 	if( addHandler( index, eventHandler ) != -1 ) {
@@ -64,10 +66,13 @@ int Eventazio::getFreeSlot( void ) {
 
 int Eventazio::getEventIndex( const char* evNm ) {
 	unsigned int i;
-	for( i = 0 ; i < _EVENT_CAPABILITY_ ; i++ )
-		if( eventNames[ i ] != NULL )
-			if( eventNames[ i ]->equals( evNm ) )
+	for( i = 0 ; i < _EVENT_CAPABILITY_ ; i++ ) {
+		if( eventNames[ i ] != NULL ) {
+			if( eventNames[ i ]->equals( evNm ) ) {
 				return i;
+			}
+		}
+	}
 	return -1;
 }
 
