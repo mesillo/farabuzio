@@ -14,6 +14,14 @@ class Eventazio {
 		tEventHandler eventHandlers[_EVENT_CAPABILITY_][_PER_EVENT_HANDLER_CAPABILITY_];
 	
 		void init( void );
+		void deleteEvent( unsigned int );
+		int addEvent( const char*, tEventHandler );
+		int getFreeSlot( void );
+		int getEventIndex( const char* );
+		int addHandler( int, tEventHandler );
+		int getHandlerSlot( tEventHandler[] );
+		void clearHandlers( int );
+
 	public:
 		bool on( const char*, tEventHandler );
 };
