@@ -1,6 +1,15 @@
 #include "eventazio.h"
 
+void Eventazio::emit( const char* eventName ) {
+	int index = getEventIndex( eventName );
+	if( index != -1 ) {
+		invokeAllHandlers( index ); // TODO: insert a queuing logic.
+	}
+}
+
 bool Eventazio::on( const char* eventName, tEventHandler eventHandler ) {
+	if( addEvent( eventName, eventHandler ) != -1 )
+		return true;
 	return false;
 }
 
@@ -11,6 +20,12 @@ void Eventazio::init( void ) {
 		for( y = 0 ; y < _PER_EVENT_HANDLER_CAPABILITY_ ; y++ )
 			eventHandlers[i][y] = NULL;	
 	}
+}
+
+void Eventazio::invokeAllHandlers( int index ) {
+	unsigned int i;
+	for( i = 0 ; i < _PER_EVENT_HANDLER_CAPABILITY_ ; i++ )
+		(eventHandlers[index][i])();
 }
 
 void Eventazio::deleteEvent( unsigned int index ) {

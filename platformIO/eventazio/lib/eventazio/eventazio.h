@@ -21,8 +21,10 @@ class Eventazio {
 		int addHandler( int, tEventHandler );
 		int getHandlerSlot( tEventHandler[] );
 		void clearHandlers( int );
+		void invokeAllHandlers( int );
 
 	public:
+		void emit( const char* );
 		bool on( const char*, tEventHandler );
 };
 
