@@ -24,6 +24,7 @@ class Eventazio {
 		void invokeAllHandlers( int );
 
 	public:
+		Eventazio( void );
 		void emit( const char* );
 		bool on( const char*, tEventHandler );
 };

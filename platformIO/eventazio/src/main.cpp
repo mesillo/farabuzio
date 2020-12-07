@@ -1,24 +1,27 @@
 #include <Arduino.h>
 #include <eventazio.h>
 
+#define INTERVAL 250
+
+Eventazio evz = Eventazio();
+
+bool toggle( void ) {
+	static bool status = LOW;
+	status = ! status;
+	return status;
+}
+
+void handlerFn( void ) {
+	digitalWrite( LED_BUILTIN, toggle() );
+}
+
 void setup() {
-	// put your setup code here, to run once:
 	Serial.begin( 9600 );
-
-	String *teststring = NULL;
-
-	teststring = new String( "test" );
-
-	//delete teststring;
-
-	if( teststring == NULL )
-		Serial.println( "NULL" );
-	else
-		Serial.println( "... doh!" );
-
-	Serial.println( *teststring );
+	pinMode( LED_BUILTIN, OUTPUT );
+	evz.on( "blink", handlerFn );
 }
 
 void loop() {
-	// put your main code here, to run repeatedly:
+	evz.emit( "blink" );
+	delay(INTERVAL);
 }
