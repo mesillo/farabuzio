@@ -5,15 +5,19 @@
 
 #define _EVENT_CAPABILITY_ 5
 #define _PER_EVENT_HANDLER_CAPABILITY_ 5
+#define _MAX_EVENT_NAME_LEN_ 10
 
+// typedef char tEventName[_MAX_EVENT_NAME_LEN_ + 1];
 typedef void ( *tEventHandler )();
 
 class Eventazio {
 	private:
-		String *eventNames[_EVENT_CAPABILITY_];
+		// tEventName eventNames[_EVENT_CAPABILITY_];
+		char eventNames[_EVENT_CAPABILITY_][_MAX_EVENT_NAME_LEN_ + 1];
 		tEventHandler eventHandlers[_EVENT_CAPABILITY_][_PER_EVENT_HANDLER_CAPABILITY_];
-	
+
 		void init( void );
+		bool isValidEventName( const char* );
 		void deleteEvent( unsigned int );
 		int addEvent( const char*, tEventHandler );
 		int getFreeSlot( void );
@@ -22,6 +26,8 @@ class Eventazio {
 		int getHandlerSlot( tEventHandler[] );
 		void clearHandlers( int );
 		void invokeAllHandlers( int );
+
+		void stringCopy( char*, const char* );
 
 	public:
 		Eventazio( void );

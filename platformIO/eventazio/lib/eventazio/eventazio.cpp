@@ -12,19 +12,23 @@ void Eventazio::emit( const char* eventName ) {
 }
 
 bool Eventazio::on( const char* eventName, tEventHandler eventHandler ) {
+	if( ! isValidEventName( eventName ) )
+		return false;
 	if( addEvent( eventName, eventHandler ) != -1 )
 		return true;
 	return false;
 }
 
 void Eventazio::init( void ) {
-	unsigned int i; //, y;
+	unsigned int i;
 	for( i = 0 ; i < _EVENT_CAPABILITY_ ; i++ ) {
-		eventNames[i] = NULL;
-		/* for( y = 0 ; y < _PER_EVENT_HANDLER_CAPABILITY_ ; y++ )
-			eventHandlers[i][y] = NULL; */
+		eventNames[i][0] = '\0';
 		clearHandlers( i );
 	}
+}
+
+bool Eventazio::isValidEventName( const char* evNm ) {
+	return ( strlen( evNm ) <= _MAX_EVENT_NAME_LEN_ );
 }
 
 void Eventazio::invokeAllHandlers( int index ) {
@@ -34,8 +38,7 @@ void Eventazio::invokeAllHandlers( int index ) {
 }
 
 void Eventazio::deleteEvent( unsigned int index ) {
-	delete eventNames[ index ];
-	eventNames[ index ] = NULL;
+	eventNames[ index ][ 0 ] = '\0';
 }
 
 int Eventazio::addEvent( const char* evNm, tEventHandler eventHandler ) {
@@ -45,9 +48,9 @@ int Eventazio::addEvent( const char* evNm, tEventHandler eventHandler ) {
 		if( index == -1 ) {
 			return -1;
 		}
-		//eventNames[ index ] = new String( evNm );
-		eventNames[ index ] = new String( evNm );
-		Serial.print( " ==> " ); //Serial.println( *(eventNames[ index ]) );
+		strcpy( eventNames[ index ], evNm );
+		//stringCopy( eventNames[ index ], evNm );
+		Serial.print( " ==> " ); Serial.println( index );
 		clearHandlers( index );
 	}
 	if( addHandler( index, eventHandler ) != -1 ) {
@@ -59,7 +62,7 @@ int Eventazio::addEvent( const char* evNm, tEventHandler eventHandler ) {
 int Eventazio::getFreeSlot( void ) {
 	unsigned int i;
 	for( i = 0 ; i < _EVENT_CAPABILITY_ ; i++ )
-		if( eventNames[ i ] == NULL )
+		if( eventNames[ i ][ 0 ] == '\0' )
 			return i;
 	return -1;
 }
@@ -67,8 +70,8 @@ int Eventazio::getFreeSlot( void ) {
 int Eventazio::getEventIndex( const char* evNm ) {
 	unsigned int i;
 	for( i = 0 ; i < _EVENT_CAPABILITY_ ; i++ ) {
-		if( eventNames[ i ] != NULL ) {
-			if( eventNames[ i ]->equals( evNm ) ) {
+		if( eventNames[ i ][ 0 ] != '\0' ) {
+			if( strcmp( eventNames[ i ], evNm ) == 0 ) {
 				return i;
 			}
 		}
@@ -97,4 +100,15 @@ void Eventazio::clearHandlers( int index ) {
 	unsigned int i;
 	for( i = 0 ; i < _PER_EVENT_HANDLER_CAPABILITY_ ; i++ )
 		eventHandlers[index][i] = NULL;
+}
+
+/// ... why? ///
+
+void Eventazio::stringCopy( char* dest, const char* source ) {
+	unsigned short index = 0;
+	while( source[ index ] != '\0' ) {
+		dest[ index ] = source[ index ];
+		index++;
+	}
+	dest[ index ] = '\0';
 }
