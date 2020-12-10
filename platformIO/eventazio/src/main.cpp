@@ -3,7 +3,6 @@
 
 #define INTERVAL 1000
 
-bool setupDone = false;
 Eventazio evz = Eventazio();
 
 bool toggle( void ) {
@@ -12,28 +11,33 @@ bool toggle( void ) {
 	return status;
 }
 
-void handlerFn( void ) {
+void handlerBlink( void ) {
 	digitalWrite( LED_BUILTIN, toggle() );
+}
+
+void handlerWriteBlink( void ) {
+	Serial.println( "blink" );
+}
+
+void handlerWriteDots( void ) {
+	Serial.println( "..." );
 }
 
 String *pippo;
 void setup() {
 	Serial.begin( 9600 );
-	//delay( 3000 );
 	pinMode( LED_BUILTIN, OUTPUT );
-	evz.on( "blink", handlerFn );
-	//delay( 3000 );
+	evz.on( "blink", handlerBlink );
+	evz.on( "blink", handlerWriteBlink );
+	evz.on( "dots", handlerWriteDots );
 	Serial.println( "Setup done..." );
 }
 
 void loop() {
-	//if( ! setupDone ) {
-	//	evz.on( "blink", handlerFn );
-	//	setupDone = true;
-	//	Serial.println( "setup" );
-	//}
-	evz.emit( "blink" );
-	//handlerFn();
-	Serial.println( "Emitted" );
-	delay(INTERVAL);
+	int blinkTimes;
+	for( blinkTimes = 0 ; blinkTimes < 3 ; blinkTimes++ ) {
+		evz.emit( "blink" );
+		delay(INTERVAL);
+	}
+	evz.emit( "dots" );
 }

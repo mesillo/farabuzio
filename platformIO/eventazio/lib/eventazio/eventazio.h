@@ -7,12 +7,10 @@
 #define _PER_EVENT_HANDLER_CAPABILITY_ 5
 #define _MAX_EVENT_NAME_LEN_ 10
 
-// typedef char tEventName[_MAX_EVENT_NAME_LEN_ + 1];
 typedef void ( *tEventHandler )();
 
 class Eventazio {
 	private:
-		// tEventName eventNames[_EVENT_CAPABILITY_];
 		char eventNames[_EVENT_CAPABILITY_][_MAX_EVENT_NAME_LEN_ + 1];
 		tEventHandler eventHandlers[_EVENT_CAPABILITY_][_PER_EVENT_HANDLER_CAPABILITY_];
 
@@ -26,8 +24,6 @@ class Eventazio {
 		int getHandlerSlot( tEventHandler[] );
 		void clearHandlers( int );
 		void invokeAllHandlers( int );
-
-		void stringCopy( int, const char* );
 
 	public:
 		Eventazio( void );

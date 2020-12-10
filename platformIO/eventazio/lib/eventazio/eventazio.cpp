@@ -8,7 +8,6 @@ void Eventazio::emit( const char* eventName ) {
 	int index = getEventIndex( eventName );
 	if( index != -1 ) {
 		invokeAllHandlers( index ); // TODO: insert a queuing logic.
-		//Serial.print( "Emit found: " ); Serial.println( index );
 	}
 }
 
@@ -51,8 +50,6 @@ int Eventazio::addEvent( const char* evNm, tEventHandler eventHandler ) {
 			return -1;
 		}
 		strcpy( eventNames[ index ], evNm );
-		// stringCopy( index, evNm );
-		// Serial.print( " ==> " ); Serial.println( index );
 		clearHandlers( index );
 	}
 	if( addHandler( index, eventHandler ) != -1 ) {
@@ -102,17 +99,4 @@ void Eventazio::clearHandlers( int index ) {
 	unsigned int i;
 	for( i = 0 ; i < _PER_EVENT_HANDLER_CAPABILITY_ ; i++ )
 		eventHandlers[index][i] = NULL;
-}
-
-/// ... why? ///
-
-void Eventazio::stringCopy( int eventIndex, const char* source ) {
-	unsigned short index = 0;
-	while( source[ index ] != '\0' ) {
-		eventNames[ eventIndex ][ index ] = source[ index ];
-		Serial.print( source[ index ] );
-		index++;
-	}
-	eventNames[ eventIndex ][ index ] = '\0';
-	Serial.println( "" );
 }
