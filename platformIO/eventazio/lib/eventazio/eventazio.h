@@ -1,7 +1,7 @@
 #ifndef _EVENTAZIO_HEADER_
 #define _EVENTAZIO_HEADER_
 
-#include <Arduino.h>
+#include <string.h>
 
 #define _EVENT_CAPABILITY_ 5
 #define _PER_EVENT_HANDLER_CAPABILITY_ 5

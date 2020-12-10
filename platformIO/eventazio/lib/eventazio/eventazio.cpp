@@ -36,7 +36,7 @@ void Eventazio::deleteHandler( const char* eventName, tEventHandler eventHandler
 void Eventazio::init( void ) {
 	unsigned int i;
 	for( i = 0 ; i < _EVENT_CAPABILITY_ ; i++ ) {
-		eventNames[i][0] = '\0';
+		eventNames[ i ][ 0 ] = '\0';
 		clearHandlers( i );
 	}
 }
@@ -48,8 +48,8 @@ bool Eventazio::isValidEventName( const char* evNm ) {
 void Eventazio::invokeAllHandlers( int index ) {
 	unsigned int i;
 	for( i = 0 ; i < _PER_EVENT_HANDLER_CAPABILITY_ ; i++ )
-		if( eventHandlers[index][i] != NULL )
-			(eventHandlers[index][i])();
+		if( eventHandlers[ index ][ i ] != NULL )
+			( eventHandlers[ index ][ i ] )();
 }
 
 void Eventazio::deleteEvent( unsigned int index ) {
