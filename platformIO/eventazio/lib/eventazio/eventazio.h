@@ -27,7 +27,7 @@ class Eventazio {
 		void clearHandlers( int );
 		void invokeAllHandlers( int );
 
-		void stringCopy( char*, const char* );
+		void stringCopy( int, const char* );
 
 	public:
 		Eventazio( void );
