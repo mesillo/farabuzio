@@ -19,6 +19,13 @@ bool Eventazio::on( const char* eventName, tEventHandler eventHandler ) {
 	return false;
 }
 
+void Eventazio::deleteEvent( const char* eventName ) {
+	int index = getEventIndex( eventName );
+	if( index != -1 ) {
+		deleteEvent( index );
+	}
+}
+
 void Eventazio::init( void ) {
 	unsigned int i;
 	for( i = 0 ; i < _EVENT_CAPABILITY_ ; i++ ) {

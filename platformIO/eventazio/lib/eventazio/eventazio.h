@@ -29,6 +29,7 @@ class Eventazio {
 		Eventazio( void );
 		void emit( const char* );
 		bool on( const char*, tEventHandler );
+		void deleteEvent( const char* );
 };
 
 #endif

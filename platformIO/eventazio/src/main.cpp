@@ -34,10 +34,14 @@ void setup() {
 }
 
 void loop() {
+	static unsigned int counter = 0;
 	int blinkTimes;
 	for( blinkTimes = 0 ; blinkTimes < 3 ; blinkTimes++ ) {
 		evz.emit( "blink" );
 		delay(INTERVAL);
 	}
 	evz.emit( "dots" );
+	if( counter++ > 3 ) {
+		evz.deleteEvent( "blink" );
+	}
 }
