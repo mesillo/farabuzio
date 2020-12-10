@@ -42,6 +42,9 @@ void loop() {
 	}
 	evz.emit( "dots" );
 	if( counter++ > 3 ) {
+		evz.deleteHandler( "blink", handlerWriteBlink );
+	}
+	if( counter++ > 10 ) {
 		evz.deleteEvent( "blink" );
 	}
 }

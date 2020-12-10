@@ -24,12 +24,14 @@ class Eventazio {
 		int getHandlerSlot( tEventHandler[] );
 		void clearHandlers( int );
 		void invokeAllHandlers( int );
+		void removeHandler( int, tEventHandler );
 
 	public:
 		Eventazio( void );
 		void emit( const char* );
 		bool on( const char*, tEventHandler );
 		void deleteEvent( const char* );
+		void deleteHandler( const char*, tEventHandler );
 };
 
 #endif

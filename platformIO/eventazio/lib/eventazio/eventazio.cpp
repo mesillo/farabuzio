@@ -26,6 +26,13 @@ void Eventazio::deleteEvent( const char* eventName ) {
 	}
 }
 
+void Eventazio::deleteHandler( const char* eventName, tEventHandler eventHandler ) {
+	int index = getEventIndex( eventName );
+	if( index != -1 ) {
+		removeHandler( index, eventHandler );
+	}
+}
+
 void Eventazio::init( void ) {
 	unsigned int i;
 	for( i = 0 ; i < _EVENT_CAPABILITY_ ; i++ ) {
@@ -106,4 +113,12 @@ void Eventazio::clearHandlers( int index ) {
 	unsigned int i;
 	for( i = 0 ; i < _PER_EVENT_HANDLER_CAPABILITY_ ; i++ )
 		eventHandlers[index][i] = NULL;
+}
+
+void Eventazio::removeHandler( int eventIndex, tEventHandler eventHandler ) {
+	for( int index = 0 ; index < _EVENT_CAPABILITY_ ; index++ ) {
+		if( eventHandlers[ eventIndex ][ index ] == eventHandler ) {
+			eventHandlers[ eventIndex ][ index ] = NULL;
+		}
+	}
 }
