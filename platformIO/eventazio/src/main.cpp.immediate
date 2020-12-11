@@ -23,23 +23,28 @@ void handlerWriteDots( void ) {
 	Serial.println( "..." );
 }
 
-void handlerCount() {
-	static unsigned int count = 0;
-	Serial.println( count++ );
-}
-
 String *pippo;
 void setup() {
 	Serial.begin( 9600 );
 	pinMode( LED_BUILTIN, OUTPUT );
+	evz.on( "blink", handlerBlink );
+	evz.on( "blink", handlerWriteBlink );
 	evz.on( "dots", handlerWriteDots );
-	evz.on( "count", handlerCount );
-	evz.bufferedMode( true );
 	Serial.println( "Setup done..." );
 }
 
 void loop() {
-	evz.emit( "count" );
+	static unsigned int counter = 0;
+	int blinkTimes;
+	for( blinkTimes = 0 ; blinkTimes < 3 ; blinkTimes++ ) {
+		evz.emit( "blink" );
+		delay(INTERVAL);
+	}
 	evz.emit( "dots" );
-	delay( INTERVAL );
+	if( counter++ > 3 ) {
+		evz.deleteHandler( "blink", handlerWriteBlink );
+	}
+	if( counter++ > 10 ) {
+		evz.deleteEvent( "blink" );
+	}
 }

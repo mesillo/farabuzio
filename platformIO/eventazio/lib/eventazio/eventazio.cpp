@@ -7,7 +7,11 @@ Eventazio::Eventazio( void ) {
 void Eventazio::emit( const char* eventName ) {
 	int index = getEventIndex( eventName );
 	if( index != -1 ) {
-		invokeAllHandlers( index ); // TODO: insert a queuing logic.
+		if( mode == immediate ) {
+			invokeAllHandlers( index );
+		} else {
+			enqueueEvent( index );
+		}
 	}
 }
 
@@ -39,6 +43,15 @@ void Eventazio::init( void ) {
 		eventNames[ i ][ 0 ] = '\0';
 		clearHandlers( i );
 	}
+	bufferedMode( false );
+	initEventQueue();
+}
+
+void Eventazio::initEventQueue( void ) {
+	for( unsigned int i = 0 ; i < _EVENT_QUEUE_CAPABILITY_ ; i++ ) {
+		eventQueue[ i ] = -1;
+	}
+	eventQueueIndex = 0;
 }
 
 bool Eventazio::isValidEventName( const char* evNm ) {
@@ -120,5 +133,30 @@ void Eventazio::removeHandler( int eventIndex, tEventHandler eventHandler ) {
 		if( eventHandlers[ eventIndex ][ index ] == eventHandler ) {
 			eventHandlers[ eventIndex ][ index ] = NULL;
 		}
+	}
+}
+
+void Eventazio::enqueueEvent( int eventNumber ) {
+	if( eventQueueIndex < _EVENT_QUEUE_CAPABILITY_ ) { // a slot is available
+		eventQueue[ eventQueueIndex++ ] = eventNumber;
+	} else {
+		flushEvents();
+		enqueueEvent( eventNumber );
+	}
+}
+
+void Eventazio::flushEvents( void ) {
+	for( int i = 0 ; i < eventQueueIndex ; i++ ) {
+		invokeAllHandlers( eventQueue[ i ] );
+	}
+	initEventQueue();
+}
+
+void Eventazio::bufferedMode( bool enableBuffer ) {
+	if( mode == immediate && enableBuffer ) {
+		mode = buffered;
+	} else if( mode == buffered && ! enableBuffer ) {
+		flushEvents();
+		mode = immediate;
 	}
 }
