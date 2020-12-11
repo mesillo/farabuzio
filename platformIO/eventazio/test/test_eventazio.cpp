@@ -29,6 +29,7 @@ bool checkCount( int expected ) {
 
 void should_add_a_event_handler( void ) {
 	resetCounter();
+	evz.bufferedMode( false );
 	evz.on( "count", increaseCounter );
 	evz.emit( "count" );
 	evz.deleteEvent( "count" );
@@ -37,6 +38,7 @@ void should_add_a_event_handler( void ) {
 
 void should_remove_a_event_handler( void ) {
 	resetCounter();
+	evz.bufferedMode( false );
 	evz.on( "count", increaseCounter );
 	evz.deleteEvent( "count" );
 	evz.emit( "count" );
@@ -45,6 +47,7 @@ void should_remove_a_event_handler( void ) {
 
 void should_remove_a_single_handler_for_a_event( void ) {
 	resetCounter();
+	evz.bufferedMode( false );
 	evz.on( "count", increaseCounter );
 	evz.on( "count", decreaseCounter );
 	evz.deleteHandler( "count", decreaseCounter );
@@ -55,6 +58,7 @@ void should_remove_a_single_handler_for_a_event( void ) {
 
 void should_manage_multiple_handlers_for_a_event( void ) {
 	resetCounter();
+	evz.bufferedMode( false );
 	evz.on( "count", increaseCounter );
 	evz.on( "count", decreaseCounter );
 	evz.emit( "count" );
@@ -64,6 +68,7 @@ void should_manage_multiple_handlers_for_a_event( void ) {
 
 void should_manage_multiple_events( void ) {
 	resetCounter();
+	evz.bufferedMode( false );
 	evz.on( "add", increaseCounter );
 	evz.on( "remove", decreaseCounter );
 	evz.emit( "add" );
@@ -71,6 +76,50 @@ void should_manage_multiple_events( void ) {
 	evz.deleteEvent( "add" );
 	evz.deleteEvent( "remove" );
 	TEST_ASSERT( checkCount( 0 ) );
+}
+
+void should_buffering_events( void ) {
+	resetCounter();
+	evz.bufferedMode( true );
+	evz.on( "count", increaseCounter );
+	evz.emit( "count" );
+	evz.emit( "count" );
+	evz.emit( "count" );
+	evz.deleteEvent( "count" );
+	TEST_ASSERT( checkCount( 0 ) );
+	evz.flushEvents();
+}
+
+void should_flush_buffered_events( void ) {
+	resetCounter();
+	evz.bufferedMode( true );
+	evz.on( "count", increaseCounter );
+	evz.emit( "count" );
+	evz.emit( "count" );
+	evz.emit( "count" );
+	evz.flushEvents();
+	evz.deleteEvent( "count" );
+	TEST_ASSERT( checkCount( 3 ) );
+}
+
+void should_automatically_flush_buffered_events( void ) {
+	resetCounter();
+	evz.bufferedMode( true );
+	evz.on( "count", increaseCounter );
+	evz.emit( "count" );
+	evz.emit( "count" );
+	evz.emit( "count" );
+	evz.emit( "count" );
+	evz.emit( "count" );
+	evz.emit( "count" );
+	evz.emit( "count" );
+	evz.emit( "count" );
+	evz.emit( "count" );
+	evz.emit( "count" );
+	evz.emit( "count" );
+	evz.deleteEvent( "count" );
+	TEST_ASSERT( checkCount( 10 ) );
+	evz.flushEvents();
 }
 
 /// SETUP and RUN ///
@@ -86,6 +135,9 @@ void loop( void ) {
 	RUN_TEST( should_remove_a_single_handler_for_a_event );
 	RUN_TEST( should_manage_multiple_handlers_for_a_event );
 	RUN_TEST( should_manage_multiple_events );
+	RUN_TEST( should_buffering_events );
+	RUN_TEST( should_flush_buffered_events );
+	RUN_TEST( should_automatically_flush_buffered_events );
 	Serial.println( "[==================================================]" );
 	delay( 10000 );
 }
