@@ -52,7 +52,9 @@ void Timerazio::setHandler( tmzHandlerFn handler ) {
 bool Timerazio::loop( void ) {
 	if( handlerFn != NULL ) {
 		if( check() ) {
-			handlerFn();
+			if( handlerFn != NULL ) {
+				handlerFn();
+			}
 			return true;
 		}
 	}
