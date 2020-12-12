@@ -8,7 +8,7 @@
 #define _MAX_EVENT_NAME_LEN_ 10
 #define _EVENT_QUEUE_CAPABILITY_ 10
 
-typedef void ( *tEventHandler )();
+typedef void ( *tEventHandler )( void );
 
 typedef enum eTriggerMode {
 	immediate,
@@ -38,12 +38,48 @@ class Eventazio {
 		void enqueueEvent( int );
 
 	public:
+		/**
+		 *  Constructor
+		 *  @param void
+		 */
 		Eventazio( void );
+		/**
+		 * Used to emit a Event.
+		 * @param char* the event name
+		 * @return void
+		 */
 		void emit( const char* );
+		/**
+		 * Bind the Event Handler to a Event
+		 * @param char* the Event name
+		 * @param tEventHandler the Event Handler
+		 * @return bool the result of operation
+		 */
 		bool on( const char*, tEventHandler );
+		/**
+		 * Delete a Event (and all relative handlers)
+		 * @param char* the Event name
+		 * @return void
+		 */
 		void deleteEvent( const char* );
+		/**
+		 * Delete the given Event Handler for the given Event.
+		 * @param char* the Event name
+		 * @param tEventHandler the Event Handler
+		 * @return void
+		 */
 		void deleteHandler( const char*, tEventHandler );
+		/**
+		 * Execute all Handlers for cached Events
+		 * @param void
+		 * @return void
+		 */
 		void flushEvents( void );
+		/**
+		 * Set or Unset the Buffered Mode for events execution.
+		 * @param bool the Buffered Mode enabling flag
+		 * @return void
+		 */ 
 		void bufferedMode( bool );
 };
 
