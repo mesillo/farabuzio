@@ -8,8 +8,13 @@
 #define _MAX_EVENT_NAME_LEN_ 10
 #define _EVENT_QUEUE_CAPABILITY_ 10
 
+/**
+ * Type for Event Handlers (no params no return)
+ */
 typedef void ( *tEventHandler )( void );
-
+/**
+ * Type for Event Execution mode.
+ */
 typedef enum eTriggerMode {
 	immediate,
 	buffered
