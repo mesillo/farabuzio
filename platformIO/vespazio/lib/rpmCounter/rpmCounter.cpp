@@ -2,40 +2,46 @@
 
 #include "rpmCounter.h"
 
+volatile unsigned int RpmCounter::count = 0;
+unsigned int RpmCounter::pNm = _RPMCOUNTER_DEFAULT_PIN_;
+unsigned int RpmCounter::md = _RPMCOUNTER_DEFAULT_MODE_;
+bool RpmCounter::enabled = false;
+
 void RpmCounter::doCount( void ) {
-	count++;
+	RpmCounter::count++;
 }
 
-void RpmCounter::init( void ) {
-	pNm = _RPMCOUNTER_DEFAULT_PIN_;
-	md = _RPMCOUNTER_DEFAULT_MODE_;
-	enabled = false;
+void RpmCounter::init( void ) { // TODO: is it needed?
+	RpmCounter::count = 0;
+	RpmCounter::pNm = _RPMCOUNTER_DEFAULT_PIN_;
+	RpmCounter::md = _RPMCOUNTER_DEFAULT_MODE_;
+	RpmCounter::enabled = false;
 }
 void RpmCounter::enable( void ) {
-	if( ! enabled ) {
-		attachInterrupt( digitalPinToInterrupt( pNm ), doCount, md );
-		enabled = true;
+	if( ! RpmCounter::enabled ) {
+		attachInterrupt( digitalPinToInterrupt( RpmCounter::pNm ), RpmCounter::doCount, RpmCounter::md );
+		RpmCounter::enabled = true;
 	}
 }
 void RpmCounter::setPin( unsigned int pin ) {
-	if( ! enabled ) {
-		pNm = pin;
+	if( ! RpmCounter::enabled ) {
+		RpmCounter::pNm = pin;
 	}
 }
 void RpmCounter::setMode( unsigned int mode ) {
-	if( ! enabled ) {
-		md = mode; 
+	if( ! RpmCounter::enabled ) {
+		RpmCounter::md = mode; 
 	}
 }
 void RpmCounter::disable( void ) {
-	if( enabled ) {
-		detachInterrupt( digitalPinToInterrupt( pNm ) );
-		enabled = false;
+	if( RpmCounter::enabled ) {
+		detachInterrupt( digitalPinToInterrupt( RpmCounter::pNm ) );
+		RpmCounter::enabled = false;
 	}
 }
 void RpmCounter::reset( void ) {
-	count = 0;
+	RpmCounter::count = 0;
 }
 unsigned int RpmCounter::getCount( void ) {
-	return count;
+	return RpmCounter::count;
 }
