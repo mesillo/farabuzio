@@ -2,10 +2,13 @@
 
 #include "rpmCounter.h"
 
+#define MINSAMPLES 30
+
 volatile unsigned int RpmCounter::count = 0;
 unsigned int RpmCounter::pNm = _RPMCOUNTER_DEFAULT_PIN_;
 unsigned int RpmCounter::md = _RPMCOUNTER_DEFAULT_MODE_;
 bool RpmCounter::enabled = false;
+unsigned long RpmCounter::strTm = millis();
 
 void RpmCounter::doCount( void ) {
 	RpmCounter::count++;
@@ -16,6 +19,7 @@ void RpmCounter::init( void ) { // TODO: is it needed?
 	RpmCounter::pNm = _RPMCOUNTER_DEFAULT_PIN_;
 	RpmCounter::md = _RPMCOUNTER_DEFAULT_MODE_;
 	RpmCounter::enabled = false;
+	RpmCounter::strTm = millis();
 }
 void RpmCounter::enable( void ) {
 	if( ! RpmCounter::enabled ) {
@@ -44,4 +48,23 @@ void RpmCounter::reset( void ) {
 }
 unsigned int RpmCounter::getCount( void ) {
 	return RpmCounter::count;
+}
+float RpmCounter::getFrequency( void ) {
+	unsigned int cnt = RpmCounter::count;  // TODO: call getCount instead?
+	//if( cnt == 0 ) {
+	if( cnt < MINSAMPLES ) {
+		return -1; // TODO: Better value
+	}
+	RpmCounter::count = 0; // TODO: call reset instead?
+
+	unsigned long now = millis();
+	if( now == RpmCounter::strTm ) {
+		return -1; // TODO: Better value
+	}
+	float elapsed = ( now - RpmCounter::strTm ); // / 1000;
+	RpmCounter::strTm = now; // TODO: write and call a method to do this?
+
+	// return elapsed;
+	// return cnt;
+	return ( cnt / elapsed ) * 1000;
 }

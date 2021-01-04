@@ -1,10 +1,9 @@
 #ifndef _RPMCOUNTER_HEADERS_
 #define _RPMCOUNTER_HEADERS_
 
-//#include <Arduino.h>
+#include <Arduino.h>
 
-//#define _RPMCOUNTER_DEFAULT_MODE_ RISING
-#define _RPMCOUNTER_DEFAULT_MODE_ 3
+#define _RPMCOUNTER_DEFAULT_MODE_ RISING
 #define _RPMCOUNTER_DEFAULT_PIN_ 2 // For UNO board
 
 class RpmCounter {
@@ -13,6 +12,7 @@ class RpmCounter {
 		static unsigned int pNm;
 		static unsigned int md;
 		static bool enabled;
+		static unsigned long strTm;
 
 		static void doCount( void );
 
@@ -24,6 +24,7 @@ class RpmCounter {
 		static void disable( void );
 		static void reset( void );
 		static unsigned int getCount( void );
+		static float getFrequency( void );
 };
 
 #endif
