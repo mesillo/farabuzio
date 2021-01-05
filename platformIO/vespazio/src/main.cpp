@@ -4,9 +4,10 @@
 #include <rpmCounter.h>
 
 #define PINTONE 8
-#define PINFREQUENCY 12000 // 16 <-> 200 Hz : 1000 <-> 12000 RPM
+#define PINFREQUENCY 117 // 16 <-> 200 Hz : 1000 <-> 12000 RPM (tone() low limit 31Hz)
 
-int prevFreq = -1;
+//int prevFreq = -1;
+int prevRpm = -1;
 
 void setup() {
 	Serial.begin( 9600 );
@@ -18,10 +19,16 @@ void setup() {
 }
 
 void loop() {
-	// float freq = RpmCounter::getFrequency();
-	int freq = (int) RpmCounter::getFrequency();
-	if( freq != prevFreq && freq != -1 ) {
-		prevFreq = freq;
-		Serial.println( freq );
+	int rpm = RpmCounter::getRPM();
+	if( rpm != prevRpm && rpm != -1 ) {
+		prevRpm = rpm;
+		Serial.println( rpm );
 	}
+	//////////////////////////////////////////
+	// float freq = RpmCounter::getFrequency();
+	//int freq = (int) RpmCounter::getFrequency();
+	//if( freq != prevFreq && freq != -1 ) {
+	//	prevFreq = freq;
+	//	Serial.println( freq );
+	//}
 }

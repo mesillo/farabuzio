@@ -6,6 +6,12 @@
 #define _RPMCOUNTER_DEFAULT_MODE_ RISING
 #define _RPMCOUNTER_DEFAULT_PIN_ 2 // For UNO board
 
+#define MINSAMPLES 8
+
+#define HZ_TO_RPM_FACTOR 60
+
+#define RPMCOUNTER_UNAVAILABLE -1
+
 class RpmCounter {
 	private:
 		static volatile unsigned int count;
@@ -25,6 +31,7 @@ class RpmCounter {
 		static void reset( void );
 		static unsigned int getCount( void );
 		static float getFrequency( void );
+		static int getRPM( void );
 };
 
 #endif

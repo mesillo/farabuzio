@@ -2,8 +2,6 @@
 
 #include "rpmCounter.h"
 
-#define MINSAMPLES 30
-
 volatile unsigned int RpmCounter::count = 0;
 unsigned int RpmCounter::pNm = _RPMCOUNTER_DEFAULT_PIN_;
 unsigned int RpmCounter::md = _RPMCOUNTER_DEFAULT_MODE_;
@@ -51,20 +49,22 @@ unsigned int RpmCounter::getCount( void ) {
 }
 float RpmCounter::getFrequency( void ) {
 	unsigned int cnt = RpmCounter::count;  // TODO: call getCount instead?
-	//if( cnt == 0 ) {
 	if( cnt < MINSAMPLES ) {
-		return -1; // TODO: Better value
+		return RPMCOUNTER_UNAVAILABLE;
 	}
 	RpmCounter::count = 0; // TODO: call reset instead?
 
 	unsigned long now = millis();
 	if( now == RpmCounter::strTm ) {
-		return -1; // TODO: Better value
+		return RPMCOUNTER_UNAVAILABLE;
 	}
-	float elapsed = ( now - RpmCounter::strTm ); // / 1000;
+	float elapsed = ( now - RpmCounter::strTm );
 	RpmCounter::strTm = now; // TODO: write and call a method to do this?
 
-	// return elapsed;
-	// return cnt;
 	return ( cnt / elapsed ) * 1000;
 }
+int RpmCounter::getRPM( void ) {
+	float frequency = RpmCounter::getFrequency();
+	return frequency == RPMCOUNTER_UNAVAILABLE ? RPMCOUNTER_UNAVAILABLE : (int) frequency * HZ_TO_RPM_FACTOR;
+}
+
