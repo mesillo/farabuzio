@@ -7,7 +7,7 @@
 #define PINFREQUENCY 117 // 16 <-> 200 Hz : 1000 <-> 12000 RPM (tone() low limit 31Hz)
 
 //int prevFreq = -1;
-int prevRpm = -1;
+int prevRpm = RPMCOUNTER_UNAVAILABLE;
 
 void setup() {
 	Serial.begin( 9600 );
@@ -20,7 +20,7 @@ void setup() {
 
 void loop() {
 	int rpm = RpmCounter::getRPM();
-	if( rpm != prevRpm && rpm != -1 ) {
+	if( rpm != prevRpm && rpm != RPMCOUNTER_UNAVAILABLE ) {
 		prevRpm = rpm;
 		Serial.println( rpm );
 	}
