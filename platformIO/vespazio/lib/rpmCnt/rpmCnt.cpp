@@ -2,7 +2,7 @@
 
 #include "rpmCnt.h"
 
-volatile unsigned long RpmCnt::prevMicros = micros();
+volatile unsigned long RpmCnt::prevMicros = _RPMCNT_MICROS_INVALID_VALUE_;
 volatile long RpmCnt::period = RPMCNT_UNAVAILABLE; // in microsec
 unsigned int RpmCnt::pNm = _RPMCNT_DEFAULT_PIN_;
 unsigned int RpmCnt::md = _RPMCNT_DEFAULT_MODE_;
@@ -11,12 +11,16 @@ bool RpmCnt::enabled = false;
 void RpmCnt::getPeriod( void ) {
 	// value returned by millis() will not increment -> https://www.arduino.cc/reference/en/language/functions/external-interrupts/attachinterrupt/
 	unsigned long now = micros();
-	RpmCnt::period = now - RpmCnt::prevMicros;
+	if( now > RpmCnt::prevMicros && RpmCnt::prevMicros != _RPMCNT_MICROS_INVALID_VALUE_ ) { // else we have hit the overflow... 70 min circa.
+		RpmCnt::period = now - RpmCnt::prevMicros;
+	} else {
+		RpmCnt::period = RPMCNT_UNAVAILABLE;
+	}
 	RpmCnt::prevMicros = now;
 }
 
 void RpmCnt::init( void ) { // TODO: is it needed?
-	RpmCnt::prevMicros = micros();
+	RpmCnt::prevMicros = _RPMCNT_MICROS_INVALID_VALUE_;
 	RpmCnt::period = RPMCNT_UNAVAILABLE;
 	RpmCnt::pNm = _RPMCNT_DEFAULT_PIN_;
 	RpmCnt::md = _RPMCNT_DEFAULT_MODE_;
@@ -50,7 +54,6 @@ void RpmCnt::reset( void ) {
 }
 float RpmCnt::getFrequency( void ) {
 	return RpmCnt::period != RPMCNT_UNAVAILABLE ? 1000000 / RpmCnt::period : RPMCNT_UNAVAILABLE;
-	// return RpmCnt::period;
 }
 int RpmCnt::getRPM( void ) {
 	float frequency = RpmCnt::getFrequency();

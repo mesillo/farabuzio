@@ -7,7 +7,7 @@
 #include <rpmCnt.h>
 
 #define PINTONE 8
-#define PINFREQUENCY 200 // 16 <-> 200 Hz : 1000 <-> 12000 RPM (tone() low limit 31Hz)
+#define PINFREQUENCY 400 // 16 <-> 200 Hz : 1000 <-> 12000 RPM (tone() low limit 31Hz)
 
 int prevFreq = RPMCNT_UNAVAILABLE;
 //int prevRpm = RPMCOUNTER_UNAVAILABLE;
@@ -16,7 +16,7 @@ int prevRpm = RPMCNT_UNAVAILABLE;
 U8X8_SSD1306_128X64_NONAME_HW_I2C u8x8( U8X8_PIN_NONE );
 
 void setup() {
-	//Serial.begin( 9600 );
+	Serial.begin( 9600 );
 	u8x8.begin();
 	u8x8.setFont(u8x8_font_courR24_3x4_n);
 	// RpmCounter::init();
@@ -40,7 +40,7 @@ void loop() {
 		u8x8.setCursor( 2, 3 );
 		u8x8.print( freq );
 		delay( 125 );
-		//Serial.println( freq );
+		Serial.println( freq );
 	}
 	//////////////////////////////////////////
 	// int rpm = RpmCounter::getRPM();

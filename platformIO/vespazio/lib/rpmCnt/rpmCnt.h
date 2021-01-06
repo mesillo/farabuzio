@@ -9,6 +9,7 @@
 #define RPMCNT_UNAVAILABLE -1
 
 #define _HZ_TO_RPM_ 60
+#define _RPMCNT_MICROS_INVALID_VALUE_ 0
 
 class RpmCnt {
 	private:
