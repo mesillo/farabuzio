@@ -11,7 +11,8 @@ bool RpmCnt::enabled = false;
 void RpmCnt::getPeriod( void ) {
 	// value returned by millis() will not increment -> https://www.arduino.cc/reference/en/language/functions/external-interrupts/attachinterrupt/
 	unsigned long now = micros();
-	if( now > RpmCnt::prevMicros && RpmCnt::prevMicros != _RPMCNT_MICROS_INVALID_VALUE_ ) { // else we have hit the overflow... 70 min circa.
+	if( now > RpmCnt::prevMicros &&
+		RpmCnt::prevMicros != _RPMCNT_MICROS_INVALID_VALUE_ ) { // else we have hit the overflow... 70 min circa.
 		RpmCnt::period = now - RpmCnt::prevMicros;
 	} else {
 		RpmCnt::period = RPMCNT_UNAVAILABLE;
@@ -53,7 +54,12 @@ void RpmCnt::reset( void ) {
 	RpmCnt::period = RPMCNT_UNAVAILABLE;
 }
 float RpmCnt::getFrequency( void ) {
-	return RpmCnt::period != RPMCNT_UNAVAILABLE ? 1000000 / RpmCnt::period : RPMCNT_UNAVAILABLE;
+	if( RpmCnt::period != RPMCNT_UNAVAILABLE &&
+		RpmCnt::period < _RPMCNT_MAX_PERIOD_ ) {
+		return 1000000 / RpmCnt::period;
+	} else {
+		return RPMCNT_UNAVAILABLE;
+	}
 }
 int RpmCnt::getRPM( void ) {
 	float frequency = RpmCnt::getFrequency();

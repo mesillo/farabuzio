@@ -10,6 +10,7 @@
 
 #define _HZ_TO_RPM_ 60
 #define _RPMCNT_MICROS_INVALID_VALUE_ 0
+#define _RPMCNT_MAX_PERIOD_ 200000 // 3 * 15 Hz period
 
 class RpmCnt {
 	private:
