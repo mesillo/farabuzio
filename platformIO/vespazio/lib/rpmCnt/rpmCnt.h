@@ -12,7 +12,7 @@
 
 class RpmCnt {
 	private:
-		static volatile unsigned long prevMillis;
+		static volatile unsigned long prevMicros;
 		static volatile long period;
 		static unsigned int pNm;
 		static unsigned int md;
