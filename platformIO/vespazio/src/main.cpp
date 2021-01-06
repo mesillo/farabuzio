@@ -38,6 +38,7 @@ void loop() {
 		prevFreq = freq;
 		u8x8.setCursor( 2, 3 );
 		u8x8.print( freq );
+		delay( 500 );
 		//Serial.println( freq );
 	}
 	//////////////////////////////////////////
