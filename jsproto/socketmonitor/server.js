@@ -3,10 +3,23 @@
 const TcpSocket = require( "./lib/svr/tcpSocket" );
 const SocketMonitor = require( "./lib/socketMonitor/socketMonitor" );
 
-let server = new TcpSocket( 12345 );
+const PORT = 12345;
+const PERIOD = 1500;
 
-let socketMonitor = new SocketMonitor();
+class Server {
+	constructor( port, period ) {
+		this.port = port;
+		this.period = period;
+		this.server = new TcpSocket( port );
+		this.socketMonitor = new SocketMonitor( port );
+	}
 
-setInterval( () => {
-	socketMonitor.getData();
-}, 5000 );
+	startMonitoring() {
+		this.monitor = setInterval( () => {
+			this.socketMonitor.getData();
+		}, this.period );
+	}
+}
+
+let srv = new Server( PORT, PERIOD );
+srv.startMonitoring();
