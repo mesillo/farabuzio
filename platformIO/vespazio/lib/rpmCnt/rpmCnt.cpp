@@ -20,6 +20,14 @@ void RpmCnt::getPeriod( void ) {
 	RpmCnt::prevMicros = now;
 }
 
+bool RpmCnt::isMeasureValid( void ) {
+	if( micros() < RpmCnt::prevMicros + _RPMCNT_MAX_PERIOD_ ) {
+		return true;
+	}
+	return false;
+}
+
+
 void RpmCnt::init( void ) { // TODO: is it needed?
 	RpmCnt::prevMicros = _RPMCNT_MICROS_INVALID_VALUE_;
 	RpmCnt::period = RPMCNT_UNAVAILABLE;
@@ -55,7 +63,7 @@ void RpmCnt::reset( void ) {
 }
 float RpmCnt::getFrequency( void ) {
 	if( RpmCnt::period != RPMCNT_UNAVAILABLE &&
-		RpmCnt::period < _RPMCNT_MAX_PERIOD_ ) {
+		RpmCnt::isMeasureValid() ) {
 		return 1000000 / RpmCnt::period;
 	} else {
 		return RPMCNT_UNAVAILABLE;

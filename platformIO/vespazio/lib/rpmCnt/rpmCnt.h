@@ -21,6 +21,7 @@ class RpmCnt {
 		static bool enabled;
 
 		static void getPeriod( void );
+		static bool isMeasureValid( void );
 
 	public:
 		static void init( void ); // TODO: is it needed?
