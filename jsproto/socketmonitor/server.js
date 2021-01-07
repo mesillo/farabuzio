@@ -4,7 +4,7 @@ const TcpSocket = require( "./lib/svr/tcpSocket" );
 const SocketMonitor = require( "./lib/socketMonitor/socketMonitor" );
 
 const PORT = 12345;
-const PERIOD = 1500;
+const PERIOD = 5000;
 
 class Server {
 	constructor( port, period ) {

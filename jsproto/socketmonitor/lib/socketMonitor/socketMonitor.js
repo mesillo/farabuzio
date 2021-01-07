@@ -69,7 +69,11 @@ class SocketMonitor {
 	}
 
 	getData() {
-		child_process.exec( LSOF_COMMAND.replace( "LISTENPORT", this.port ), ( error, stdout, stderr ) => {
+		child_process.exec(
+			LSOF_COMMAND
+				.replace( "LISTENPORT", this.port )
+				//.replace( "SERVERPID", process.pid )
+			, ( error, stdout, stderr ) => {
 			if( error ) {
 				throw error;
 			}
