@@ -79,7 +79,11 @@ class SocketMonitor {
 			if( stderr ) {
 				throw new Error( stderr );
 			}
-			callback( this.countConnectionPerStatus( this.parseResult( stdout ) ) );
+			let connectionCount = this.countConnectionPerStatus( this.parseResult( stdout ) );
+			callback( {
+				port: this.port,
+				stats: connectionCount
+			} );
 			//console.dir( this.countConnectionPerStatus( this.parseResult( stdout ) ) );
 			//console.dir( this.parseResult( stdout ) );
 		} );
