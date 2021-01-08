@@ -10,6 +10,8 @@ const LSOF_COMMAND = "lsof -i tcp:LISTENPORT -n -P -F cpnT";
 class SocketMonitor {
 	constructor( port ) {
 		this.port = port;
+		this.lsof_command = LSOF_COMMAND.replace( "LISTENPORT", this.port );
+		//.replace( "SERVERPID", process.pid )
 	}
 
 	parseResult( rawResult ) {
@@ -68,19 +70,17 @@ class SocketMonitor {
 		return counts;
 	}
 
-	getData() {
+	getData( callback ) {
 		child_process.exec(
-			LSOF_COMMAND
-				.replace( "LISTENPORT", this.port )
-				//.replace( "SERVERPID", process.pid )
-			, ( error, stdout, stderr ) => {
+			this.lsof_command, ( error, stdout, stderr ) => {
 			if( error ) {
 				throw error;
 			}
 			if( stderr ) {
 				throw new Error( stderr );
 			}
-			console.dir( this.countConnectionPerStatus( this.parseResult( stdout ) ) );
+			callback( this.countConnectionPerStatus( this.parseResult( stdout ) ) );
+			//console.dir( this.countConnectionPerStatus( this.parseResult( stdout ) ) );
 			//console.dir( this.parseResult( stdout ) );
 		} );
 	}

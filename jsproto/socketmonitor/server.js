@@ -14,12 +14,12 @@ class Server {
 		this.socketMonitor = new SocketMonitor( port );
 	}
 
-	startMonitoring() {
+	startMonitoring( callback ) {
 		this.monitor = setInterval( () => {
-			this.socketMonitor.getData();
+			this.socketMonitor.getData( callback );
 		}, this.period );
 	}
 }
 
 let srv = new Server( PORT, PERIOD );
-srv.startMonitoring();
+srv.startMonitoring( console.dir );
