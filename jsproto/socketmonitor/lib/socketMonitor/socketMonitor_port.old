@@ -2,23 +2,24 @@
 
 const child_process = require( "child_process" );
 
-//const LSOF_COMMAND = "lsof -p PROCESSPID -n -P -F cpnT";
-const LSOF_COMMAND = "lsof -p PROCESSPID -n -P -F nT"; // -i seems not work with -p :-(
-
+//const LSOF_COMMAND = "lsof -i tcp -n -P -F cpnT";
+const LSOF_COMMAND = "lsof -i tcp:LISTENPORT -n -P -F cpnT";
+//const LSOF_COMMAND = "lsof -R -i tcp:LISTENPORT -n -P -F cpnT";
+//const LSOF_COMMAND = "lsof -p SERVERPID -i tcp -n -P -F cpnT";
 
 class SocketMonitor {
-	constructor() {
-		this.pid = process.pid;
-		this.lsof_command = LSOF_COMMAND.replace( "PROCESSPID", this.pid );
-		console.log( this.lsof_command );
+	constructor( port ) {
+		this.port = port;
+		this.lsof_command = LSOF_COMMAND.replace( "LISTENPORT", this.port );
+		//.replace( "SERVERPID", process.pid )
 	}
 
 	parseResult( rawResult ) {
 		let lines = rawResult.split( "\n" );
 		let stats = [];
 
-		//let pid = 0;
-		//let cmd = null;
+		let pid = 0;
+		let cmd = null;
 		let sock = null;
 		let state = null;
 		let prefix = null;
@@ -28,12 +29,12 @@ class SocketMonitor {
 			line = line.slice( 1 );
 	  
 			switch( s ) {
-				//case "p": // pid
-				//	pid = line;
-				//	break;
-				//case "c": // command
-				//	cmd = line;
-				//	break;
+				case "p": // pid
+					pid = line;
+					break;
+				case "c": // command
+					cmd = line;
+					break;
 				case "n": // socket description
 					sock = line;
 					break;
@@ -42,9 +43,8 @@ class SocketMonitor {
 					if( prefix === "ST" ) { // connection status
 						state = line.slice( 3 );
 						stats.push( {
-							//pid: pid,
-							//cmd: cmd,
-							port: this.getPortFromSocketDescription( sock ),
+							pid: pid,
+							cmd: cmd,
 							sock: sock,
 							state: state
 						} );
@@ -54,10 +54,6 @@ class SocketMonitor {
 		};
 
 		return stats;
-	}
-
-	getPortFromSocketDescription( sockDesc ) {
-		return sockDesc.split( "->" )[0].split( ":" )[1];
 	}
 
 	countConnectionPerStatus( stats ) {
@@ -85,11 +81,11 @@ class SocketMonitor {
 			}
 			let connectionCount = this.countConnectionPerStatus( this.parseResult( stdout ) );
 			callback( {
-				pid: this.pid,
+				port: this.port,
 				stats: connectionCount
 			} );
 			//console.dir( this.countConnectionPerStatus( this.parseResult( stdout ) ) );
-			console.dir( this.parseResult( stdout ) );
+			//console.dir( this.parseResult( stdout ) );
 		} );
 	}
 }
