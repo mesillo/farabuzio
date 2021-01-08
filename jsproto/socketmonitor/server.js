@@ -4,13 +4,15 @@ const TcpSocket = require( "./lib/svr/tcpSocket" );
 const SocketMonitor = require( "./lib/socketMonitor/socketMonitor" );
 
 const PORT = 12345;
+const PORT2 = 56789;
 const PERIOD = 5000;
 
 class Server {
-	constructor( port, period ) {
+	constructor( port, port2, period ) {
 		this.port = port;
 		this.period = period;
 		this.server = new TcpSocket( port );
+		this.server2 = new TcpSocket( port2 );
 		this.socketMonitor = new SocketMonitor( port );
 	}
 
@@ -21,5 +23,5 @@ class Server {
 	}
 }
 
-let srv = new Server( PORT, PERIOD );
+let srv = new Server( PORT, PORT2, PERIOD );
 srv.startMonitoring( console.dir );

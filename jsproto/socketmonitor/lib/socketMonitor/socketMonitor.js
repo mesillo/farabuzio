@@ -2,23 +2,18 @@
 
 const child_process = require( "child_process" );
 
-//const LSOF_COMMAND = "lsof -p PROCESSPID -n -P -F cpnT";
 const LSOF_COMMAND = "lsof -p PROCESSPID -n -P -F nT"; // -i seems not work with -p :-(
-
 
 class SocketMonitor {
 	constructor() {
 		this.pid = process.pid;
 		this.lsof_command = LSOF_COMMAND.replace( "PROCESSPID", this.pid );
-		console.log( this.lsof_command );
 	}
 
 	parseResult( rawResult ) {
 		let lines = rawResult.split( "\n" );
 		let stats = [];
 
-		//let pid = 0;
-		//let cmd = null;
 		let sock = null;
 		let state = null;
 		let prefix = null;
@@ -28,12 +23,6 @@ class SocketMonitor {
 			line = line.slice( 1 );
 	  
 			switch( s ) {
-				//case "p": // pid
-				//	pid = line;
-				//	break;
-				//case "c": // command
-				//	cmd = line;
-				//	break;
 				case "n": // socket description
 					sock = line;
 					break;
@@ -42,8 +31,6 @@ class SocketMonitor {
 					if( prefix === "ST" ) { // connection status
 						state = line.slice( 3 );
 						stats.push( {
-							//pid: pid,
-							//cmd: cmd,
 							port: this.getPortFromSocketDescription( sock ),
 							sock: sock,
 							state: state
@@ -61,13 +48,16 @@ class SocketMonitor {
 	}
 
 	countConnectionPerStatus( stats ) {
-		let counts = [];
+		let counts = {};
 
 		for( let stat of stats ) {
-			if( counts[stat.state] === undefined ) {
-				counts[stat.state] = 1;
+			if( counts[stat.port] === undefined ) {
+				counts[stat.port] = {};
+			}
+			if( counts[stat.port][stat.state] === undefined ) {
+				counts[stat.port][stat.state] = 1;
 			} else {
-				counts[stat.state]++;
+				counts[stat.port][stat.state]++;
 			}
 		}
 
@@ -83,13 +73,16 @@ class SocketMonitor {
 			if( stderr ) {
 				throw new Error( stderr );
 			}
-			let connectionCount = this.countConnectionPerStatus( this.parseResult( stdout ) );
+			let result = this.parseResult( stdout );
+			let connectionCount = this.countConnectionPerStatus( result );
 			callback( {
 				pid: this.pid,
+				count: result.length,
 				stats: connectionCount
 			} );
 			//console.dir( this.countConnectionPerStatus( this.parseResult( stdout ) ) );
-			console.dir( this.parseResult( stdout ) );
+			//console.dir( this.parseResult( stdout ) );
+			//console.log( "===============" );
 		} );
 	}
 }
