@@ -31,7 +31,6 @@ class SocketMonitor {
 					if( prefix === "ST" ) { // connection status
 						state = line.slice( 3 );
 						stats.push( {
-							port: this.getPortFromSocketDescription( sock ),
 							sock: sock,
 							state: state
 						} );
@@ -51,13 +50,14 @@ class SocketMonitor {
 		let counts = {};
 
 		for( let stat of stats ) {
-			if( counts[stat.port] === undefined ) {
-				counts[stat.port] = {};
+			let port = this.getPortFromSocketDescription( stat.sock );
+			if( counts[port] === undefined ) {
+				counts[port] = {};
 			}
-			if( counts[stat.port][stat.state] === undefined ) {
-				counts[stat.port][stat.state] = 1;
+			if( counts[port][stat.state] === undefined ) {
+				counts[port][stat.state] = 1;
 			} else {
-				counts[stat.port][stat.state]++;
+				counts[port][stat.state]++;
 			}
 		}
 
