@@ -1,6 +1,7 @@
 "use strict";
 
 const TcpSocket = require( "./lib/svr/tcpSocket" );
+const TcpClient = require( "./lib/clt/tcpClient" );
 const SocketMonitor = require( "./lib/socketMonitor/socketMonitor" );
 
 const PORT = 12345;
@@ -25,3 +26,4 @@ class Server {
 
 let srv = new Server( PORT, PORT2, PERIOD );
 srv.startMonitoring( console.dir );
+let clt = new TcpClient( 2468 );
