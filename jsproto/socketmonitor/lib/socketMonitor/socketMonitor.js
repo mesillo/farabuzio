@@ -10,7 +10,7 @@ class SocketMonitor {
 		this.lsof_command = LSOF_COMMAND.replace( "PROCESSPID", this.pid );
 	}
 
-	parseResult( rawResult ) {
+	_parseResult( rawResult ) {
 		let lines = rawResult.split( "\n" );
 		let stats = [];
 
@@ -42,15 +42,15 @@ class SocketMonitor {
 		return stats;
 	}
 
-	getPortFromSocketDescription( sockDesc ) {
+	_getPortFromSocketDescription( sockDesc ) {
 		return sockDesc.split( "->" )[0].split( ":" )[1];
 	}
 
-	countConnectionPerStatus( stats ) {
+	_countConnectionPerStatus( stats ) {
 		let counts = {};
 
 		for( let stat of stats ) {
-			let port = this.getPortFromSocketDescription( stat.sock );
+			let port = this._getPortFromSocketDescription( stat.sock );
 			if( counts[port] === undefined ) {
 				counts[port] = {};
 			}
@@ -73,8 +73,8 @@ class SocketMonitor {
 			if( stderr ) {
 				throw new Error( stderr );
 			}
-			let result = this.parseResult( stdout );
-			let connectionCount = this.countConnectionPerStatus( result );
+			let result = this._parseResult( stdout );
+			let connectionCount = this._countConnectionPerStatus( result );
 			callback( {
 				pid: this.pid,
 				count: result.length,
