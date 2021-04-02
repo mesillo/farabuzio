@@ -58,6 +58,7 @@ if( process.argv[ 2 ] !== undefined ) {
 	let inputfile = process.argv[ 2 ];
 	packets = JSON.parse( fs.readFileSync( inputfile ) );
 }
+
 const iterator = arrayIterator( packets );
 
 for( let i = 0 ; i < SENDER_NUM ; i++ ) {
