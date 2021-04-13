@@ -10,7 +10,8 @@ const ACK_TIMEOUT = 3000;
 const SENDING_INTERVAL = 3000;
 const SENDER_NUM = 1;
 //const SENDER_NUM = 50;
-const STATS_INTERVAL = 60000;
+//const STATS_INTERVAL = 60000;
+const STATS_INTERVAL = 10000;
 
 const stats = {
 	open: 0,
