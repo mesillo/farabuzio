@@ -7,7 +7,8 @@ const doTest = async () => {
 			timeout: 10000
 		}
 	};
-	const metadataService = new AWS.MetadataService( options );
+	//const metadataService = new AWS.MetadataService( options );
+	const metadataService = new AWS.MetadataService();
 	const requestAsync = promisify( metadataService.request );
 	try {
 		const startRequestTime = process.hrtime();
