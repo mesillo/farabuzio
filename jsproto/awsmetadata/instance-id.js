@@ -21,6 +21,14 @@ const doTest = async () => {
 	}
 };
 
+const metadataService = new AWS.MetadataService();
+metadataService.request( "/latest/meta-data/instance-id", ( error, data ) => {
+	if( error ) {
+		console.error( error );
+	}
+	console.log( data );
+} );
+
 doTest();
 
 //export default class HealthCheck {
