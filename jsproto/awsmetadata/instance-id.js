@@ -1,5 +1,5 @@
 const AWS = require( "aws-sdk" );
-const promisify = require( "util" ).promisify;
+//const promisify = require( "util" ).promisify;
 
 const doTest = async () => {
 	const options = {
@@ -7,9 +7,19 @@ const doTest = async () => {
 			timeout: 10000
 		}
 	};
-	//const metadataService = new AWS.MetadataService( options );
-	const metadataService = new AWS.MetadataService();
-	const requestAsync = promisify( metadataService.request );
+	const metadataService = new AWS.MetadataService( options );
+	//const metadataService = new AWS.MetadataService();
+	//const requestAsync = promisify( metadataService.request );
+	const requestAsync = async ( requestParam ) => {
+		return new Promise( ( resolve, reject ) => {
+			metadataService.request( requestParam, ( error, data ) => {
+				if( error ) {
+					reject( error );
+				}
+				resolve( data );
+			} );
+		} );
+	};
 	try {
 		const startRequestTime = process.hrtime();
 		const response = await requestAsync("/latest/meta-data/instance-id");
@@ -22,13 +32,13 @@ const doTest = async () => {
 	}
 };
 
-const metadataService = new AWS.MetadataService();
-metadataService.request( "/latest/meta-data/instance-id", ( error, data ) => {
-	if( error ) {
-		console.error( error );
-	}
-	console.log( data );
-} );
+//const metadataService = new AWS.MetadataService();
+//metadataService.request( "/latest/meta-data/instance-id", ( error, data ) => {
+//	if( error ) {
+//		console.error( error );
+//	}
+//	console.log( data );
+//} );
 
 doTest();
 
