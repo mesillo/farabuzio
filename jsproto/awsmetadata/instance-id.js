@@ -1,5 +1,5 @@
-import AWS from "aws-sdk";
-import { promisify } from "util";
+const AWS = require( "aws-sdk" );
+const promisify = require( "util" ).promisify;
 
 const doTest = async () => {
 	const options = {
