@@ -58,7 +58,11 @@ metadataService.request( "/latest/meta-data/", ( error, data ) => {
 	if( error ) {
 		console.error( error );
 	}
-	console.log( data );
+	//console.log( data );
+	console.dir(
+		data,
+		{ depth: null }
+	)
 } );
 
 //doTest();
