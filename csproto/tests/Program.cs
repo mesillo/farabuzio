@@ -43,7 +43,12 @@ public class Program
 {
 	public static void Main()
 	{
-		var pippo = new EdiContent();
-		Console.WriteLine(pippo.WifiSSID);
+		//var pippo = new EdiContent();
+		//Console.WriteLine(pippo.WifiSSID);
+		ushort test = 0;
+
+		while( true ) {
+			Console.WriteLine( test++ );
+		}
 	}
 }
