@@ -8,10 +8,10 @@ const HOST = "127.0.0.1";
 const PORT = 1620;
 const ACK_TIMEOUT = 3000;
 const SENDING_INTERVAL = 3000;
-const SENDER_NUM = 1;
+const SENDER_NUM = 100;
 //const SENDER_NUM = 50;
 //const STATS_INTERVAL = 60000;
-const STATS_INTERVAL = 10000;
+const STATS_INTERVAL = 30000;
 
 const stats = {
 	open: 0,

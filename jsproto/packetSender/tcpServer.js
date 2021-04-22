@@ -12,7 +12,7 @@ const server = net.createServer( ( socket ) => {
 	} );
 
 	socket.on( "close", () => {
-		//console.info( "Connection Closed" );
+		console.info( "Connection Closed" );
 	} );
 
 	socket.on( "data", ( data ) => {
