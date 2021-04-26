@@ -53,12 +53,14 @@ public class AsynchronousClient {
 			connectDone.WaitOne();
 
 			// Send test data to the remote device.
-			Send(client,"This is a test<EOF>");
+			Send(client,"TEST");
 			sendDone.WaitOne();
+			// Console.WriteLine( "sendDone" );
 
 			// Receive the response from the remote device.
 			Receive(client);
 			receiveDone.WaitOne();
+			Console.WriteLine( "receiveDone" );
 
 			// Write the response to the console.
 			Console.WriteLine("Response received : {0}", response);

@@ -18,7 +18,10 @@ const server = net.createServer( ( socket ) => {
 	socket.on( "data", ( data ) => {
 		//console.info( `Received: ${data}` );
 		console.info( data );
-		socket.write( "ACK" );
+		socket.write( "ACK", ( error ) => {
+			console.error( "Error on Write" );
+			console.error( error );
+		} );
 	} );
 } );
 
