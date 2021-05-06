@@ -11,6 +11,18 @@ namespace testRandom
 		public const int round = 6;
 		static void Main(string[] args)
 		{
+			//latitudeTest();
+			allCoordinatesGeneration();
+		}
+		static void allCoordinatesGeneration() {
+			for( uint i = 0 ; i < samplesNum ; i++ ) {
+				double latitude = Math.Round( CoordinateGenerator.getLatitude(), round );
+				double longitude = Math.Round( CoordinateGenerator.getLongitude(), round );
+
+				Console.WriteLine( "{0}\t{1}", latitude, longitude );
+			}
+		}
+		static void latitudeTest() {
 			Dictionary<double, uint> latitudeMap = new Dictionary<double, uint>();
 			//while( true ) {
 			for( uint i = 0 ; i < samplesNum ; i++ ) {
