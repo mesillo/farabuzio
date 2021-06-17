@@ -10,6 +10,8 @@ const SENDING_INTERVAL = 3000;
 const SENDER_NUM = 5;
 const STATS_INTERVAL = 6000;
 
+const TIMEOUT = 60000; //= null;
+
 let packets = [
 	"000B00000B1A29F64B",
 	"800208F3D31100006AD057E922AC0926B957EB9260DF",
@@ -143,7 +145,12 @@ class TcpClient {
 		return this._senders.length;	
 	}
 
-	stop() {} // TODO: ... to do...
+	stop() {
+		for( let sender of this._senders ) {
+			clearInterval( sender );
+		}
+		this._senders = [];
+	} // TODO: ... to do...
 
 	_statsReset() {
 		this._stats.open = 0;
@@ -189,7 +196,7 @@ const client = new TcpClient(
 	PORT
 );
 
-setInterval( () => {
+const statInterval = setInterval( () => {
 	console.dir(
 		client.getStats()
 	);
@@ -197,3 +204,8 @@ setInterval( () => {
 
 const clientNum = client.start();
 console.log( `Started ${clientNum} clients!` );
+
+setTimeout( () => {
+	client.stop();
+	clearTimeout( statInterval );
+}, TIMEOUT );
