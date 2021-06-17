@@ -1,6 +1,5 @@
 "use strict";
 
-/////////////////////////////////////////////////////////////////
 function* arrayIterator( elements ) { // TODO: Put in the class definition.
 	let index = 0;
 	while( true ) {
@@ -8,6 +7,7 @@ function* arrayIterator( elements ) { // TODO: Put in the class definition.
 		index = ( index + 1 ) % elements.length;
 	}
 }
+
 class ArrayIterator {
 	constructor( elements ) {
 		this.iterator = arrayIterator( elements );
@@ -55,6 +55,5 @@ class DataGenerator {
 		return originData;
 	};
 }
-/////////////////////////////////////////////////////////////////
 
 module.exports = DataGenerator;
