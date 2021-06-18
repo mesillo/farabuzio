@@ -1,8 +1,7 @@
 "use strict";
 
-//const udp = require( "dgram" );
 const UdpClient = require( "./lib/libUdpClient" );
-const fs = require( "fs" );
+//const fs = require( "fs" );
 
 const HOST = "127.0.0.1";
 const PORT = 1234;
@@ -12,13 +11,6 @@ const SENDER_NUM = 10;
 
 const STATS_INTERVAL = 6000;
 const TIMEOUT = 60000;
-
-//const stats = {
-//	sended: 0,
-//	acked: 0,
-//	timeouted: 0,
-//	errors: 0
-//};
 
 let packets = [
 	"000B00000B1A29F64B",
