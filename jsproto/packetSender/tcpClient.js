@@ -49,5 +49,5 @@ console.log( `Started ${clientNum} clients!` );
 
 setTimeout( () => {
 	client.stop();
-	clearTimeout( statInterval );
+	clearInterval( statInterval );
 }, TIMEOUT );
